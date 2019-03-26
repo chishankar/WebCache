@@ -27,20 +27,31 @@ export default class MenuBuilder {
     return menu;
   }
 
-  setupDevelopmentEnvironment() {
-    this.mainWindow.openDevTools();
-    this.mainWindow.webContents.on('context-menu', (e, props) => {
-      const { x, y } = props;
+  // setupDevelopmentEnvironment() {
+  //   this.mainWindow.openDevTools();
+  //   this.mainWindow.webContents.on('context-menu', (e, props) => {
+  //     const { x, y } = props;
 
-      Menu.buildFromTemplate([
-        {
-          label: 'Inspect element',
-          click: () => {
-            this.mainWindow.inspectElement(x, y);
-          }
-        }
-      ]).popup(this.mainWindow);
-    });
+  //     Menu.buildFromTemplate([
+  //       {
+  //         label: 'Inspect element',
+  //         click: () => {
+  //           this.mainWindow.inspectElement(x, y);
+  //         }
+  //       }
+  //     ]).popup(this.mainWindow);
+  //   });
+  // }
+
+  setupDevelopmentEnvironment() {
+    if (process.env.HIDE_DEV_TOOLS) {
+      this.mainWindow.webContents.once('devtools-opened', () => {
+        this.mainWindow.webContents.closeDevTools();
+      });
+    } else {
+      this.mainWindow.openDevTools();
+    }
+    // skip code...
   }
 
   buildDarwinTemplate() {
