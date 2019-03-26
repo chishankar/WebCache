@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import routes from '../constants/routes';
-import styles from './Navbar.css';
+import styles from './Home.css';
 
 type Props = {};
 
