@@ -1,0 +1,104 @@
+.popup {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background-color: rgba(0,0,0, 0.5);
+}
+.popup_inner {
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  top: 25%;
+  bottom: 25%;
+  margin: auto;
+  /* background: white; */
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+
+h2 {
+  font-weight: normal !important;
+  display: inline-block;
+}
+
+span{
+  display: inline-block;
+}
+
+/* a{
+  margin-top: 14px;
+  margin-right: 16px;
+  margin-left: 16px;
+  display: inline-block;
+} */
+
+a{
+  vertical-align: middle;
+}
+
+
+.yellow {
+  /* margin-top: 14px; */
+  margin-right: 16px;
+  margin-left: 16px;
+  height: 25px;
+  width: 25px;
+  background-color: yellow;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.purple {
+  /* margin-top: 14px; */
+  margin-right: 16px;
+  margin-left: 16px;
+  height: 25px;
+  width: 25px;
+  background-color: purple;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.red {
+  /* margin-top: 14px; */
+  margin-right: 16px;
+  margin-left: 16px;
+  height: 25px;
+  width: 25px;
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+}
+.green {
+  /* margin-top: 14px; */
+  margin-right: 16px;
+  margin-left: 16px;
+  height: 25px;
+  width: 25px;
+  background-color: green;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.blue {
+  /* margin-top: 14px; */
+  margin-right: 16px;
+  margin-left: 16px;
+  height: 25px;
+  width: 25px;
+  background-color: blue;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.bckground{
+  background: rgb(0,0,0,0.5);
+  border-radius: 5px;
+  padding: 5px;
+}
+
