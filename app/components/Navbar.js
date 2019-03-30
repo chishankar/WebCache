@@ -21,7 +21,7 @@ export default class Navbar extends Component<Props> {
         <a href="#contact">View</a>
         <a href="#contact">Setting</a>
         <input type="text" placeholder="Google Search.."/>
-        <p>{color}</p>
+        <a>Current Highlight Color: {color}</a>
       </div>
     );
   }
