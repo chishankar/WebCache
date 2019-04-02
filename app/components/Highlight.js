@@ -33,6 +33,10 @@ export default class Highlight extends Component<Props> {
     this.store.dispatch(highlighterActions.changePurple());
   }
 
+  _default = () => {
+    this.store.dispatch(highlighterActions.changeDefault());
+  }
+
 
   render() {
     return (
@@ -45,6 +49,7 @@ export default class Highlight extends Component<Props> {
               <a className={popup.blue} onClick={this._blue}></a>
               <a className={popup.yellow} onClick={this._yellow}></a>
               <a className={popup.purple} onClick={this._purple}></a>
+              <a className={popup.default} onClick={this._default}></a>
             </div>
           </span>
         </div>

@@ -38,6 +38,12 @@ export default function highlighter(state=initialState, action) {
           color: "purple"
       });
 
+    case 'DEFAULT':
+      console.log("Highlighter: DEFAULT")
+      return Object.assign({},state, {
+          color: "DEFAULT"
+      });
+
     default:
       return state;
   }

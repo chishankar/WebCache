@@ -7,7 +7,7 @@
   right: 0;
   bottom: 0;
   margin: auto;
-  background-color: rgba(0,0,0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .popup_inner {
   position: absolute;
@@ -21,13 +21,12 @@
   background-color: rgba(255, 255, 255, 0.3);
 }
 
-
 h2 {
   font-weight: normal !important;
   display: inline-block;
 }
 
-span{
+span {
   display: inline-block;
 }
 
@@ -38,10 +37,9 @@ span{
   display: inline-block;
 } */
 
-a{
+a {
   vertical-align: middle;
 }
-
 
 .yellow {
   /* margin-top: 14px; */
@@ -97,9 +95,20 @@ a{
   display: inline-block;
 }
 
-.bckground{
-  background: rgb(0,0,0,0.5);
+.bckground {
+  background: rgb(0, 0, 0, 0.5);
   border-radius: 5px;
   padding: 5px;
 }
 
+.default {
+  /* margin-top: 14px; */
+  margin-right: 16px;
+  margin-left: 16px;
+  height: 25px;
+  width: 25px;
+  background-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  border: solid 1px;
+}

@@ -30,3 +30,9 @@ export const changePurple = () => {
       type: "PURPLE"
   }
 }
+
+export const changeDefault = () => {
+  return {
+      type: "DEFAULT"
+  }
+}
