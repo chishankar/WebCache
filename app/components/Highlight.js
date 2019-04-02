@@ -1,15 +1,7 @@
 import React, {Component} from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-// import styles from './Navbar.css';
 import 'font-awesome/css/font-awesome.min.css';
 import popup from './Popup.css';
-
 import * as highlighterActions from '../actions/highlighter';
-// import * as reducers from '../actions/highlighter';
-
-// const reducer = combineReducers(reducers);
-// const store = createStore(reducer);
 
 // type Props ={};
 

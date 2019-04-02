@@ -7,6 +7,7 @@ import CounterPage from './containers/CounterPage';
 import NavbarPage from './containers/NavbarPage';
 import Navbar from './components/Navbar';
 import Toolbar from './components/Toolbar';
+// import Notification from './components/Notification';
 
 export default class Routes extends Component<Props> {
 
@@ -18,8 +19,8 @@ export default class Routes extends Component<Props> {
   render() {
     return (
       <App>
-        <NavbarPage store={this.store}/>
-        <Toolbar store={this.store}/>
+          <NavbarPage store={this.store}/>
+          <Toolbar store={this.store}/>
         <Switch>
           <Route path={routes.COUNTER} component={CounterPage} />
           <Route path={routes.HOME} component={HomePage} />
