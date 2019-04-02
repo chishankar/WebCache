@@ -40,10 +40,12 @@ export default class UrlSearch extends Component<Props>{
   render(){
     const showValidate = this.state.showValidate;
     const validateHTML = <i float="right" className="fas fa-check" className={styles.facheck}></i>;
+    const notValidateHTML = <i float="right" className="fas fa-check" className={styles.fauncheck}></i>;
       return(
         <div>
           <input type="text" placeholder="Google Search.." onChange={this.handleInput}/>
           {showValidate && validateHTML}
+          {!showValidate && notValidateHTML}
         </div>
       )
   }
