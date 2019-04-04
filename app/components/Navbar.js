@@ -10,6 +10,7 @@ type Props = {
 };
 
 class ShowHighlightColor extends Component{
+
   getColor = (color) => {
     switch (color){
       case 'red':
@@ -26,6 +27,7 @@ class ShowHighlightColor extends Component{
         return popup.default;
     }
   }
+
   render(){
     return (
       <a className={this.getColor(this.props.color)}></a>
