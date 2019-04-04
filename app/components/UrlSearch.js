@@ -25,13 +25,13 @@ export default class UrlSearch extends Component<Props>{
 
   handleEnter = (event) => {
     if (event.key === 'Enter' && this.state.showValidate){
-      console.log("WE HERE")
+      console.log('Scraping site 8==D');
       getSite.getSite(this.state.validUrl);
     }
   }
 
   _setValidUrl = (vUrl) =>{
-    this.setState({validURL: vUrl})
+    this.setState({validUrl: vUrl});
   }
 
   _turnOnValidation= () =>{

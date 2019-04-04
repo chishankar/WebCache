@@ -2,8 +2,8 @@ const scrape = require('website-scraper');
 
 exports.getSite = function (url){
   scrape({
-    urls: 'https://chishankar.github.io', // Will be saved with default filename 'index.html',
-    directory: '‎⁨⁨../../../../../../Desktop/dick',
+    urls: url, // Will be saved with default filename 'index.html',
+    directory: '‎⁨⁨../hello2',
     recursive: true,
     maxDepth: 1,
     subdirectories: [
