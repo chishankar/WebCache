@@ -61,7 +61,7 @@ export default class UrlSearch extends Component<Props>{
     const notValidateHTML = <i float="right" className="fas fa-check" className={styles.fauncheck}></i>;
       return(
         <div>
-          <input type="text" placeholder="Google Search.." onKeyUp={this.handleEnter} onChange={this.handleInput}/>
+          <input type="text" placeholder="https://<website>" onKeyUp={this.handleEnter} onChange={this.handleInput}/>
           {showValidate && validateHTML}
           {!showValidate && notValidateHTML}
         </div>
