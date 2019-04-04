@@ -1,0 +1,14 @@
+{
+  "name": "webcache",
+  "version": "1.0.0",
+  "description": "for testing",
+  "main": "main,js",
+  "scripts": {
+    "te"
+  },
+  "author": "Kaan Ibici",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^4.1.0"
+  }
+}

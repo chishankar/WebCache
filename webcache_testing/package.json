@@ -1,0 +1,18 @@
+{
+  "name": "webcache",
+  "version": "1.0.0",
+  "description": "for testing",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Kaan Ibici",
+  "license": "ISC",
+  "dependencies": {
+    "elasticlunr": "^0.9.5",
+    "electron": "^4.1.0",
+    "fs": "0.0.1-security",
+    "fuse.js": "^3.4.4",
+    "underscore": "^1.9.1"
+  }
+}
