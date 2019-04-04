@@ -26,7 +26,9 @@ export default class UrlSearch extends Component<Props>{
   handleEnter = (event) => {
     if (event.key === 'Enter' && this.state.showValidate){
       console.log('Scraping site 8==D');
-      getSite.getSite(this.state.validUrl);
+      if (getSite.getSite(this.state.validUrl) == true){
+        console.log('tits');
+      };
     }
   }
 
@@ -59,7 +61,7 @@ export default class UrlSearch extends Component<Props>{
     const notValidateHTML = <i float="right" className="fas fa-check" className={styles.fauncheck}></i>;
       return(
         <div>
-          <input type="text" placeholder="Google Search.." value="https://" onKeyUp={this.handleEnter} onChange={this.handleInput}/>
+          <input type="text" placeholder="Google Search.." onKeyUp={this.handleEnter} onChange={this.handleInput}/>
           {showValidate && validateHTML}
           {!showValidate && notValidateHTML}
         </div>
