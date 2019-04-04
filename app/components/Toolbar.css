@@ -25,11 +25,12 @@
 
 .text::before{
   content: '';
+
   /* background: linear-gradient(to right, transparent, #818078, transparent); */
   background: linear-gradient(to right, red , yellow, transparent);
   position: absolute;
   left: 0;
-  margin: 0px;
+  margin: 0;
   top: 50%;
   width: 100%;
   height: 2px;
@@ -50,8 +51,10 @@
 /* Add a black background color to the top navigation bar */
 .topnav {
   overflow: hidden;
+
   /* border-radius: 5px;
   border: solid 1px; */
+
   /* background-color: #e9e9e9; */
 }
 
