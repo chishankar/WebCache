@@ -3,7 +3,7 @@ const scrape = require('website-scraper');
 exports.getSite = function (url){
   scrape({
     urls: url, // Will be saved with default filename 'index.html',
-    directory: '‎⁨⁨../hello2',
+    directory: "data/" + url.replace(/https:\/\//g,"").replace(/http:\/\//g, ""), 
     recursive: true,
     maxDepth: 1,
     subdirectories: [
