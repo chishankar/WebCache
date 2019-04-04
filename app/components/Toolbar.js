@@ -48,7 +48,7 @@ export default class Toolbar extends Component<Props>{
           <a data-tip="Link" href="#home">
             <i className="fas fa-external-link-alt" />
           </a>
-          <UrlSearch />
+          <UrlSearch store={this.store}/>
         </div>
         <div>
           {this.state.showHighlighter && <Highlight store={this.store} text="Pick Color: "/>}

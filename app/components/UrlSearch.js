@@ -11,6 +11,7 @@ export default class UrlSearch extends Component<Props>{
       showValidate: false,
       validUrl: ''
     };
+    this.store = this.props.store;
   }
 
   handleInput = (event) => {
