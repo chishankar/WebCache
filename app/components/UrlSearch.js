@@ -27,7 +27,9 @@ export default class UrlSearch extends Component<Props>{
   handleEnter = (event) => {
     if (event.key === 'Enter' && this.state.showValidate){
       console.log('Scraping site 8==D');
-      getSite.getSite(this.state.validUrl);
+      if (getSite.getSite(this.state.validUrl) == true){
+        console.log('tits');
+      };
     }
   }
 
