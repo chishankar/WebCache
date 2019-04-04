@@ -1,11 +1,9 @@
 const scrape = require('website-scraper');
 
-function getSite(){
+exports.getSite = function (url){
   scrape({
-    urls: [
-        'http://chishankar.github.io', // Will be saved with default filename 'index.html'
-    ],
-    directory: './node-website',
+    urls: 'https://chishankar.github.io', // Will be saved with default filename 'index.html',
+    directory: '‎⁨⁨../../../../../../Desktop/dick',
     recursive: true,
     maxDepth: 1,
     subdirectories: [
@@ -44,9 +42,9 @@ function getSite(){
     // Outputs HTML
     // console.log(result);
     console.log("Content succesfully downloaded");
+    return true;
 }).catch(function (err) {
     console.log(err);
+    return false;
 });
 }
-
-module.exports(getSite);

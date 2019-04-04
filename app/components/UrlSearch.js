@@ -1,21 +1,37 @@
 import React, {Component} from 'react';
 import styles from './UrlSearch.css';
 import 'font-awesome/css/font-awesome.min.css';
+import getSite from '../utilities/webscraper';
 
 export default class UrlSearch extends Component<Props>{
 
   constructor(props){
     super(props);
-    this.state = {showValidate: false};
+    this.state = {
+      showValidate: false,
+      validUrl: ''
+    };
   }
 
   handleInput = (event) => {
     let value = event.target.value;
     if (this.validURL(value)){
+      this._setValidUrl(value);
       this._turnOnValidation();
     }else{
       this._turnOffValidation();
     }
+  }
+
+  handleEnter = (event) => {
+    if (event.key === 'Enter' && this.state.showValidate){
+      console.log("WE HERE")
+      getSite.getSite(this.state.validUrl);
+    }
+  }
+
+  _setValidUrl = (vUrl) =>{
+    this.setState({validURL: vUrl})
   }
 
   _turnOnValidation= () =>{
@@ -37,13 +53,15 @@ export default class UrlSearch extends Component<Props>{
   }
 
 
+
+
   render(){
     const showValidate = this.state.showValidate;
     const validateHTML = <i float="right" className="fas fa-check" className={styles.facheck}></i>;
     const notValidateHTML = <i float="right" className="fas fa-check" className={styles.fauncheck}></i>;
       return(
         <div>
-          <input type="text" placeholder="Google Search.." onChange={this.handleInput}/>
+          <input type="text" placeholder="Google Search.." onKeyUp={this.handleEnter} onChange={this.handleInput}/>
           {showValidate && validateHTML}
           {!showValidate && notValidateHTML}
         </div>
