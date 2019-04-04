@@ -15,11 +15,11 @@ export default class Routes extends Component<Props> {
     super(props)
     this.store = this.props.store;
   }
+  //           <NavbarPage store={this.store}/>
 
   render() {
     return (
       <App>
-          <NavbarPage store={this.store}/>
           <Toolbar store={this.store}/>
         <Switch>
           <Route path={routes.COUNTER} component={CounterPage} />

@@ -4,6 +4,8 @@ import 'font-awesome/css/font-awesome.min.css';
 import tooltip from './Tooltip.css';
 import Highlight from './Highlight';
 import ReactTooltip from 'react-tooltip';
+import UrlSearch from './UrlSearch';
+
 
 // type Props = {};
 
@@ -46,6 +48,7 @@ export default class Toolbar extends Component<Props>{
           <a data-tip="Link" href="#home">
             <i className="fas fa-external-link-alt" />
           </a>
+          <UrlSearch />
         </div>
         <div>
           {this.state.showHighlighter && <Highlight store={this.store} text="Pick Color: "/>}
