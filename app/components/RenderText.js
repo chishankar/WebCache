@@ -43,7 +43,7 @@ export default class RenderText extends Component<Props> {
   render() {
 
     return (
-      <div contenteditable="true" ref='myTextarea' onMouseUp={this.handleHighlight}>{gettext()}</div>
+      <div scrollabe='true' contenteditable="true" ref='myTextarea' onMouseUp={this.handleHighlight}>{gettext()}</div>
     );
   }
 }
