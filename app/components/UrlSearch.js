@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styles from './UrlSearch.css';
 import 'font-awesome/css/font-awesome.min.css';
 import getSite from '../utilities/webscraper';
+import * as urlsearchActions from '../actions/urlsearch';
 
 export default class UrlSearch extends Component<Props>{
 
@@ -27,8 +28,11 @@ export default class UrlSearch extends Component<Props>{
   handleEnter = (event) => {
     if (event.key === 'Enter' && this.state.showValidate){
       console.log('Scraping site 8==D');
+      this.store.dispatch(urlsearchActions.changeActiveUrl("data/" + this.state.validUrl.replace(/https:\/\//g,"").replace(/http:\/\//g, "") + "/index.html"));
+
       if (getSite.getSite(this.state.validUrl) == true){
         console.log('tits');
+        this.store.dispatch(urlsearchActions.changeActiveUrl("data/" + this.state.validUrl.replace(/https:\/\//g,"").replace(/http:\/\//g, "") + "/index.html"));
       };
     }
   }
