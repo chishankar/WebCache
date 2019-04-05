@@ -12,3 +12,7 @@
 .container a {
   font-size: 1.4rem;
 }
+
+.appBar{
+  background-color: #383535de !important;
+}

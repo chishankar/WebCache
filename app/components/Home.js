@@ -22,9 +22,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Toolbar from './Toolbar';
+import homeStyles from './Home.css';
+import { blue } from '@material-ui/core/colors';
 
 const drawerWidth = 240;
 // JUST A TEST :)
+
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -40,6 +43,9 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       width: `calc(100% - ${drawerWidth}px)`,
     },
+  },
+  drawerPaper: {
+    background: blue,
   },
   menuButton: {
     marginRight: 20,
@@ -73,7 +79,6 @@ class Home extends Component {
   };
 
   render() {
-    console.log(this.store)
     const { classes, theme } = this.props;
 
     const drawer = (
@@ -94,7 +99,7 @@ class Home extends Component {
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar}>
+        <AppBar position="fixed" className={classes.appBar} classes={{colorPrimary: homeStyles.appBar}}>
 
             <IconButton
               color="inherit"
@@ -110,7 +115,7 @@ class Home extends Component {
         </AppBar>
         <nav className={classes.drawer}>
           {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-          <Hidden smUp implementation="css">
+          <Hidden smUp implementation="css" >
             <Drawer
               container={this.props.container}
               variant="temporary"
@@ -118,7 +123,7 @@ class Home extends Component {
               open={this.state.mobileOpen}
               onClose={this.handleDrawerToggle}
               classes={{
-                paper: classes.drawerPaper,
+                paper: classes.drawerPaper
               }}
             >
               {drawer}
