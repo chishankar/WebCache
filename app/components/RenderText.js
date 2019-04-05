@@ -58,7 +58,7 @@ export default class RenderText extends Component<Props> {
     var filePath = `${testPath + legacyPath}index.html`;
 
     return (
-      <div scrollabe='true' contenteditable="true" ref='myTextarea' onMouseUp={this.handleHighlight}>{gettext()}</div>
+      <div contenteditable="true" ref='myTextarea' className="divStuff" onMouseUp={this.handleHighlight}>{gettext()}</div>
 
     );
   }
