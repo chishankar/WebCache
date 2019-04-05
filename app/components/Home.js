@@ -22,9 +22,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Toolbar from './Toolbar';
+import homeStyles from './Home.css';
+import { blue } from '@material-ui/core/colors';
 
-const drawerWidth = 240;
+const drawerWidth = 175;
 // JUST A TEST :)
+
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -50,12 +53,18 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
+    backgroundColor: '#383535de'
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing.unit * 3,
   },
+  txt: {
+    color: 'white !important'
+  }
 });
+
+
 
 type Props = {};
 class Home extends Component {
@@ -73,18 +82,17 @@ class Home extends Component {
   };
 
   render() {
-    console.log(this.store)
     const { classes, theme } = this.props;
 
     const drawer = (
       <div>
-        <div className={classes.toolbar} />
+        <div className={classes.toolbar}><h1 align="center">WebCache</h1></div>
         <Divider />
-        <List>
+        <List className={classes.txt}>
           {['File', 'Save', 'Edit', 'Settings'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
+            <ListItem button className={classes.txt} key={text}>
+              <ListItemIcon className={classes.txt}>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+              <ListItemText className={classes.txt} primary={text} />
             </ListItem>
           ))}
         </List>
@@ -94,7 +102,7 @@ class Home extends Component {
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar}>
+        <AppBar position="fixed" className={classes.appBar} classes={{colorPrimary: homeStyles.appBar}}>
 
             <IconButton
               color="inherit"
@@ -110,7 +118,7 @@ class Home extends Component {
         </AppBar>
         <nav className={classes.drawer}>
           {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-          <Hidden smUp implementation="css">
+          <Hidden smUp implementation="css" >
             <Drawer
               container={this.props.container}
               variant="temporary"
@@ -118,7 +126,7 @@ class Home extends Component {
               open={this.state.mobileOpen}
               onClose={this.handleDrawerToggle}
               classes={{
-                paper: classes.drawerPaper,
+                paper: classes.drawerPaper
               }}
             >
               {drawer}
