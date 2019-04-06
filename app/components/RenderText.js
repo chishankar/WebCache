@@ -18,6 +18,7 @@ function getRenderText(filePath) {
   // TODO: Rewrite so that it does not convert HTML to JSX this way
   //       There should be a HTML to React library floating out there.
   // TODO: also render the css files associated with it
+  //       <div contenteditable="true" ref='myTextarea' onMouseUp={this.handleHighlight}>{getRenderText(filePath)}</div>
   return (
     <div className="Container" dangerouslySetInnerHTML={{__html: someHtml}}>
     </div>
@@ -57,7 +58,8 @@ export default class RenderText extends Component<Props> {
     var filePath = `${testPath + legacyPath}index.html`;
 
     return (
-      <div contenteditable="true" ref='myTextarea' onMouseUp={this.handleHighlight}>{getRenderText(filePath)}</div>
+      <div contenteditable="true" ref='myTextarea' className="divStuff" onMouseUp={this.handleHighlight}>{gettext()}</div>
+
     );
   }
 }

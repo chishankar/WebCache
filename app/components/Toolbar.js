@@ -20,18 +20,17 @@ export default class Toolbar extends Component<Props>{
   _showHighlighter = () =>{
     this.setState({showHighlighter: !this.state.showHighlighter});
   }
+  // <hr className={styles.text} data-content="Toolbar" />
 
 
   render(){
     const highlighter = this.state.showHighlighter;
     console.log("hello")
-    console.log(this.store);
     return(
       <div>
         <ReactTooltip place="top" type="dark" effect="float" />
 
         <div className={styles.topnav} data-tid="container">
-          <hr className={styles.text} data-content="Toolbar" />
           <a data-tip="Annotation" href="#home">
             <i className="far fa-comment-alt" />
           </a>

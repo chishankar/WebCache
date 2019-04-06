@@ -8,3 +8,7 @@ div.editable {
 strong {
   font-weight: bold;
 }
+
+.divStuff{
+  overflow-y:auto
+}

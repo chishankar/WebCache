@@ -16,15 +16,12 @@ export default class Routes extends Component<Props> {
     this.store = this.props.store;
   }
   //           <NavbarPage store={this.store}/>
+ //            <Toolbar store={this.store}/>
 
   render() {
     return (
       <App>
-          <Toolbar store={this.store}/>
-        <Switch>
-          <Route path={routes.COUNTER} component={CounterPage} />
-          <Route path={routes.HOME} component={HomePage} />
-        </Switch>
+        <HomePage store={this.store}/>
       </App>
     );
   }
@@ -41,4 +38,10 @@ export default class Routes extends Component<Props> {
 //       <Route path={routes.HOME} component={HomePage} />
 //     </Switch>
 //   </App>
+
+
+// <Switch>
+// <Route path={routes.COUNTER} component={CounterPage} />
+// <Route path={routes.HOME} store={this.store} component={HomePage} />
+// </Switch>
 // );
