@@ -14,13 +14,13 @@ let mainWindow;
 
 
 function checkIndexForChanges(lastFileStats, dirFiles, index) {
-  
-  // try to find each file from stats list 
+
+  // try to find each file from stats list
 
   for(var i = 0; i < lastFileStats.length; i++) {
-    
+
     var match = _.find(dirFiles, `${lastFileStats[i].title}`);
-    
+
     if(match) {
 
       let escapedFN = lastFileStats[i].title;
@@ -35,14 +35,14 @@ function checkIndexForChanges(lastFileStats, dirFiles, index) {
         // if last modified date isn't the one we have listed, update doc and stats
 
         if (stdout != `${lastFileStats[i].lastMod}`) {
-            
+
           filePath = path.join(__dirname, '/test_docs/' + `${escapedFN}`);
 
           fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
               if (!err) {
                 index.update({
                   title: `${lastFileStats[i].title}`,
-                  html: data 
+                  html: data
                 });
 
                 lastFileStats[i].lastMod = stdout;
@@ -64,13 +64,13 @@ function checkIndexForChanges(lastFileStats, dirFiles, index) {
 }
 
 function checkForNewFiles(lastFileStats, dirFiles, index) {
-  
+
   console.log("length: " + dirFiles.length)
   dirFiles.forEach(function(fileName) {
-    
+
     var match = _.find(lastFileStats, {title: fileName});
     console.log(match);
-    
+
     if(match === undefined) {
 
       let escapedFN = fileName.replace(/(\s+)/g, '\\$1');
@@ -78,7 +78,7 @@ function checkForNewFiles(lastFileStats, dirFiles, index) {
       // file hasn't been added to index, so add it to index and stats list.
 
       exec(`date -r test_docs/${escapedFN}`, (err, stdout, stderr) => {
-        
+
 
         if (err) {
           console.log(`error trying to run: date -r test_docs/${fileName}`)
@@ -87,12 +87,12 @@ function checkForNewFiles(lastFileStats, dirFiles, index) {
         }
 
         filePath = path.join(__dirname, '/test_docs/' + fileName);
-        
+
         fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
             if (!err) {
               index.addDoc({
                 title: fileName,
-                html: data 
+                html: data
               });
               lastFileStats.push({
                 title: fileName,
@@ -120,7 +120,7 @@ function getIndicesOf(searchStr, str, caseSensitive) {
   }
   while ((index = str.indexOf(searchStr, startIndex)) > -1) {
     //Check if this instance is a substring of another word (if next char is whitespace or not) <- FIX
-    //TODO: MAKE SURE ALL WORDS HAVE LOCATIONS 
+    //TODO: MAKE SURE ALL WORDS HAVE LOCATIONS
     let nextCharIndex = index + searchStrLen;
     /*
     if (str.slice(nextCharIndex, nextCharIndex+1).match(/\S/g) &&
@@ -138,12 +138,12 @@ function getFileIndex(fileName) {
   var fileIndex = [];
 
   filePath = path.join(__dirname, '/test_docs/' + fileName);
-  
+
   return new Promise(resolve => {
     fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
         if (!err) {
           // TODO: REMOVE HTML TAGS
-          // Case-sensitive indexing not implented for simplicity. 
+          // Case-sensitive indexing not implented for simplicity.
           let cleanText = data.replace(/<\/?[^>]+(>|$)/g, "");
           let fileWords = cleanText.toLowerCase().trim().split(/\s+/).filter(function(value, index, self){return self.indexOf(value) === index;});
           fileWords.forEach(function(word) {
@@ -151,7 +151,6 @@ function getFileIndex(fileName) {
             fileIndex.push({word: word, locations: locations});
           });
 
-          console.log("index inside func: " + fileIndex);
           resolve(fileIndex);
         } else {
           console.log(err);
@@ -166,16 +165,16 @@ function addToMainIndex(fileName, fileIndex, mainIndex) {
   fileIndex.forEach(fileWord => {
     let newWordEntry = {
       fileName: fileName,
-      fileLocs: fileWord.location
+      fileLocs: fileWord.locations
     };
 
     wordInd = mainIndex.findIndex(mainWord => mainWord.word == fileWord.word);
-    
+
     if (wordInd > 0) {
       mainIndex[wordInd].allLocs.push(newWordEntry);
     } else {
       mainIndex.push({
-        word: fileWord,
+        word: fileWord.word,
         allLocs: [newWordEntry]
       });
     }
@@ -186,7 +185,7 @@ function search(searchStr, index) {
   let finalResults = []
   let fileLists = []; // will hold all files for each search word
   let wordResults = [];
-  let reducedFileList = []; // will hold all files that contain all search words 
+  let reducedFileList = []; // will hold all files that contain all search words
   let searchWords = searchStr.toLowerCase().trim().split(/\s+/);
   let startIndex = 0;
 
@@ -194,15 +193,15 @@ function search(searchStr, index) {
   searchWords.forEach(word => {
     let wordFiles = [];
     results = _.findWhere(index, {word: word})
-    wordResults.push(results);
+    wordResults.push(results.allLocs);
     results.allLocs.forEach(wordLocs => {
       wordFiles.push(wordLocs.fileName);
     });
     fileLists.push(wordFiles);
   });
 
-  //  PART 1: Get list of files that contain all search words 
-  
+  //  PART 1: Get list of files that contain all search words
+
   let lastFileInds = [];
 
   fileLists.forEach(wordFiles => {
@@ -212,14 +211,14 @@ function search(searchStr, index) {
 
   let wordNum = 0;
   let numWords = searchWords.length;
-  let listReduced = false; 
+  let listReduced = false;
   while(listReduced === false) {
 
     if (lastFileInds[0] === fileLists[0].length) {
       break;
     }
 
-    let currFile = lastFileInds[0];
+    let currFile = fileLists[0][lastFileInds[0]];
     wordNum = 1;
     while(wordNum > 0) {
       // if end of a list reached, reducedFileList done.
@@ -228,11 +227,11 @@ function search(searchStr, index) {
         break;
       }
 
-      if (wordFiles[lastFileInds[wordNum]] < currFile) {
-        lastFileInds[wordNum]++;     
+      if (fileLists[wordNum][lastFileInds[wordNum]] < currFile) {
+        lastFileInds[wordNum]++;
       }
 
-      else if (wordFiles[lastFileInds[wordNum]] > currFile) {
+      else if (fileLists[wordNum][lastFileInds[wordNum]] > currFile) {
         // backtrack
         lastFileInds[--wordNum]++;
       }
@@ -240,7 +239,7 @@ function search(searchStr, index) {
       else {
         if (wordNum = searchWords.length - 1) {
           reducedFileList.push(currFile);
-          listFileInds[0]++;
+          lastFileInds[0]++;
           wordNum = 0;
         }
         else {
@@ -252,26 +251,26 @@ function search(searchStr, index) {
 
   // PART 2: Find search string locations in each file
 
-  let wordLocs = [];
-  let lastLocInds = [];
-  let desiredLocs = [];
-  let dists = [];
-
   reducedFileList.forEach(fileName => {
-
+    let startIndex = 0;
+    let wordLocs = [];
+    let lastLocInds = [];
+    let desiredLocs = [];
+    let dists = [];
     let fileResults = [];
 
     for (var i = 0 ; i < searchWords.length ; i++ ){
       let dist = searchStr.indexOf(searchWords[i],startIndex);
       startIndex = startIndex + searchWords[i].length;
       lastLocInds.push(0);
-      dists.push(distToNext);
-      desiredLocs.push(distToNext);
-      wordLocs.push(_.findWhere(wordResults[i], {fileName: fileName}).sort());
+      dists.push(dist);
+      desiredLocs.push(dist);
+
+      wordLocs.push(_.findWhere(wordResults[i], {fileName: fileName}).fileLocs.sort(function(a, b){return a-b}));
     }
 
     let wordNum = 0;
-    let searchComplete = false; 
+    let searchComplete = false;
     while(searchComplete === false) {
 
       if (lastLocInds[0] === wordLocs[0].length) {
@@ -279,31 +278,31 @@ function search(searchStr, index) {
       }
 
       for (var i = 1; i < numWords; i++) {
-        desiredLocs[i] = wordLocs[lastLocInds[0]] + dists[i];
+        desiredLocs[i] = wordLocs[0][lastLocInds[0]] + dists[i];
       }
-      
+
       wordNum = 1;
 
       while(wordNum > 0) {
         // if end of a list reached, reducedFileList done.
-        if (lastLocInds[wordNum] === wordLocs[0].length) {
+        if (lastLocInds[wordNum] === wordLocs[wordNum].length) {
           searchComplete = true;
           break;
         }
 
-        if (wordLocs[lastLocInds[wordNum]] < desiredLocs[wordNum]) {
-          lastLocInds[wordNum]++;     
+        if (wordLocs[wordNum][lastLocInds[wordNum]] < desiredLocs[wordNum]) {
+          lastLocInds[wordNum]++;
         }
 
-        else if (wordLocs[lastLocInds[wordNum]] > desiredLocs[wordNum]) {
+        else if (wordLocs[wordNum][lastLocInds[wordNum]] > desiredLocs[wordNum]) {
           // backtrack
           lastLocInds[--wordNum]++;
         }
 
         else {
           if (wordNum = searchWords.length - 1) {
-            fileResults.push(wordLocs[lastLocInds[0]]);
-            listFileInds[0]++;
+            fileResults.push(wordLocs[0][lastLocInds[0]]);
+            lastLocInds[0]++;
             wordNum = 0;
           }
           else {
@@ -317,7 +316,7 @@ function search(searchStr, index) {
       fileName: fileName,
       locations: fileResults
     });
-  
+
   });
 
   return finalResults;
@@ -325,7 +324,7 @@ function search(searchStr, index) {
 }
 
 function fuseSearch(index, searchStr) {
-  //THIS ONLY WORKS FOR SINGLE WORDS 
+  //THIS ONLY WORKS FOR SINGLE WORDS
   var options = {
     shouldSort: true,
     includeMatches: true,
@@ -351,7 +350,7 @@ app.on('ready', function(){
     slashes: true
   }));
 
-  // fresh index and stat table for testing 
+  // fresh index and stat table for testing
 
   var lastFileStats = [];
 
@@ -378,7 +377,7 @@ app.on('ready', function(){
       dirFiles.pop();
       checkIndexForChanges(lastFileStats, dirFiles, index);
       checkForNewFiles(lastFileStats, dirFiles, index);
-    }, 
+    },
     function(error) {console.log("error: " + error);}
   )
   */
@@ -397,28 +396,33 @@ const mainMenuTemplate = [
         label: 'Search Test',
         click(){
           getFileIndex("testdoc1.txt").then(function(index) {
-            index.forEach(obj => {
-              console.log(obj.word + " at " + obj.locations);
-            })
+            // index.forEach(obj => {
+            //   console.log(obj.word + " at " + obj.locations);
+            // })
             addToMainIndex("testdoc1.txt", index,mainIndex);
-          });
 
-          getFileIndex("testdoc2.txt").then(function(index) {
-            index.forEach(obj => {
-              console.log(obj.word + " at " + obj.locations);
-            })
-            
-            addToMainIndex("testdoc2.txt", index,mainIndex);
+            getFileIndex("testdoc2.txt").then(function(index) {
+              // index.forEach(obj => {
+              //   console.log(obj.word + " at " + obj.locations);
+              // });
 
-            mainIndex.forEach(obj => {
-              console.log(obj.word + "at" + obj.allLocs);
-            })
+              addToMainIndex("testdoc2.txt", index,mainIndex);
 
-            let results = search("lorem ipsum");
-            results.forEach(obj => {
-              console.log(obj.fileName + " at " + obj.locations);
+              // mainIndex.forEach(obj => {
+              //   console.log("Word: " + obj.word);
+              //   obj.allLocs.forEach(x => {
+              //     console.log("File: " + x.fileName +  " Locs: "+ x.fileLocs + "\n");
+              //   });
+              // });
+
+              let results = search("it has",mainIndex);
+              results.forEach(obj => {
+                console.log(obj.fileName + " at " + obj.locations);
+              });
             });
           });
+
+
 
 
 
@@ -426,7 +430,7 @@ const mainMenuTemplate = [
           //   let index = getFileIndex("elasticlunr.html");
           //   resolve(index);
           // }).then(function(index){
-          // });   
+          // });
         }
       }
     ]
