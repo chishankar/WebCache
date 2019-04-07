@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import routes from '../constants/routes';
+import webview from 'electron';
 import styles from './Text.css';
 import HighlightText from './HighlightText';
 import 'react-notifications/lib/notifications.css';
@@ -14,14 +15,20 @@ function gettext(){
 }
 
 function getRenderText(filePath) {
-  var someHtml = fs.readFileSync(filePath).toString();
+  // var someHtml = fs.readFileSync(filePath).toString();
   // TODO: Rewrite so that it does not convert HTML to JSX this way
   //       There should be a HTML to React library floating out there.
   // TODO: also render the css files associated with it
   //       <div contenteditable="true" ref='myTextarea' onMouseUp={this.handleHighlight}>{getRenderText(filePath)}</div>
+
+  // <div className="Container" dangerouslySetInnerHTML={{__html: someHtml}}>
+  // </div>
+  let updatedDirname = __dirname.toString().replace("app","")
+  let fullPath = "file://" + updatedDirname +filePath
+  console.log("updated: "+fullPath);
   return (
-    <div className="Container" dangerouslySetInnerHTML={{__html: someHtml}}>
-    </div>
+    <webview className={styles.setWidth} id = "foo" src={fullPath}>
+    </webview>
   );
 }
 
@@ -58,7 +65,7 @@ export default class RenderText extends Component<Props> {
     {
       this.render();
     }
-  } 
+  }
 
   render() {
     console.log(this.props.activeUrl);

@@ -1,9 +1,12 @@
 const scrape = require('website-scraper');
 
-exports.getSite = function (url, callback){
+exports.getSite = function (inputUrl, callback){
+  console.log(inputUrl)
   scrape({
-    urls: url, // Will be saved with default filename 'index.html',
-    directory: "data/" + url.replace(/https:\/\//g,"").replace(/http:\/\//g, ""),
+    urls: [
+      {url: inputUrl, filename: 'index.html'}
+    ], // Will be saved with default filename 'index.html',
+    directory: "data/" + inputUrl.replace(/https:\/\//g,"").replace(/http:\/\//g, ""),
     recursive: true,
     maxDepth: 1,
     subdirectories: [

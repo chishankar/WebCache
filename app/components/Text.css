@@ -5,6 +5,11 @@ div.editable {
   padding: 5px;
 }
 
+.setWidth{
+  width:1000px;
+  height: 500px;
+}
+
 strong {
   font-weight: bold;
 }
