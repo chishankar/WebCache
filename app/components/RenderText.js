@@ -52,14 +52,26 @@ export default class RenderText extends Component<Props> {
     }
   };
 
+  componentDidUpdate(prevProps) {
+    console.log("detected updated");
+    if(!(this.props.activeUrl === prevProps.activeUrl)) // Check if it's a new user, you can also use some unique property, like the ID  (this.props.user.id !== prevProps.user.id)
+    {
+      this.render();
+    }
+  } 
+
   render() {
+    console.log(this.props.activeUrl);
     const testPath = './test/';
     const legacyPath = 'legacy-data/ScrapBook/data/20190327234416/';
     var filePath = `${testPath + legacyPath}index.html`;
+    let displayInput = this.props.activeUrl.startsWith('data');
 
     return (
-      <div contenteditable="true" ref='myTextarea' className="divStuff" onMouseUp={this.handleHighlight}>{gettext()}</div>
-
+      <div>
+      {displayInput && getRenderText(this.props.activeUrl)}
+      {!displayInput && <div contenteditable="true" ref='myTextarea' className="divStuff" onMouseUp={this.handleHighlight}>{gettext()}</div>}
+      </div>
     );
   }
 }

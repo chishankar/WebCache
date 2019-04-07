@@ -1,6 +1,6 @@
 const scrape = require('website-scraper');
 
-exports.getSite = function (url){
+exports.getSite = function (url, callback){
   scrape({
     urls: url, // Will be saved with default filename 'index.html',
     directory: "data/" + url.replace(/https:\/\//g,"").replace(/http:\/\//g, ""),
@@ -38,13 +38,13 @@ exports.getSite = function (url){
             attr: 'src'
         }
     ]
-}).then(function (result) {
+}).then((result) => {
     // Outputs HTML
     // console.log(result);
     console.log("Content succesfully downloaded");
-    return true;
-}).catch(function (err) {
+    callback(true);
+}).catch((err) => {
     console.log(err);
-    return err;
+    callback(false);
 });
 }

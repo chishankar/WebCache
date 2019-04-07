@@ -6,7 +6,8 @@ import RenderText from '../components/RenderText';
 function mapStateToProps(state) {
   // console.log(state.highlighter.color);
   return {
-    color: state.highlighter.color
+    color: state.highlighter.color, 
+    activeUrl: state.urlsearch.activeUrl
   };
 }
 
