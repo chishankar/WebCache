@@ -9,7 +9,7 @@ type Props = {
   color: string
 };
 
-class ShowHighlightColor extends Component{
+class ShowHighlightColor extends Component<Props>{
 
   getColor = (color) => {
     switch (color){

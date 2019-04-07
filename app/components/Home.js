@@ -67,7 +67,7 @@ const styles = theme => ({
 
 
 type Props = {};
-class Home extends Component {
+class Home extends Component<Props> {}
   state = {
     mobileOpen: false,
   };
