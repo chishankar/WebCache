@@ -181,6 +181,18 @@ function addToMainIndex(fileName, fileIndex, mainIndex) {
   });
 }
 
+function addFilesToMainIndex(fileNames, mainIndex) {
+
+  return new Promise(resolve => {
+    fileNames.forEach(fileName => {
+      getFileIndex(fileName).then(fileIndex => {
+        addToMainIndex(fileName, fileIndex, mainIndex);
+      });
+    });
+    resolve();
+  });
+}
+
 function search(searchStr, index) {
   let finalResults = []
   let fileLists = []; // will hold all files for each search word
@@ -395,36 +407,13 @@ const mainMenuTemplate = [
       {
         label: 'Search Test',
         click(){
-          getFileIndex("testdoc1.txt").then(function(index) {
-            // index.forEach(obj => {
-            //   console.log(obj.word + " at " + obj.locations);
-            // })
-            addToMainIndex("testdoc1.txt", index,mainIndex);
 
-            getFileIndex("testdoc2.txt").then(function(index) {
-              // index.forEach(obj => {
-              //   console.log(obj.word + " at " + obj.locations);
-              // });
-
-              addToMainIndex("testdoc2.txt", index,mainIndex);
-
-              // mainIndex.forEach(obj => {
-              //   console.log("Word: " + obj.word);
-              //   obj.allLocs.forEach(x => {
-              //     console.log("File: " + x.fileName +  " Locs: "+ x.fileLocs + "\n");
-              //   });
-              // });
-
-              let results = search("it has",mainIndex);
-              results.forEach(obj => {
-                console.log(obj.fileName + " at " + obj.locations);
-              });
+          addFilesToMainIndex(['testdoc1.txt', 'testdoc2.txt'], mainIndex).then(function() {
+            let results = search("it has",mainIndex);
+            results.forEach(obj => {
+              console.log(obj.fileName + " at " + obj.locations);
             });
           });
-
-
-
-
 
           // let p = new Promise(function(resolve, reject){
           //   let index = getFileIndex("elasticlunr.html");
