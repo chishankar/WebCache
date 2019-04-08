@@ -6,8 +6,8 @@ div.editable {
 }
 
 .setWidth{
-  width:1000px;
-  height: 500px;
+  width:-webkit-fill-available;
+  height: -webkit-fill-available;
 }
 
 strong {

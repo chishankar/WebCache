@@ -23,7 +23,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Toolbar from './Toolbar';
 import homeStyles from './Home.css';
-import { blue } from '@material-ui/core/colors';
+import Footer from './Footer';
 
 const drawerWidth = 175;
 // JUST A TEST :)
@@ -53,7 +53,7 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: '#383535de'
+    backgroundColor: '#383535'
   },
   content: {
     flexGrow: 1,
