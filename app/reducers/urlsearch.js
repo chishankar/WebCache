@@ -6,8 +6,14 @@ const initialState = {
 }
 
 export default function urlsearch(state=initialState, action) {
-    console.log("action for f ile path" + action.type);
-    return Object.assign({},state, {
-        activeUrl: action.type
-    });
-}
+    switch(action.type){
+      case 'URLUPDATE':
+        return Object.assign({},state, {
+          activeUrl: action.activeUrl
+       });
+
+       default:
+        return state;
+    }
+    }
+

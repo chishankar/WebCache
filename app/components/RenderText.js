@@ -23,12 +23,15 @@ function getRenderText(filePath) {
 
   // <div className="Container" dangerouslySetInnerHTML={{__html: someHtml}}>
   // </div>
+  // return (
+  //   <webview className={styles.setWidth} id = "foo" src={fullPath}>
+  //   </webview>
+  // );
   let updatedDirname = __dirname.toString().replace("app","")
   let fullPath = "file://" + updatedDirname +filePath
   console.log("updated: "+fullPath);
   return (
-    <webview className={styles.setWidth} id = "foo" src={fullPath}>
-    </webview>
+    <iframe className={styles.setWidth}  ref="serviceFrameSend" src={fullPath}></iframe>
   );
 }
 
@@ -66,6 +69,7 @@ export default class RenderText extends Component<Props> {
       this.render();
     }
   }
+  //       {!displayInput && <div contenteditable="true" ref='myTextarea' className="divStuff" onMouseUp={this.handleHighlight}>{gettext()}</div>}
 
   render() {
     console.log(this.props.activeUrl);
@@ -77,7 +81,6 @@ export default class RenderText extends Component<Props> {
     return (
       <div>
       {displayInput && getRenderText(this.props.activeUrl)}
-      {!displayInput && <div contenteditable="true" ref='myTextarea' className="divStuff" onMouseUp={this.handleHighlight}>{gettext()}</div>}
       </div>
     );
   }
