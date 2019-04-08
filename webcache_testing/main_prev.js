@@ -7,11 +7,12 @@ const { exec } = require('child_process');
 const _ = require('underscore');
 const fs = require('fs');
 const sizeof = require('object-sizeof');
-const { PerformanceObserver, performance } = require('perf_hooks');
 
 const {app, BrowserWindow, Menu} = electron;
 
 let mainWindow;
+
+const nextFileId = 0;
 
 
 
@@ -165,8 +166,8 @@ function addToMainIndex(fileName, fileIndex, mainIndex) {
   //assumes unique words, and no preexisting entries for the file being added
   fileIndex.forEach(fileWord => {
     let newWordEntry = {
-      fileName: fileName,
-      fileLocs: fileWord.locations
+      fId: nextFileId++,
+      fLocs: fileWord.locations
     };
 
     wordInd = mainIndex.findIndex(mainWord => mainWord.word == fileWord.word);
@@ -175,8 +176,8 @@ function addToMainIndex(fileName, fileIndex, mainIndex) {
       mainIndex[wordInd].allLocs.push(newWordEntry);
     } else {
       mainIndex.push({
-        word: fileWord.word,
-        allLocs: [newWordEntry]
+        w: fileWord.word,
+        aLocs: [newWordEntry]
       });
     }
   });
@@ -205,9 +206,9 @@ function search(searchStr, index) {
   // populate fileLists with lists of files holding each word.
   searchWords.forEach(word => {
     let wordFiles = [];
-    results = _.findWhere(index, {word: word})
-    wordResults.push(results.allLocs);
-    results.allLocs.forEach(wordLocs => {
+    results = _.findWhere(index, {w: word})
+    wordResults.push(results.aLocs);
+    results.aLocs.forEach(wordLocs => {
       wordFiles.push(wordLocs.fileName);
     });
     fileLists.push(wordFiles);
@@ -279,7 +280,7 @@ function search(searchStr, index) {
       dists.push(dist);
       desiredLocs.push(dist);
 
-      wordLocs.push(_.findWhere(wordResults[i], {fileName: fileName}).fileLocs.sort(function(a, b){return a-b}));
+      wordLocs.push(_.findWhere(wordResults[i], {fId: fileName}).fLocs.sort(function(a, b){return a-b}));
     }
 
     let wordNum = 0;
@@ -395,15 +396,12 @@ const mainMenuTemplate = [
         click(){
           let searchStr = "it has";
           console.log("Search Results for " + searchStr + ":");
-          var t0 = performance.now();
           let results = search(searchStr,mainIndex);
-          var t1 = performance.now();
           results.forEach(obj => {
             console.log(obj.fileName + " at " + obj.locations);
           });
 
           console.log("Size of index: " + sizeof(mainIndex));
-          console.log("Search took " + (t1 - t0) + " milliseconds.")
 
 
           // let p = new Promise(function(resolve, reject){
