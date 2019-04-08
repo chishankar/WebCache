@@ -56,8 +56,8 @@ export default class UrlSearch extends Component<Props>{
     return !!pattern.test(str);
   }
 
-
   render(){
+
     const showValidate = this.state.showValidate;
     const validateHTML = <i float="right" className="fas fa-check" className={styles.facheck}></i>;
     const notValidateHTML = <i float="right" className="fas fa-check" className={styles.fauncheck}></i>;

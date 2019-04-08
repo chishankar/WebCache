@@ -3,10 +3,7 @@ import { Switch, Route } from 'react-router';
 import routes from './constants/routes';
 import App from './containers/App';
 import HomePage from './containers/HomePage';
-import CounterPage from './containers/CounterPage';
-import NavbarPage from './containers/NavbarPage';
-import Navbar from './components/Navbar';
-import Toolbar from './components/Toolbar';
+import Footer from './components/Footer';
 // import Notification from './components/Notification';
 
 export default class Routes extends Component<Props> {
@@ -22,6 +19,7 @@ export default class Routes extends Component<Props> {
     return (
       <App>
         <HomePage store={this.store}/>
+        <Footer />
       </App>
     );
   }
