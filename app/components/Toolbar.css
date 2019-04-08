@@ -45,7 +45,7 @@
   line-height: 1.5em;
   color: white;
   background-color: rgb(0,0,0);
-  border-radius: 5px;
+  /* border-radius: 5px; */
 }
 
 /* Add a black background color to the top navigation bar */
@@ -73,7 +73,7 @@
 .topnav a:hover {
   background-color: White;
   color: black;
-  border-radius: 5px;
+  /* border-radius: 5px; */
 }
 
 /* Style the "active" element to highlight the current page */
@@ -90,7 +90,7 @@
   margin-top: 8px;
   margin-right: 16px;
   font-size: 17px;
-  border-radius: 5px;
+  /* border-radius: 5px; */
 }
 
 /* When the screen is less than 600px wide, stack the links and the search field vertically instead of horizontally */

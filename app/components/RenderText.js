@@ -87,7 +87,7 @@ export default class RenderText extends Component<Props> {
 
     return (
       <div>
-      {getRenderText(this.props.activeUrl)}
+        {getRenderText(this.props.activeUrl)}
       </div>
     );
   }

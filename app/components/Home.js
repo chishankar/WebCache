@@ -3,9 +3,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import routes from '../constants/routes';
 import Paper from '@material-ui/core/Paper';
-// import styles from './Home.css';
 import RenderTextPage from '../containers/RenderTextPage';
-
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -25,8 +23,7 @@ import Toolbar from './Toolbar';
 import homeStyles from './Home.css';
 import Footer from './Footer';
 
-const drawerWidth = 175;
-// JUST A TEST :)
+const drawerWidth = 150;
 
 const styles = theme => ({
   root: {
@@ -117,7 +114,6 @@ class Home extends Component {
             </Typography>
         </AppBar>
         <nav className={classes.drawer}>
-          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
           <Hidden smUp implementation="css" >
             <Drawer
               container={this.props.container}
@@ -154,21 +150,3 @@ class Home extends Component {
 }
 
 export default withStyles(styles, { withTheme: true })(Home);
-
-
-// export default class Home extends Component<Props> {
-//   props: Props;
-
-//   // <h2>Home</h2>
-//   // <Link to={routes.COUNTER}>to Counter</Link>
-
-//   render() {
-//     return (
-//       <div data-tid="container">
-//         < RenderTextPage/>
-//       </div>
-//     );
-//   }
-// }
-
-
