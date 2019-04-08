@@ -2,11 +2,12 @@
 import type { Action } from './types';
 
 const initialState = {
-  activeUrl: "DEFAULT"
+  activeUrl: "/default_landing_page.html"
 }
 
 export default function urlsearch(state=initialState, action) {
     switch(action.type){
+
       case 'URLUPDATE':
         return Object.assign({},state, {
           activeUrl: action.activeUrl
@@ -15,5 +16,5 @@ export default function urlsearch(state=initialState, action) {
        default:
         return state;
     }
-    }
+}
 

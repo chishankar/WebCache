@@ -27,7 +27,13 @@ function getRenderText(filePath) {
   //   <webview className={styles.setWidth} id = "foo" src={fullPath}>
   //   </webview>
   // );
-  let updatedDirname = __dirname.toString().replace("app","")
+
+  var updatedDirname = __dirname;
+
+  if (filePath.startsWith('data')){
+    updatedDirname = __dirname.toString().replace("app","")
+  }
+
   let fullPath = "file://" + updatedDirname +filePath
   console.log("updated: "+fullPath);
   return (
@@ -70,6 +76,7 @@ export default class RenderText extends Component<Props> {
     }
   }
   //       {!displayInput && <div contenteditable="true" ref='myTextarea' className="divStuff" onMouseUp={this.handleHighlight}>{gettext()}</div>}
+//       {displayInput && getRenderText(this.props.activeUrl)}
 
   render() {
     console.log(this.props.activeUrl);
@@ -80,7 +87,7 @@ export default class RenderText extends Component<Props> {
 
     return (
       <div>
-      {displayInput && getRenderText(this.props.activeUrl)}
+      {getRenderText(this.props.activeUrl)}
       </div>
     );
   }
