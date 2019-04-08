@@ -2,6 +2,7 @@ import type { GetState, Dispatch } from '../reducers/types'; //what to change in
 
 export const changeActiveUrl = (activeUrl) => {
   return {
-      type: activeUrl
+      type: 'URL_UPDATE',
+      activeUrl: activeUrl
   }
 }

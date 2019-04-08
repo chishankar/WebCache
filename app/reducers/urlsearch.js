@@ -6,8 +6,16 @@ const initialState = {
 }
 
 export default function urlsearch(state=initialState, action) {
-    console.log("action for f ile path" + action.type);
-    return Object.assign({},state, {
-        activeUrl: action.type
-    });
+    console.log("action for file path" + action.type);
+
+    switch(action.type){
+	    case 'URL_UPDATE':
+	      console.log("Highlighter: Red")
+	      return Object.assign({},state, {
+	          activeUrl: action.activeUrl
+	      });
+
+	    default:
+	      return state;
+    }
 }
