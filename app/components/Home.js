@@ -22,6 +22,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Toolbar from './Toolbar';
 import homeStyles from './Home.css';
 import Footer from './Footer';
+import PageWidget from './PageWidget'
+import RenderText from './RenderText';
 
 const drawerWidth = 150;
 
