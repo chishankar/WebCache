@@ -1,115 +1,12 @@
 //testing code
-const electron = require('electron');
-const Fuse = require('fuse.js');
-const url = require('url');
 const path = require('path');
 const { exec } = require('child_process');
 const _ = require('underscore');
 const fs = require('fs');
 const sizeof = require('object-sizeof');
 const { PerformanceObserver, performance } = require('perf_hooks');
-const htmlParse = require(gethtmltext.js);
-
-const {app, BrowserWindow, Menu} = electron;
 
 let mainWindow;
-
-
-
-function checkIndexForChanges(lastFileStats, dirFiles, index) {
-
-  // try to find each file from stats list
-
-  for(var i = 0; i < lastFileStats.length; i++) {
-
-    var match = _.find(dirFiles, `${lastFileStats[i].title}`);
-
-    if(match) {
-
-      let escapedFN = lastFileStats[i].title;
-      escapedFN.replace(/(\s+)/g, '\\$1');
-
-      exec(`date -r test_docs/${escapedFN}`, (err, stdout, stderr) => {
-        if (err) {
-          // node couldn't execute the command
-          return;
-        }
-
-        // if last modified date isn't the one we have listed, update doc and stats
-
-        if (stdout != `${lastFileStats[i].lastMod}`) {
-
-          filePath = path.join(__dirname, '/test_docs/' + `${escapedFN}`);
-
-          fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
-              if (!err) {
-                index.update({
-                  title: `${lastFileStats[i].title}`,
-                  html: data
-                });
-
-                lastFileStats[i].lastMod = stdout;
-
-              } else {
-                console.log(err);
-              }
-          });
-        }
-      });
-
-    } else {
-      // file was removed from dir, so remove from index
-      index.removeDoc({
-        title: lastFileStats[i].title,
-      });
-    }
-  }
-}
-
-function checkForNewFiles(lastFileStats, dirFiles, index) {
-
-  console.log("length: " + dirFiles.length)
-  dirFiles.forEach(function(fileName) {
-
-    var match = _.find(lastFileStats, {title: fileName});
-    console.log(match);
-
-    if(match === undefined) {
-
-      let escapedFN = fileName.replace(/(\s+)/g, '\\$1');
-
-      // file hasn't been added to index, so add it to index and stats list.
-
-      exec(`date -r test_docs/${escapedFN}`, (err, stdout, stderr) => {
-
-
-        if (err) {
-          console.log(`error trying to run: date -r test_docs/${fileName}`)
-          // node couldn't execute the command
-          return;
-        }
-
-        filePath = path.join(__dirname, '/test_docs/' + fileName);
-
-        fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
-            if (!err) {
-              index.addDoc({
-                title: fileName,
-                html: data
-              });
-              lastFileStats.push({
-                title: fileName,
-                lastMod: stdout
-              });
-              console.log("File added to index");
-            } else {
-              console.log(err);
-            }
-        });
-      });
-    }
-  });
-}
 
 function getIndicesOf(searchStr, str, caseSensitive) {
   var searchStrLen = searchStr.length;
@@ -146,7 +43,7 @@ function getFileIndex(fileName) {
         if (!err) {
           // TODO: REMOVE HTML TAGS
           // Case-sensitive indexing not implented for simplicity.
-          // let cleanText =
+          let cleanText =
           let fileWords = cleanText.toLowerCase().trim().split(/\s+/).filter(function(value, index, self){return self.indexOf(value) === index;});
           fileWords.forEach(function(word) {
             let locations = getIndicesOf(word,cleanText);
@@ -335,24 +232,6 @@ function search(searchStr, index) {
 
   return finalResults;
 
-}
-
-function fuseSearch(index, searchStr) {
-  //THIS ONLY WORKS FOR SINGLE WORDS
-  var options = {
-    shouldSort: true,
-    includeMatches: true,
-    threshold: 0,
-    location: 0,
-    distance: 0,
-    maxPatternLength: 32,
-    minMatchCharLength: 1,
-    keys: [
-      "word"
-    ]
-  };
-  var fuse = new Fuse(index, options); // "list" is the item array
-  var result = fuse.search(searchStr);
 }
 
 
