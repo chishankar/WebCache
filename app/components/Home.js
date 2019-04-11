@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import routes from '../constants/routes';
 import Paper from '@material-ui/core/Paper';
 import RenderTextPage from '../containers/RenderTextPage';
+import Viewer from '../containers/viewerRenderPage';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -142,7 +143,7 @@ class Home extends Component {
         </nav>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-              <RenderTextPage />
+              <Viewer store={this.store}/>
         </main>
       </div>
     );
