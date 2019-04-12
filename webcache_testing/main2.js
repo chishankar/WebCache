@@ -314,7 +314,8 @@ var proc = exec('ls test_docs', (err, stdout, stderr) => {
   dirFiles = stdout.split(/\r?\n/);
   dirFiles.pop();
   addFilesToMainIndex(dirFiles, mainIndex);
-  addFilesToSecondIndex(dirFiles, secondInd);
+  console.log("done");
+ // addFilesToSecondIndex(dirFiles, secondInd);
 });
 
 
@@ -323,16 +324,16 @@ function user_search(str) {
   console.log("Search Results for " + str + ":");
   var t0 = performance.now();
   let results = search(str,mainIndex);
-  let results2 = searchSecond(str, secondInd);
+  //let results2 = searchSecond(str, secondInd);
   var t1 = performance.now();
   results.forEach(obj => {
     console.log(obj.fileName + " at " + obj.locations);
   });
 
   console.log("Test results\n");
-  results2.forEach(obj => {
-    console.log(obj.name + " at " + obj.locs);
-  });
+  // results2.forEach(obj => {
+  //   console.log(obj.name + " at " + obj.locs);
+  // });
 
   console.log("Size of index: " + sizeof(mainIndex));
   console.log("Search took " + (t1 - t0) + " milliseconds.")
@@ -400,5 +401,6 @@ rl.on("line", function (line) {
     // console.log(fileWord.w + ":\n" + fileWord.a + "\n");
     // });
     user_search(line);
+    //console.log(mainIndex.length);
  // });
  });
