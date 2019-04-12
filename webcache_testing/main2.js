@@ -7,13 +7,12 @@ const _ = require('underscore');
 const fs = require('fs');
 const sizeof = require('object-sizeof');
 const { PerformanceObserver, performance } = require('perf_hooks');
-
 var readline = require("readline");
 
 
 //Lookup table between file name and file number
 let lookup = [];
-lookup.push({word: " ", allLocs: []});
+lookup.push({fileName: "", a: []});
 
 function getIndicesOf(searchStr, str, caseSensitive) {
   var searchStrLen = searchStr.length;
@@ -67,18 +66,17 @@ function getFileIndex(fileName) {
           //Iterate for each unique word in file
           fileWords.forEach( word => {
             //Will hold a list of IDs for each word, one for each location
-            let w2 = word;
             let IDList = [];
             let locations = getIndicesOf(word,cleanText);
             //Calculates ID for unique location
             locations.forEach(loc => {
               let locLen = loc.toString().length;
-              let fileLen = fileNum.toString.length;
+              let fileLen = fileNum.toString().length;
               let newID = loc + Math.pow(10, locLen) * fileNum + Math.pow(10, (locLen + fileLen)) * fileLen;
               IDList.push(newID);
             });
             //Push object of word and its locations to return
-            fileIndex.push({word: word, allLocs: IDList});
+            fileIndex.push({w: word, a: IDList});
           });
           //returns the list
           resolve(fileIndex);
@@ -92,12 +90,12 @@ function getFileIndex(fileName) {
 function addToMainIndex(fileIndex, mainIndex) {
 
   //assumes unique words, and no preexisting entries for the file being added
-  fileIndex.forEach( fileWord => {
+  fileIndex.forEach(fileWord => {
 
-    wordInd = mainIndex.findIndex(mainWord => mainWord.word == fileWord.word);
+    wordInd = mainIndex.findIndex(mainWord => mainWord.w == fileWord.w);
 
     if (wordInd > 0) {
-      mainIndex[wordInd].allLocs.concat(fileWord.allLocs);
+      mainIndex[wordInd].a = mainIndex[wordInd].a.concat(fileWord.a);
     } else {
       mainIndex.push(fileWord);
     }
@@ -121,14 +119,14 @@ function addFilesToMainIndex(fileNames, mainIndex) {
 function getWordLocs(codes) {
   wordLocs = []
   codes.forEach( code => {
-    locStart = 1+parseInt(code.toString().slice(0,1))
-    id = parseInt(code.toString().slice(1,locStart));
-    fn = lookup[id].fileName;
-    loc = parseInt(code.toString().slice(locStart))
+    let locStart = 1+parseInt(code.toString().slice(0,1))
+    let id = parseInt(code.toString().slice(1,locStart));
+    let fn = lookup[id].fileName;
+    let loc = parseInt(code.toString().slice(locStart,))
 
-    fileInd = wordLocs.findIndex(file => file.fileName == fn);
+    let fileInd = wordLocs.findIndex(file => file.fileName == fn);
 
-    if (fileInd > 0) {
+    if (fileInd >= 0) {
       wordLocs[fileInd].fileLocs.push(loc);
     } else {
       wordLocs.push({
@@ -151,8 +149,12 @@ function search(searchStr, index) {
   // populate fileLists with lists of files holding each word.
   searchWords.forEach(word => {
     let wordFiles = [];
-    results = _.findWhere(index, {word: word});
-    wordLocs = getWordLocs(results.allLocs);
+    //returns a list of all unique location IDs associated with the current word
+    results = _.findWhere(index, {w: word});
+    //if not found return empty
+    if (results == null) return;
+    //Changes into filename and location format
+    wordLocs = getWordLocs(results.a);
     wordResults.push(wordLocs);
     wordLocs.forEach(fileLocs => {
       wordFiles.push(fileLocs.fileName);
@@ -162,11 +164,13 @@ function search(searchStr, index) {
 
   if (searchWords.length <= 1) {
     wordResults.forEach(obj => {
-      finalResults.push({
-        fileName: obj.fileName,
-        locations: obj.fileLocs
+      obj.forEach( entry => {
+        finalResults.push({
+          fileName: entry.fileName,
+          locations: entry.fileLocs
+        });
       });
-    })
+    });
 
     return finalResults;
   }
@@ -310,12 +314,7 @@ var proc = exec('ls test_docs', (err, stdout, stderr) => {
   dirFiles = stdout.split(/\r?\n/);
   dirFiles.pop();
   addFilesToMainIndex(dirFiles, mainIndex);
- // addFilesToSecondIndex(dirFiles, secondInd);
-  // mainIndex.forEach(entry => {
-  //   if (entry.word === has) {
-  //     console.log(entry.allLocs);
-  //   }
-  // });
+  addFilesToSecondIndex(dirFiles, secondInd);
 });
 
 
@@ -331,9 +330,9 @@ function user_search(str) {
   });
 
   console.log("Test results\n");
-  // results2.forEach(obj => {
-  //   console.log(obj.name + " at " + obj.locs);
-  // });
+  results2.forEach(obj => {
+    console.log(obj.name + " at " + obj.locs);
+  });
 
   console.log("Size of index: " + sizeof(mainIndex));
   console.log("Search took " + (t1 - t0) + " milliseconds.")
@@ -346,15 +345,6 @@ var rl = readline.createInterface({
   terminal: false
  });
 
- rl.on("line", function (line) {
-  //  lookup.forEach( fileWord => {
-  //   console.log(fileWord.fileName + " " + fileWord.ID + "\n");
-  //  });
-    // mainIndex.forEach( fileWord => {
-    // console.log(fileWord.word + ":\n" + fileWord.allLocs + "\n");
-    user_search("has the");
- // });
- });
 
 
 //FOLLOWING FUNCTIONS FOR TESTING
@@ -394,7 +384,7 @@ function searchSecond(searchStr, secondInd) {
 
     secondInd.forEach(fileName => {
         let curr = getIndicesOf(searchStr, fileName.body, false);
-        if (curr != []) {
+        if (curr.length != 0) {
             results.push({name: fileName.name, locs: curr});
         }
     });
@@ -402,3 +392,13 @@ function searchSecond(searchStr, secondInd) {
 }
 
 
+rl.on("line", function (line) {
+  //  lookup.forEach( fileWord => {
+  //   console.log(fileWord.fileName + " " + fileWord.ID + "\n");
+  // });
+    // mainIndex.forEach( fileWord => {
+    // console.log(fileWord.w + ":\n" + fileWord.a + "\n");
+    // });
+    user_search(line);
+ // });
+ });
