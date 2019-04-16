@@ -16,6 +16,10 @@ function highlight(color){
   }
 }
 
+function changeIFrameSrc(path){
+  document.getElementById('content').src = path;
+}
+
 document.onmouseup = function(event){
   window.parent.postMessage('highlighted text','*')
 }
@@ -23,5 +27,14 @@ document.onmouseup = function(event){
 window.parent.addEventListener('message',function(e){
   console.log('This is the color I got: ' + JSON.stringify(e.data))
   let data = e.data;
-  highlight(data.color)
+
+  if (data.color){
+    highlight(data.color);
+  }
+
+  else if (data.src){
+    changeIFrameSrc(data.src);
+  }
 })
+
+
