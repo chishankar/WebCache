@@ -31,7 +31,6 @@
 [![Join the community on Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/electron-react-blpt)
 [![OpenCollective](https://opencollective.com/electron-react-boilerplate/backers/badge.svg)](#backers)
 [![OpenCollective](https://opencollective.com/electron-react-boilerplate/sponsors/badge.svg)](#sponsors)
-[![Good first issues open][good-first-issue-image]][good-first-issue-url]
 [![StackOverflow](http://img.shields.io/badge/stackoverflow-electron_react_boilerplate-blue.svg)](http://stackoverflow.com/questions/tagged/electron-react-boilerplate)
 
 </div>
@@ -41,7 +40,7 @@
 First, clone the repo via git:
 
 ```bash
-git clone --depth 1 --single-branch --branch develop https://github.com/electron-react-boilerplate/electron-react-boilerplate.git your-project-name
+git clone https://github.com/chishankar/WebCache.git
 ```
 
 And then install the dependencies with yarn.
