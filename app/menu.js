@@ -1,7 +1,7 @@
 // @flow
 import { app, Menu, shell, BrowserWindow } from 'electron';
 const { dialog } = require('electron');
-import * as urlsearchActions from '../actions/urlsearch';
+import * as urlsearchActions from './actions/urlsearch';
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
@@ -210,7 +210,7 @@ export default class MenuBuilder {
         label: '&File',
         submenu: [{
             label: '&Open',
-            accelerator: 'Ctrl+O', 
+            accelerator: 'Ctrl+O',
             click: () => {
               dialog.showOpenDialog(options, (filePath) => {
                 console.log(filePath);
