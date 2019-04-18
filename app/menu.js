@@ -1,7 +1,7 @@
 // @flow
 import { app, Menu, shell, BrowserWindow } from 'electron';
 const { dialog } = require('electron');
-import * as urlsearchActions from '../actions/urlsearch';
+import * as urlsearchActions from './actions/urlsearch';
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
