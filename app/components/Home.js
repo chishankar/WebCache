@@ -22,8 +22,12 @@ import { withStyles } from '@material-ui/core/styles';
 import Toolbar from './Toolbar';
 import homeStyles from './Home.css';
 import Footer from './Footer';
+import FileTree from 'react-filetree-electron';
+import Routes from '../Routes';
+import App from '../containers/App';
+import FileDialogue from './FileSelector';
 
-const drawerWidth = 150;
+const drawerWidth = 240;
 
 const styles = theme => ({
   root: {
@@ -61,8 +65,6 @@ const styles = theme => ({
   }
 });
 
-
-
 type Props = {};
 class Home extends Component {
   state = {
@@ -78,6 +80,7 @@ class Home extends Component {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
 
+
   render() {
     const { classes, theme } = this.props;
 
@@ -85,14 +88,7 @@ class Home extends Component {
       <div>
         <div className={classes.toolbar}><h1 align="center">WebCache</h1></div>
         <Divider />
-        <List className={classes.txt}>
-          {['File', 'Save', 'Edit', 'Settings'].map((text, index) => (
-            <ListItem button className={classes.txt} key={text}>
-              <ListItemIcon className={classes.txt}>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText className={classes.txt} primary={text} />
-            </ListItem>
-          ))}
-        </List>
+        <FileDialogue />
       </div>
     );
 
@@ -140,6 +136,7 @@ class Home extends Component {
             </Drawer>
           </Hidden>
         </nav>
+        {/* <FileDialogue /> */}
         <main className={classes.content}>
           <div className={classes.toolbar} />
               <RenderTextPage />
