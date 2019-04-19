@@ -33,11 +33,18 @@ function getRenderText(filePath, iframeRef) {
   resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
 
   // change all paths to become relative
-  resourceHtml = resourceHtml.replace(/href="/g, "href=\"" + resourceDir + "/");
-  resourceHtml = resourceHtml.replace(/src="/g, "src=\"" + resourceDir + "/");
+  // check to see if the path is already changed - don't change it twice!!
+  console.log('this is the ifle path: ' + filePath);
+  if (filePath != "app/default_landing_page.html") {
+    resourceHtml = resourceHtml.replace(/href="([\.\/\w+]+)"/g, "href=\"" + resourceDir + "$1" + "\"");
+    resourceHtml = resourceHtml.replace(/src="([\.\/\w+]+)"/g, "src=\"" + resourceDir + "$1" + "\"");
+
+  }
 
   return (
+
     <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml }></iframe>
+
   );
 }
 
@@ -51,6 +58,10 @@ export default class RenderText extends Component < Props > {
   constructor(props) {
     super(props);
     this.iframeRef = React.createRef();
+  }
+
+  createData = (key,value) => {
+    return {key: value}
   }
 
   // Once the component mounts, add an event listener to listen for messages and pass all the messages to the handleIFrameTask
@@ -67,7 +78,6 @@ export default class RenderText extends Component < Props > {
 
   // Takes in data returned by window.postMessage from the iframe rendered within the component
   handleIFrameTask = (e) => {
-
     if (e.data == 'clicked button') {
 
     } else if (e.data == 'highlighted text') {
