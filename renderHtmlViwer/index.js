@@ -5,7 +5,7 @@ function highlight(color){
       let _range = _selection.getRangeAt(0);
       var _span = document.createElement('span');
 
-      _span.style.backgroundColor = color
+      _span.style.backgroundColor = color;
       _span.style.display = 'inline';
 
       let range = _range.cloneRange();
@@ -14,6 +14,13 @@ function highlight(color){
       _selection.addRange(range);
     }
   }
+}
+
+function handleSave(){
+  console.log("in handle save");
+  let data = {savedData: document.documentElement.innerHTML};
+  console.log(data)
+  window.parent.postMessage(data,"*");
 }
 
 function changeIFrameSrc(path){
@@ -25,7 +32,7 @@ document.onmouseup = function(event){
 }
 
 window.parent.addEventListener('message',function(e){
-  console.log('This is the color I got: ' + JSON.stringify(e.data))
+  console.log('This the message I got: ' + JSON.stringify(e.data))
   let data = e.data;
 
   if (data.color){
@@ -35,6 +42,11 @@ window.parent.addEventListener('message',function(e){
   else if (data.src){
     changeIFrameSrc(data.src);
   }
+
+  else if (data.save){
+    handleSave()
+  }
+
 })
 
 

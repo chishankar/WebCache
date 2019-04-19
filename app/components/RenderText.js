@@ -28,11 +28,11 @@ function getRenderText(filePath) {
   // );
   var updatedDirname = __dirname;
 
-  if (filePath.startsWith('data')){
-    updatedDirname = __dirname.toString().replace("app","")
-  }
+  // if (filePath.startsWith('data')){
+  //   updatedDirname = __dirname.toString().replace("app","")
+  // }
 
-  let fullPath = updatedDirname +filePath
+  let fullPath = "file://" + updatedDirname + "/" +filePath
 
   var someHtml = fs.readFileSync(fullPath).toString();
 
@@ -65,6 +65,8 @@ export default class RenderText extends Component<Props> {
 
   // Abstracted event message from window in iframe
   handleIFrameTask = (e) => {
+    console.log(e.data)
+
     if (e.data == 'clicked button'){
       console.log('It has reached me!');
     }
@@ -73,6 +75,14 @@ export default class RenderText extends Component<Props> {
       let data = {color: this.props.color};
       window.postMessage(data,'*');
     }
+    // if (e.data.savedData){
+    //   console.log(e.data.savedData);
+    // }
+  }
+
+  handleSaveTask = () => {
+    let data = {save: "save"}
+    window.postMessage(data, '*');
   }
 
 
@@ -88,6 +98,7 @@ export default class RenderText extends Component<Props> {
 
     return (
       <div>
+        <button onClick={this.handleSaveTask}>Save</button>
         {getRenderText(this.props.activeUrl)}
       </div>
     );
