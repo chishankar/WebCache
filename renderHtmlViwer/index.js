@@ -18,7 +18,7 @@ function highlight(color){
 
       _span.style.backgroundColor = color;
       _span.style.display = 'inline';
-      _span.setAttribute('id',highlightId);
+      _span.classList.add(highlightId);
 
       let range = _range.cloneRange();
       range.surroundContents(_span);
