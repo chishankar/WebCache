@@ -47,7 +47,7 @@ exports.getSite = function (inputUrl, callback){
     console.log("Content succesfully downloaded");
     callback(true);
 }).catch((err) => {
-    console.log(err);
+    console.log("Content is already cached");
     callback(false);
 });
 }
