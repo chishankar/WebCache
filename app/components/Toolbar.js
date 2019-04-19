@@ -25,7 +25,6 @@ export default class Toolbar extends Component<Props>{
 
   render(){
     const highlighter = this.state.showHighlighter;
-    console.log("hello")
     return(
       <div>
         <ReactTooltip place="top" type="dark" effect="float" />

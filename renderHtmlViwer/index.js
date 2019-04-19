@@ -1,5 +1,11 @@
+// Event listener to highlighting within the iframe
+document.onmouseup = function(event){
+  window.parent.postMessage('highlighted text','*');
+};
+
+// Handles adding the highlight color to the highlighted text
 function highlight(color){
-  let _selection = window.getSelection()
+  let _selection = window.getSelection();
   if (_selection){
     if (_selection.getRangeAt(0)){
       let _range = _selection.getRangeAt(0);
@@ -16,6 +22,7 @@ function highlight(color){
   }
 }
 
+// Handles returning the data in the iFrame to send back for re-writing the file
 function handleSave(){
   console.log("in handle save");
   let data = {savedData: document.documentElement.innerHTML};
@@ -23,16 +30,16 @@ function handleSave(){
   window.parent.postMessage(data,"*");
 }
 
+// Changes the src of the iframe
 function changeIFrameSrc(path){
   document.getElementById('content').src = path;
 }
 
-document.onmouseup = function(event){
-  window.parent.postMessage('highlighted text','*')
-}
-
+// Event listener for events coming from the parent
 window.parent.addEventListener('message',function(e){
-  console.log('This the message I got: ' + JSON.stringify(e.data))
+  if (!e.data.type){
+    console.log('This the message I got: ' + JSON.stringify(e.data))
+  }
   let data = e.data;
 
   if (data.color){
@@ -44,9 +51,9 @@ window.parent.addEventListener('message',function(e){
   }
 
   else if (data.save){
-    handleSave()
+    handleSave();
   }
 
-})
+});
 
 
