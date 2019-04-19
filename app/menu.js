@@ -1,5 +1,7 @@
 // @flow
 import { app, Menu, shell, BrowserWindow } from 'electron';
+const { dialog } = require('electron');
+import * as urlsearchActions from './actions/urlsearch';
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
@@ -17,9 +19,9 @@ export default class MenuBuilder {
     }
 
     const template =
-      process.platform === 'darwin'
-        ? this.buildDarwinTemplate()
-        : this.buildDefaultTemplate();
+      process.platform === 'darwin' ?
+      this.buildDarwinTemplate() :
+      this.buildDefaultTemplate();
 
     const menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);
@@ -57,8 +59,7 @@ export default class MenuBuilder {
   buildDarwinTemplate() {
     const subMenuAbout = {
       label: 'Electron',
-      submenu: [
-        {
+      submenu: [{
           label: 'About ElectronReact',
           selector: 'orderFrontStandardAboutPanel:'
         },
@@ -104,8 +105,7 @@ export default class MenuBuilder {
     };
     const subMenuViewDev = {
       label: 'View',
-      submenu: [
-        {
+      submenu: [{
           label: 'Reload',
           accelerator: 'Command+R',
           click: () => {
@@ -130,20 +130,17 @@ export default class MenuBuilder {
     };
     const subMenuViewProd = {
       label: 'View',
-      submenu: [
-        {
-          label: 'Toggle Full Screen',
-          accelerator: 'Ctrl+Command+F',
-          click: () => {
-            this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
-          }
+      submenu: [{
+        label: 'Toggle Full Screen',
+        accelerator: 'Ctrl+Command+F',
+        click: () => {
+          this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
         }
-      ]
+      }]
     };
     const subMenuWindow = {
       label: 'Window',
-      submenu: [
-        {
+      submenu: [{
           label: 'Minimize',
           accelerator: 'Command+M',
           selector: 'performMiniaturize:'
@@ -155,8 +152,7 @@ export default class MenuBuilder {
     };
     const subMenuHelp = {
       label: 'Help',
-      submenu: [
-        {
+      submenu: [{
           label: 'Learn More',
           click() {
             shell.openExternal('http://electron.atom.io');
@@ -191,14 +187,36 @@ export default class MenuBuilder {
     return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
   }
 
+
+
   buildDefaultTemplate() {
-    const templateDefault = [
-      {
+    let options = {
+      // See place holder 1 in above image
+      title: "File Browser",
+
+      // See place holder 2 in above image
+      defaultPath: "D:\\electron-app",
+
+      // See place holder 3 in above image
+      buttonLabel: "Open Page",
+
+      // See place holder 4 in above image
+      filters: [
+        { name: 'Webpages', extensions: ['html'] },
+      ],
+      properties: ['openFile']
+    }
+    const templateDefault = [{
         label: '&File',
-        submenu: [
-          {
+        submenu: [{
             label: '&Open',
-            accelerator: 'Ctrl+O'
+            accelerator: 'Ctrl+O',
+            click: () => {
+              dialog.showOpenDialog(options, (filePath) => {
+                console.log(filePath);
+                this.store.dispatch(urlsearchActions.changeActiveUrl(filePaths));
+              })
+            }
           },
           {
             label: '&Close',
@@ -211,49 +229,44 @@ export default class MenuBuilder {
       },
       {
         label: '&View',
-        submenu:
-          process.env.NODE_ENV === 'development'
-            ? [
-                {
-                  label: '&Reload',
-                  accelerator: 'Ctrl+R',
-                  click: () => {
-                    this.mainWindow.webContents.reload();
-                  }
-                },
-                {
-                  label: 'Toggle &Full Screen',
-                  accelerator: 'F11',
-                  click: () => {
-                    this.mainWindow.setFullScreen(
-                      !this.mainWindow.isFullScreen()
-                    );
-                  }
-                },
-                {
-                  label: 'Toggle &Developer Tools',
-                  accelerator: 'Alt+Ctrl+I',
-                  click: () => {
-                    this.mainWindow.toggleDevTools();
-                  }
-                }
-              ]
-            : [
-                {
-                  label: 'Toggle &Full Screen',
-                  accelerator: 'F11',
-                  click: () => {
-                    this.mainWindow.setFullScreen(
-                      !this.mainWindow.isFullScreen()
-                    );
-                  }
-                }
-              ]
+        submenu: process.env.NODE_ENV === 'development' ?
+          [{
+              label: '&Reload',
+              accelerator: 'Ctrl+R',
+              click: () => {
+                this.mainWindow.webContents.reload();
+              }
+            },
+            {
+              label: 'Toggle &Full Screen',
+              accelerator: 'F11',
+              click: () => {
+                this.mainWindow.setFullScreen(
+                  !this.mainWindow.isFullScreen()
+                );
+              }
+            },
+            {
+              label: 'Toggle &Developer Tools',
+              accelerator: 'Alt+Ctrl+I',
+              click: () => {
+                this.mainWindow.toggleDevTools();
+              }
+            }
+          ] :
+          [{
+            label: 'Toggle &Full Screen',
+            accelerator: 'F11',
+            click: () => {
+              this.mainWindow.setFullScreen(
+                !this.mainWindow.isFullScreen()
+              );
+            }
+          }]
       },
       {
         label: 'Help',
-        submenu: [
-          {
+        submenu: [{
             label: 'Learn More',
             click() {
               shell.openExternal('http://electron.atom.io');
