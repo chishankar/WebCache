@@ -60,10 +60,6 @@ export default class RenderText extends Component<Props> {
     this.iframeRef = React.createRef();
   }
 
-  createData = (key,value) => {
-    return {key: value}
-  }
-
   // Once the component mounts, add an event listener to listen for messages and pass all the messages to the handleIFrameTask
   componentDidMount(){
     window.addEventListener('message',this.handleIFrameTask)
