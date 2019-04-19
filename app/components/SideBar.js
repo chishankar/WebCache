@@ -10,6 +10,7 @@ export default class SideBar extends Component<Props>{
 
   constructor(props){
     super(props)
+
   }
 
   render(){

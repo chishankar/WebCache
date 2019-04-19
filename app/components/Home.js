@@ -27,6 +27,7 @@ import FileTree from 'react-filetree-electron';
 import Routes from '../Routes';
 import App from '../containers/App';
 import FileDialogue from './FileSelector';
+import SideBarPage from '../containers/SideBarPage';
 
 const drawerWidth = 240;
 
@@ -141,6 +142,7 @@ class Home extends Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
               <RenderTextPage store={this.store}/>
+              <SideBarPage store={this.store}/>
         </main>
       </div>
     );
