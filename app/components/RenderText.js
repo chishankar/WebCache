@@ -32,6 +32,10 @@ function getRenderText(filePath, iframeRef) {
 
   resourceHtml += "<script>" + injectScript + "<\/script>";
 
+  // change all paths to become relative
+  resourceHtml = resourceHtml.replace(/href="/g, "href=\"" + resourceDir + "/");
+  resourceHtml = resourceHtml.replace(/src="/g, "src=\"" + resourceDir + "/");
+
   return (
     <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml }></iframe>
   );
