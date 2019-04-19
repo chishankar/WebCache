@@ -1,4 +1,4 @@
-import {React, Component} from 'react';
+import React, {Component} from 'react';
 
 type Props = {
   highlights: Array,
@@ -15,7 +15,7 @@ export default class SideBar extends Component<Props>{
 
   render(){
     return(
-      <div>Hello</div>
+      <div>Chirag</div>
     )
   }
 }

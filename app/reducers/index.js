@@ -11,6 +11,7 @@ export default function createRootReducer(history: History) {
     router: connectRouter(history),
     counter,
     highlighter,
-    urlsearch
+    urlsearch,
+    sidebar
   });
 }
