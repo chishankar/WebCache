@@ -15,7 +15,6 @@ function gettext(){
 }
 
 function getRenderText(filePath) {
-  // var someHtml = fs.readFileSync(filePath).toString();
   // TODO: Rewrite so that it does not convert HTML to JSX this way
   //       There should be a HTML to React library floating out there.
   // TODO: also render the css files associated with it
@@ -27,17 +26,23 @@ function getRenderText(filePath) {
   //   <webview className={styles.setWidth} id = "foo" src={fullPath}>
   //   </webview>
   // );
-
   var updatedDirname = __dirname;
 
   if (filePath.startsWith('data')){
     updatedDirname = __dirname.toString().replace("app","")
   }
 
-  let fullPath = "file://" + updatedDirname +filePath
+  let fullPath = updatedDirname +filePath
+
+  var someHtml = fs.readFileSync(fullPath).toString();
+
+  var injectScript = fs.readFileSync("/Users/Chirag/Documents/WebCache/renderHtmlViwer/index.js").toString();
+  someHtml += "<script>"+injectScript+"<\/script>";
+
   console.log("updated: "+fullPath);
   return (
-    <iframe className={styles.setWidth}  ref="serviceFrameSend" src={fullPath}></iframe>
+    // <iframe className={styles.setWidth}  ref="serviceFrameSend" src={fullPath}></iframe>
+    <iframe className={styles.setWidth}  ref="serviceFrameSend" srcDoc={someHtml}></iframe>
   );
 }
 
@@ -48,33 +53,29 @@ type Props = {
 export default class RenderText extends Component<Props> {
   props: Props;
 
-  handleHighlight = (event) =>{
-    console.log(this.props.color)
+  componentDidMount(){
+    window.addEventListener('message',this.handleIFrameTask)
+    // window.postMessage(data,'*')
+  }
 
-    if (this.props.color != "DEFAULT"){
-      var _selection = window.getSelection();
-      let _range = _selection.getRangeAt(0);
-      var span = document.createElement(span);
+  componentDidUpdate(prevProps){
+      console.log("updating data source for iframe")
+      // window.postMessage(data,'*')
+  }
 
-      span.style.backgroundColor = this.props.color;
-      span.style.display = 'inline';
-//this code is wrong
-      if (_selection) {
-          var range = _range.cloneRange();
-          range.surroundContents(span);
-          _selection.removeAllRanges();
-          _selection.addRange(range);
-      }
+  // Abstracted event message from window in iframe
+  handleIFrameTask = (e) => {
+    if (e.data == 'clicked button'){
+      console.log('It has reached me!');
     }
-  };
-
-  componentDidUpdate(prevProps) {
-    console.log("detected updated");
-    if(!(this.props.activeUrl === prevProps.activeUrl)) // Check if it's a new user, you can also use some unique property, like the ID  (this.props.user.id !== prevProps.user.id)
-    {
-      this.render();
+    if (e.data == 'highlighted text'){
+      console.log('Someone highlighted text (.)(.)');
+      let data = {color: this.props.color};
+      window.postMessage(data,'*');
     }
   }
+
+
   //       {!displayInput && <div contenteditable="true" ref='myTextarea' className="divStuff" onMouseUp={this.handleHighlight}>{gettext()}</div>}
 //       {displayInput && getRenderText(this.props.activeUrl)}
 

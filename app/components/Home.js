@@ -143,7 +143,7 @@ class Home extends Component {
         </nav>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-              <Viewer store={this.store}/>
+              <RenderTextPage store={this.store}/>
         </main>
       </div>
     );
