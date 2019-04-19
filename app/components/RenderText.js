@@ -33,7 +33,9 @@ function getRenderText(filePath, iframeRef) {
   resourceHtml += "<script>" + injectScript + "<\/script>";
 
   return (
+
     <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml }></iframe>
+
   );
 }
 
@@ -49,10 +51,13 @@ export default class RenderText extends Component<Props> {
     this.iframeRef = React.createRef();
   }
 
+  createData = (key,value) => {
+    return {key: value}
+  }
+
   // Once the component mounts, add an event listener to listen for messages and pass all the messages to the handleIFrameTask
   componentDidMount(){
     window.addEventListener('message',this.handleIFrameTask)
-    // window.postMessage(data,'*')
   }
 
   // Upon URL change, change the URL
@@ -65,6 +70,7 @@ export default class RenderText extends Component<Props> {
   handleIFrameTask = (e) => {
 
     if (e.data == 'clicked button'){
+      console.log("TEMPORARY")
 
     } else if (e.data == 'highlighted text'){
 
@@ -75,14 +81,17 @@ export default class RenderText extends Component<Props> {
 
       console.log(e.data.savedData);
 
+    } else if (e.data.highlight){
+
+      console.log(e.data.highlight)
+
     }
   }
 
   // Function to handle saving data
   handleSaveTask = () => {
 
-    let data = {save: "save"}
-    window.postMessage(data, '*');
+    window.postMessage("save", '*');
 
   }
 

@@ -19,7 +19,7 @@ export default class Routes extends Component<Props> {
     return (
       <App>
         <HomePage store={this.store}/>
-        <Footer />
+        <Footer/>
       </App>
     );
   }
