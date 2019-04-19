@@ -7,12 +7,63 @@ const _ = require('underscore');
 const fs = require('fs');
 const sizeof = require('object-sizeof');
 const { PerformanceObserver, performance } = require('perf_hooks');
+const BSON = require('bson');
 var readline = require("readline");
 
+const stopWords = ["i", "me", "my", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"];
+
+const INDEX_DIRECTORY = false;
+
+function avg(mainIndex) {
+  let sum = 0;
+  mainIndex.forEach(w => {
+    sum += w.a.length;
+  });
+  return sum / mainIndex.length;
+}
 
 //Lookup table between file name and file number
 let lookup = [];
 lookup.push({fileName: "", a: []});
+
+function saveIndexToFile(mainIndex, table, indexFn, tableFn) {
+
+  let filePath = path.join(__dirname, indexFn);
+  return new Promise(resolve => {
+
+    fs.writeFile(filePath, BSON.serialize(mainIndex), function (err) {
+      if (err) throw err;
+      console.log('Index saved to file');
+      let filePath = path.join(__dirname, tableFn);
+      fs.writeFile(filePath, BSON.serialize(table), function (err) {
+        if (err) throw err;
+        resolve();
+      });
+    });
+
+  });
+}
+
+function loadIndexFromFile(indexFn, tableFn) {
+
+  let filePath = path.join(__dirname, indexFn);
+  let index;
+  let table;
+  return new Promise(resolve => {
+    fs.readFile(filePath, function(err,data){
+      if (err) throw err;
+      index = BSON.deserialize(data);
+      console.log('Index loaded from file');
+      let filePath = path.join(__dirname, tableFn);
+      fs.readFile(filePath, function(err,data){
+        if (err) throw err;
+        table = BSON.deserialize(data);
+        resolve([index, table]);
+      });
+
+    });
+  });
+}
 
 function getIndicesOf(searchStr, str, caseSensitive) {
   var searchStrLen = searchStr.length;
@@ -61,7 +112,7 @@ function getFileIndex(fileName) {
           // Case-sensitive indexing not implented for simplicity.
 
           let cleanText = data.replace(/<\/?[^>]+(>|$)/g, "");
-          let fileWords = cleanText.toLowerCase().trim().split(/\s+/).filter(function(value, index, self){return self.indexOf(value) === index;});
+          let fileWords = cleanText.toLowerCase().trim().split(/\s+/).filter(function(value, index, self){return self.indexOf(value) === index && !stopWords.includes(value);});
 
           //Iterate for each unique word in file
           fileWords.forEach( word => {
@@ -94,7 +145,7 @@ function addToMainIndex(fileIndex, mainIndex) {
 
     wordInd = mainIndex.findIndex(mainWord => mainWord.w == fileWord.w);
 
-    if (wordInd > 0) {
+    if (wordInd >= 0) {
       mainIndex[wordInd].a = mainIndex[wordInd].a.concat(fileWord.a);
     } else {
       mainIndex.push(fileWord);
@@ -104,13 +155,19 @@ function addToMainIndex(fileIndex, mainIndex) {
 
 function addFilesToMainIndex(fileNames, mainIndex) {
 
-  return new Promise(resolve => {
+  indexPromises = [];
+
+  return new Promise(resolveAll => {
+
     fileNames.forEach(fileName => {
-      getFileIndex(fileName).then(fileIndex => {
-        addToMainIndex(fileIndex, mainIndex);
-      });
+      indexPromises.push(new Promise(resolve => {
+        getFileIndex(fileName).then(fileIndex => {
+          addToMainIndex(fileIndex, mainIndex);
+          resolve();
+        });
+      }));
     });
-    resolve();
+    Promise.all(indexPromises).then(() => {resolveAll();});
   });
 }
 
@@ -143,7 +200,7 @@ function search(searchStr, index) {
   let fileLists = []; // will hold all files for each search word
   let wordResults = [];
   let reducedFileList = []; // will hold all files that contain all search words
-  let searchWords = searchStr.toLowerCase().trim().split(/\s+/);
+  let searchWords = searchStr.toLowerCase().trim().split(/\s+/).filter(function(value,index,self) {return !stopWords.includes(value);});
   let startIndex = 0;
 
   // populate fileLists with lists of files holding each word.
@@ -301,22 +358,41 @@ function search(searchStr, index) {
 
 // fresh index and stat table for testing
 
-const mainIndex = [];
+var mainIndex = [];
 
 var lastFileStats = [];
 
-var proc = exec('ls test_docs', (err, stdout, stderr) => {
-  if (err) {
-    // node couldn't execute the command
-    reject(Error("ls did not execute correctly"));
-  }
+if(INDEX_DIRECTORY) {
+  var proc = exec('ls test_docs', (err, stdout, stderr) => {
+    if (err) {
+      // node couldn't execute the command
+      reject(Error("ls did not execute correctly"));
+    }
 
-  dirFiles = stdout.split(/\r?\n/);
-  dirFiles.pop();
-  addFilesToMainIndex(dirFiles, mainIndex);
-  console.log("done");
- // addFilesToSecondIndex(dirFiles, secondInd);
-});
+    dirFiles = stdout.split(/\r?\n/);
+    dirFiles.pop();
+
+    var t0 = performance.now();
+    addFilesToMainIndex(dirFiles, mainIndex).then(result => {
+      var t1 = performance.now();
+      console.log("Indexing completed in  " + (t1 - t0) + " milliseconds.");
+      console.log("Size of index: " + sizeof(mainIndex));
+      saveIndexToFile(mainIndex, lookup, 'ind_bin.txt', 'tbl_bin.txt');
+    });
+
+  // addFilesToSecondIndex(dirFiles, secondInd);
+  });
+} else {
+  var t0 = performance.now();
+  loadIndexFromFile('ind_bin.txt', 'tbl_bin.txt').then(result => {
+    mainIndex = result[0];
+    lookup = result[1];
+    var t1 = performance.now();
+    console.log("Loaded index from file in  " + (t1 - t0) + " milliseconds.");
+    console.log("Size of index: " + sizeof(mainIndex));
+    let results = search("performance",mainIndex);
+  });
+}
 
 
 
@@ -327,6 +403,10 @@ function user_search(str) {
   //let results2 = searchSecond(str, secondInd);
   var t1 = performance.now();
   results.forEach(obj => {
+    locations = [];
+    Object.keys(obj.locations).forEach(ind => {
+      locations.push(obj.locations[ind]);
+    })
     console.log(obj.fileName + " at " + obj.locations);
   });
 
@@ -401,6 +481,8 @@ rl.on("line", function (line) {
     // console.log(fileWord.w + ":\n" + fileWord.a + "\n");
     // });
     user_search(line);
+
+
     //console.log(mainIndex.length);
  // });
  });
