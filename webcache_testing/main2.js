@@ -23,8 +23,32 @@ function avg(mainIndex) {
 }
 
 //Lookup table between file name and file number
-let lookup = [];
+var lookup = [];
 lookup.push({fileName: "", a: []});
+
+function checkIndexForChanges(lookup) {
+
+  for (i = 1; i < Object.keys(lookup).length; i++) {
+
+    let file = lookup[i];
+    console.log(lookup[i]);
+    let escapedFN = file.fileName.replace(/(\s+)/g, '\\$1');
+    let filePath = path.join(__dirname, '/test_docs/' + `${escapedFN}`);
+
+    fs.stat(filePath, function(err, stats){
+
+      if(err) {
+        console.log(`${escapedFN}` + ' file deleted');
+      } else {
+
+        //assuming file[1] holds last modification date
+        if (stats.mtimeMs != file.lastMod) {
+          console.log(`${escapedFN}` + ' file modified');
+        }
+      }
+    });
+  }
+}
 
 function saveIndexToFile(mainIndex, table, indexFn, tableFn) {
 
@@ -40,7 +64,6 @@ function saveIndexToFile(mainIndex, table, indexFn, tableFn) {
         resolve();
       });
     });
-
   });
 }
 
@@ -54,8 +77,8 @@ function loadIndexFromFile(indexFn, tableFn) {
       if (err) throw err;
       index = BSON.deserialize(data);
       console.log('Index loaded from file');
-      let filePath = path.join(__dirname, tableFn);
-      fs.readFile(filePath, function(err,data){
+      let filePath2 = path.join(__dirname, tableFn);
+      fs.readFile(filePath2, function(err,data){
         if (err) throw err;
         table = BSON.deserialize(data);
         resolve([index, table]);
@@ -91,15 +114,45 @@ function getIndicesOf(searchStr, str, caseSensitive) {
 
 //Takes a file name, returns a list of objects containing words
 // and all of the unique IDs of locations that word appears
+
+
+function getLastMod(fileName) {
+
+  let lastMod = 0;
+  return new Promise(resolve => {
+
+    let escapedFN = fileName.replace(/(\s+)/g, '\\$1');
+    let fp = path.join(__dirname, '/test_docs/' + `${escapedFN}`);
+    fs.stat(fp, function(err, stats){
+
+      if(err) {
+        console.log("error");
+      } else {
+        lastMod = stats.mtimeMs;
+      }
+      resolve(lastMod);
+    });
+  });
+}
+
+
+
+
 function getFileIndex(fileName) {
 
   //Assigns file ID and adds to lookup table
   let fileNum = lookup.length;
   var fileIndex = [];
+
   var newEntry = {
     fileName: fileName,
-    ID: fileNum
+    ID: fileNum,
+    lastMod: 0
   };
+
+  getLastMod(fileName).then( result => {
+    newEntry.lastMod = result;
+  });
 
   lookup.push(newEntry);
 
@@ -390,6 +443,7 @@ if(INDEX_DIRECTORY) {
     var t1 = performance.now();
     console.log("Loaded index from file in  " + (t1 - t0) + " milliseconds.");
     console.log("Size of index: " + sizeof(mainIndex));
+    console.log("lookup table size: " + sizeof(lookup));
     let results = search("performance",mainIndex);
   });
 }
@@ -433,7 +487,7 @@ const secondInd = [];
 
 function getFileBody(fileName) {
 
-    filePath = path.join(__dirname, '/test_docs/' + fileName);
+    let filePath = path.join(__dirname, '/test_docs/' + fileName);
 
     return new Promise(resolve => {
       fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
@@ -480,6 +534,7 @@ rl.on("line", function (line) {
     // mainIndex.forEach( fileWord => {
     // console.log(fileWord.w + ":\n" + fileWord.a + "\n");
     // });
+    checkIndexForChanges(lookup);
     user_search(line);
 
 
