@@ -1,8 +1,10 @@
+var color;
 // Event listener to highlighting within the iframe
 document.onmouseup = function(event){
-  window.parent.postMessage('highlighted text','*');
+  highlight(color);
 };
 
+// make the range into a JSON object so that it can be passed to the parent
 function serializeRange(range) {
   if (!range || ((range.startContainer === range.endContainer) && (range.startOffset === range.endOffset))) {
     return null;
@@ -20,7 +22,6 @@ function serializeRange(range) {
 function highlight(color){
   let data = {};
 
-  console.log(color);
   sel = window.getSelection();
   data.text = sel.toString();
   if (sel.rangeCount && sel.getRangeAt) {
@@ -32,6 +33,7 @@ function highlight(color){
       sel.addRange(range);
   }
   // Use HiliteColor since some browsers apply BackColor to the whole block
+  console.log('highlighting ' + color);
   if (!document.execCommand("HiliteColor", false, color)) {
       document.execCommand("BackColor", false, color);
   }
@@ -60,15 +62,17 @@ function changeIFrameSrc(path){
 // Event listener for events coming from the parent
 window.parent.addEventListener('message',function(e){
   if (!e.data.type){
-    console.log('This the message I got: ' + JSON.stringify(e.data))
+    console.log('iFrame received: ' + JSON.stringify(e.data))
   }
   let data = e.data;
 
   if (data.color){
-    let highlightResponse = {highlight: highlight(data.color)};
-    if (highlightResponse.highlight){
-      window.parent.postMessage(highlightResponse,"*");
-    }
+    console.log('setting color to ' + data.color);
+    color = data.color;
+    // let highlightResponse = {highlight: highlight(data.color)};
+    // if (highlightResponse.highlight){
+      // window.parent.postMessage(highlightResponse,"*");
+    // }
   }
 
   else if (data.src){
