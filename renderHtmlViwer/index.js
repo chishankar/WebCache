@@ -3,37 +3,46 @@ document.onmouseup = function(event){
   window.parent.postMessage('highlighted text','*');
 };
 
+function serializeRange(range) {
+  if (!range || ((range.startContainer === range.endContainer) && (range.startOffset === range.endOffset))) {
+    return null;
+  }
+
+  return {
+    startContainer: JSON.parse(JSON.stringify(range.startContainer)),
+    startOffset: range.startOffset,
+    endContainer: JSON.parse(JSON.stringify(range.endContainer)),
+    endOffset: range.endOffset
+  }
+}
+
 // Handles adding the highlight color to the highlighted text
 function highlight(color){
-  let data = {}
-  let _selection = window.getSelection();
+  let data = {};
 
-  if (_selection){
-
-    if (_selection.getRangeAt(0)){
-
-      let _range = _selection.getRangeAt(0);
-      let highlightId = generateRandomId();
-      var _span = document.createElement('span');
-
-      _span.style.backgroundColor = color;
-      _span.style.display = 'inline';
-      _span.classList.add(highlightId);
-
-      let range = _range.cloneRange();
-      range.surroundContents(_span);
-
-      _selection.removeAllRanges();
-      _selection.addRange(range);
-
-      // data.range = range;
-      data.text = window.getSelection().toString();
-      data.id = highlightId;
-      data.color = color;
-
-      return data;
-    }
+  console.log(color);
+  sel = window.getSelection();
+  data.text = sel.toString();
+  if (sel.rangeCount && sel.getRangeAt) {
+      range = sel.getRangeAt(0);
   }
+  document.designMode = "on";
+  if (range) {
+      sel.removeAllRanges();
+      sel.addRange(range);
+  }
+  // Use HiliteColor since some browsers apply BackColor to the whole block
+  if (!document.execCommand("HiliteColor", false, color)) {
+      document.execCommand("BackColor", false, color);
+  }
+  document.designMode = "off";
+
+  sel.removeAllRanges();
+
+  data.range = serializeRange(range);
+  data.color = color;
+
+  return data;
 }
 
 // Handles returning the data in the iFrame to send back for re-writing the file
