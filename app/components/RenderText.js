@@ -68,11 +68,13 @@ export default class RenderText extends Component<Props> {
   // Upon URL change, change the URL
   componentDidUpdate(prevProps){
       console.log("updating data source for iframe")
-      // window.postMessage(data,'*')
+      let data = {color: this.props.color};
+      window.postMessage(data,'*');
   }
 
   // Takes in data returned by window.postMessage from the iframe rendered within the component
   handleIFrameTask = (e) => {
+    console.log('parent received: ' + e.data);
 
     if (e.data == 'clicked button'){
       console.log("TEMPORARY")
