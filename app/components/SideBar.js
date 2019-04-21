@@ -15,6 +15,7 @@ import SendIcon from '@material-ui/icons/Send';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
+import HighlightText from './HighlightText';
 
 type Props = {
   highlights: Array,
@@ -42,76 +43,20 @@ class SideBar extends Component<Props>{
     }
   }
 
-  handleClick = () => {
-    this.setState(state => ({ open: !state.open }));
-  };
-
-  createHighlight = (data) => {
-    let text = data.text;
-    let color = data.color;
-    let thing =
-        <div>
-          <ListItemIcon>
-              {color}
-          </ListItemIcon>
-          <ListItemText inset primary={text} />
-        </div>
-    console.log(text)
-    console.log(thing)
-    return thing;
-  }
-
-  parseHighlights = () => {
-    let highlightlist = this.props.highlights;
-    for (let i = 0; i < highlightlist.length ; i++) {
-      var highlight = highlightlist[i];
-      console.log("BRO: " + JSON.stringify(highlight));
-      html += this.createHighlight(highlight.text,highlight.color)
-    }
-    return html;
-  }
-
-
-
   render(){
-
-    const HighlightList = createReactClass({
-      render : function () {
-        return (
-          <div>
-              {
-                Object.keys(this.props.highlightdata).map = (key) => {
-                  var highlight = this.props.highlightdata[i];
-                  return <li className="list-group-item list-group-item-info">{highlight.text}</li>
-                }
-              }
-           </div>
-        );
-       }
-     });
 
     const { classes } = this.props;
     const highlightData = this.props.highlights;
-    const createDataUI = this.createHighlight;
-    console.log(this.props.highlights)
     return(
       <List
       component="nav"
       subheader={<ListSubheader component="div">Highlighted Texts</ListSubheader>}
       className={classes.root}>
 
-      <HighlightList highlightdata={highlightData} />
+     {highlightData.map(highlight =>
+      <HighlightText key={highlight.id} text={highlight.text} color={highlight.color} id={highlight.id} />
+      )}
 
-      <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
-            <ListItemIcon>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText inset primary="Starred" />
-          </ListItem>
-        </List>
-      </Collapse>
     </List>
     )
   }
