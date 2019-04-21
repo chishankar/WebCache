@@ -260,6 +260,7 @@
     "@material-ui/icons": "^3.0.2",
     "classnames": "^2.2.6",
     "connected-react-router": "^5.0.1",
+    "create-react-class": "^15.6.3",
     "devtron": "^1.4.0",
     "electron-debug": "^2.0.0",
     "electron-log": "^2.2.17",

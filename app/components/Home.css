@@ -14,6 +14,9 @@
 }
 
 .appBar{
-  background-color: #383535 !important;
+  background-color: black !important;
 }
 
+.textcolor{
+  color: black !important;
+}

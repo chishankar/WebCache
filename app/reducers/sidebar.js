@@ -1,19 +1,18 @@
 import type { Action } from './types';
 
 const initialState = {
-  sidebar : {
     highlights: [],
     url: ""
-  }
 }
 
 export default function highlighter(state=initialState, action) {
   switch (action.type) {
 
     case 'HIGHLIGHT':
-      console.log("Client has highlighted");
+      const highlights = state.highlights;
+      const newHighlightsList = highlights.concat([action.highlightData])
       return Object.assign({},state, {
-          sidebar: "red"
+          highlights: newHighlightsList
       });
 
     default:

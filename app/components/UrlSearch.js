@@ -4,6 +4,9 @@ import 'font-awesome/css/font-awesome.min.css';
 import getSite from '../utilities/webscraper';
 import * as urlsearchActions from '../actions/urlsearch';
 
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+
 export default class UrlSearch extends Component<Props>{
 
   constructor(props){
@@ -34,6 +37,10 @@ export default class UrlSearch extends Component<Props>{
     }
   }
 
+  // <input type="text" placeholder="https://<website>" onKeyUp={this.handleEnter} onChange={this.handleInput}/>
+  // {showValidate && validateHTML}
+  // {!showValidate && notValidateHTML}
+
   _setValidUrl = (vUrl) =>{
     this.setState({validUrl: vUrl});
   }
@@ -62,10 +69,24 @@ export default class UrlSearch extends Component<Props>{
     const validateHTML = <i float="right" className="fas fa-check" className={styles.facheck}></i>;
     const notValidateHTML = <i float="right" className="fas fa-check" className={styles.fauncheck}></i>;
       return(
+
         <div>
-          <input type="text" placeholder="https://<website>" onKeyUp={this.handleEnter} onChange={this.handleInput}/>
+            <TextField
+            id="outlined-full-width"
+            label="URL"
+            style={{ margin: 8 }}
+            placeholder="https://<website>"
+            margin="normal"
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onKeyUp={this.handleEnter}
+            onChange={this.handleInput}
+          />
           {showValidate && validateHTML}
           {!showValidate && notValidateHTML}
+
         </div>
       )
   }

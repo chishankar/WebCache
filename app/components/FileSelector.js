@@ -11,7 +11,6 @@ export default class FileDialogue extends React.Component {
 
   onChange = (e) => {
     this.setState({ path: e.target.files[0].path });
-    console.log(this.state.path);
   }
 
   render() {

@@ -7,6 +7,7 @@ import HighlightText from './HighlightText';
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import * as resourcePath from '../utilities/ResourcePaths';
+import * as highlightActions from '../actions/sidebar';
 
 const fs = require('fs');
 
@@ -49,7 +50,8 @@ function getRenderText(filePath, iframeRef) {
 }
 
 type Props = {
-  color: string
+  color: string,
+  addHighlightColor: Function
 }
 
 export default class RenderText extends Component<Props> {
@@ -88,8 +90,11 @@ export default class RenderText extends Component<Props> {
 
     } else if (e.data.highlight){
 
-      console.log(e.data.highlight)
-
+      if(e.data.highlight.text !== "" && e.data.highlight.color !== "DEFAULT"){
+        // this.store
+        console.log(e.data.highlight)
+        this.props.addHighlightColor(e.data.highlight);
+      }
     }
   }
 
