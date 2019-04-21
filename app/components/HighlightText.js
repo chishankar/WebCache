@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { withStyles } from '@material-ui/core/styles';
 
 
 import 'font-awesome/css/font-awesome.min.css';
@@ -35,7 +34,7 @@ function preview(str){
   return str;
 }
 
-class HighlightText extends Component{
+export default class HighlightText extends Component{
   // props: Props
 
   constructor(props){
@@ -74,5 +73,3 @@ class HighlightText extends Component{
     );
   }
 }
-
-export default withStyles(highlighterColor, { withTheme: false })(HighlightText);
