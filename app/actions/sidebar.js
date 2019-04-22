@@ -6,3 +6,11 @@ export const addHighlight = (highlightData) => {
       highlightData
   }
 }
+
+export const addComment = (commentData) => {
+  return {
+      type: "COMMENT",
+      commentData
+  }
+}
+

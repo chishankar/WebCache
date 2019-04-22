@@ -22,7 +22,8 @@ import { Divider } from '@material-ui/core';
 
 type Props = {
   highlights: Array,
-  url: String
+  url: String,
+  addComment: Function
 };
 
 const styles = theme => ({
@@ -59,7 +60,7 @@ class SideBar extends Component<Props>{
       <Divider />
 
      {highlightData.map(highlight =>
-      <HighlightText key={highlight.id} text={highlight.text} color={highlight.color} id={highlight.id} />
+      <HighlightText key={highlight.id} text={highlight.text} color={highlight.color} id={highlight.id} func={this.props.addComment}/>
       )}
 
     </List>

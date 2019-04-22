@@ -10,6 +10,9 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import ReactTooltip from 'react-tooltip';
 import List from '@material-ui/core/List';
+import * as sideBarActions from '../actions/sidebar';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 const red = {
   color: 'red'
@@ -50,11 +53,18 @@ const styles = theme => ({
   },
 });
 
+
 function preview(str){
   if (str.length > 15){
     return str.substring(0,15) + "...";
   }
   return str;
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    addComment: sideBarActions.addComment,
+  },dispatch)
 }
 
 class HighlightText extends Component{
@@ -67,6 +77,7 @@ class HighlightText extends Component{
     this.preview = preview(this.text);
     this.id = this.props.id;
     this.listref = React.createRef();
+    this.addComment = this.props.addComment;
     this.state = {
       open: true,
       comment: ""
@@ -76,6 +87,11 @@ class HighlightText extends Component{
   handleInput = (event) => {
     let value = event.target.value;
     this.setState({comment: value});
+    let data = {
+      id: this.id,
+      comment: this.addtext
+    }
+    this.props.addComment(data);
   }
 
   getHighlighterColorIcon = (color) => {
@@ -131,7 +147,7 @@ class HighlightText extends Component{
             </ListItem>
             <ListItem button className={styles.nested}>
             <ListItemIcon>
-              <i class="fas fa-align-left"></i>
+              <i className="fas fa-align-left"></i>
             </ListItemIcon>
             <ListItemText inset primary={this.text} />
         </ListItem>
@@ -142,4 +158,7 @@ class HighlightText extends Component{
   }
 }
 
-export default withStyles(styles)(HighlightText);
+export default connect(
+  null,
+  mapDispatchToProps
+)(HighlightText)
