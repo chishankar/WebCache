@@ -82,7 +82,7 @@ class SideBar extends Component<Props>{
     return(
       <List
       component='nav'
-      subheader={<ListSubheader component='div'><i className='fas fa-highlighter' style={this.getHighlighterColorIcon(this.props.color)}/> Highlighted Texts</ListSubheader>}
+      subheader={<ListSubheader component='div'><i className='fas fa-highlighter' style={this.getHighlighterColorIcon(this.props.color)}/>  Highlighted Texts</ListSubheader>}
       className={classes.root}>
 
       <Divider />
