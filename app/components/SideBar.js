@@ -1,29 +1,41 @@
 import React, {Component} from 'react';
-var createReactClass = require('create-react-class');
 
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import SendIcon from '@material-ui/icons/Send';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
+
 import HighlightText from './HighlightText';
-import ReactTooltip from 'react-tooltip';
 import { Divider } from '@material-ui/core';
 
+const red = {
+  color: 'red'
+}
+
+const blue = {
+  color: 'blue'
+}
+
+const green={
+  color: 'green'
+}
+
+const purple={
+  color: 'purple'
+}
+
+const yellow={
+  color: 'yellow'
+}
+
+const black={
+  color: 'black'
+}
 
 type Props = {
   highlights: Array,
   url: String,
-  addComment: Function
+  addComment: Function,
+  color: String
 };
 
 const styles = theme => ({
@@ -37,6 +49,8 @@ const styles = theme => ({
   },
 });
 
+
+
 class SideBar extends Component<Props>{
   props: Props
 
@@ -47,14 +61,28 @@ class SideBar extends Component<Props>{
     }
   }
 
+  getHighlighterColorIcon = (color) => {
+    if (color === 'red'){
+      return red
+    } else if (color === 'blue'){
+      return blue
+    }else if (color === 'green'){
+      return green
+    }else if (color === 'purple'){
+      return purple
+    }else if (color === 'yellow'){
+      return yellow
+    }
+  }
+
   render(){
 
     const { classes } = this.props;
     const highlightData = this.props.highlights;
     return(
       <List
-      component="nav"
-      subheader={<ListSubheader component="div">Highlighted Texts</ListSubheader>}
+      component='nav'
+      subheader={<ListSubheader component='div'><i className='fas fa-highlighter' style={this.getHighlighterColorIcon(this.props.color)}/> Highlighted Texts</ListSubheader>}
       className={classes.root}>
 
       <Divider />

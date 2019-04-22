@@ -5,7 +5,8 @@ import * as sideBarActions from '../actions/sidebar';
 
 function mapStateToProps(state){
   return {
-    highlights: state.sidebar.highlights
+    highlights: state.sidebar.highlights,
+    color: state.highlighter.color
   };
 }
 

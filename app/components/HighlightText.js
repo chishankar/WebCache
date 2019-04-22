@@ -1,55 +1,55 @@
 import React, { Component } from 'react';
+import * as sideBarActions from '../actions/sidebar';
+
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
-import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import ReactTooltip from 'react-tooltip';
 import List from '@material-ui/core/List';
-import * as sideBarActions from '../actions/sidebar';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Divider } from '@material-ui/core';
 
 const red = {
   color: 'red'
-}
+};
 
 const blue = {
   color: 'blue'
-}
+};
 
 const green={
   color: 'green'
-}
+};
 
 const purple={
   color: 'purple'
-}
+};
 
 const yellow={
   color: 'yellow'
-}
+};
 
 const black={
   color: 'black'
-}
+};
 
 const styles = theme => ({
   root: {
     width: '100%',
     maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.paper
   },
   nested: {
     paddingLeft: theme.spacing.unit * 4,
   },
   textField: {
     marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing.unit
   },
 });
 
@@ -78,7 +78,7 @@ class HighlightText extends Component{
     this.listref = React.createRef();
     this.addComment = this.props.addComment;
     this.state = {
-      open: true,
+      open: false,
       comment: ""
     }
   }
@@ -152,6 +152,7 @@ class HighlightText extends Component{
         </ListItem>
         </List>
         </Collapse>
+        <Divider />
       </div>
     );
   }

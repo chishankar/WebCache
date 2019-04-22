@@ -13,24 +13,14 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 
 import Tools from './Toolbar';
 import homeStyles from './Home.css';
-import FileTree from 'react-filetree-electron';
 import FileDialogue from './FileSelector';
 import SideBarPage from '../containers/SideBarPage';
-import Grid from '@material-ui/core/Grid';
-import Footer from './Footer';
 import RenderTextPage from '../containers/RenderTextPage';
-import { white } from 'ansi-colors';
 
-
-const drawerWidth = 300;
+const drawerWidth = 250;
 
 const styles = theme => ({
   root: {
@@ -66,7 +56,7 @@ const styles = theme => ({
   drawerPaper: {
     width: drawerWidth,
     backgroundColor: 'darkslategrey',
-    color: "black !importnat",
+    color: 'black !importnat',
   },
   drawerHeader: {
     display: 'flex',
@@ -120,7 +110,7 @@ class Home extends Component {
 
     const drawer = (
       <div>
-        <div className={classes.toolbar}><h1 align="center">WebCache</h1></div>
+        <div className={classes.toolbar}><h1 align='center'>WebCache</h1></div>
         <Divider />
         <FileDialogue />
       </div>
@@ -130,28 +120,28 @@ class Home extends Component {
         <div className={classes.root}>
           <CssBaseline />
           <AppBar
-            position="fixed"
+            position='fixed'
             className={classNames(classes.appBar, {
               [classes.appBarShift]: open,
             },{colorPrimary: homeStyles.appBar})}
           >
             <Toolbar disableGutters={!open}>
               <IconButton
-                aria-label="Open drawer"
+                aria-label='Open drawer'
                 onClick={this.handleDrawerOpen}
                 className={classNames(classes.menuButton, open && classes.hide)}
               >
                 <MenuIcon />
               </IconButton>
-              <Typography variant="h6" color="inherit" noWrap>
+              <Typography variant='h6' color='inherit' noWrap>
                 <Tools store={this.store} />
               </Typography>
             </Toolbar>
           </AppBar>
           <Drawer
             className={classes.drawer}
-            variant="persistent"
-            anchor="left"
+            variant='persistent'
+            anchor='left'
             open={open}
             classes={{
               paper: classes.drawerPaper,
@@ -175,8 +165,8 @@ class Home extends Component {
           </main>
           <Drawer
             className={classes.drawer}
-            variant="permanent"
-            anchor="right"
+            variant='permanent'
+            anchor='right'
             classes={{
               paper: classes.drawerPaper,
             }}>
