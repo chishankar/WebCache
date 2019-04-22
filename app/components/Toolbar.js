@@ -49,12 +49,13 @@ class Tools extends Component<Props>{
               textColor="secondary"
             >
               <Tab icon={<i className="far fa-comment-alt" />} data-tip="Annotation"/>
+
               <Tab icon={<i className="fas fa-highlighter" />}  data-tip="Highlighter" onClick={this._showHighlighter}/>
               {this.state.showHighlighter && <Tab icon={<Highlight store={this.store} text="Pick Color: "/>} />}
 
               <Tab icon={<i className="far fa-comment"></i>} data-tip="Comment" />
 
-              <Tab icon={<i class="fas fa-wifi"></i>} data-tip="URL search" onClick={this._showUrlSearch}/>
+              <Tab icon={<i className="fas fa-wifi"></i>} data-tip="URL search" onClick={this._showUrlSearch}/>
               {this.state.showUrlSearch && <UrlSearch store={this.store}/>}
 
             </Tabs>

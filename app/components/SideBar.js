@@ -16,6 +16,9 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 import HighlightText from './HighlightText';
+import ReactTooltip from 'react-tooltip';
+import { Divider } from '@material-ui/core';
+
 
 type Props = {
   highlights: Array,
@@ -52,6 +55,8 @@ class SideBar extends Component<Props>{
       component="nav"
       subheader={<ListSubheader component="div">Highlighted Texts</ListSubheader>}
       className={classes.root}>
+
+      <Divider />
 
      {highlightData.map(highlight =>
       <HighlightText key={highlight.id} text={highlight.text} color={highlight.color} id={highlight.id} />
