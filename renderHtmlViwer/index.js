@@ -80,7 +80,9 @@ function highlight(color){
   data.color = color;
   data.id = highlightId;
 
-  window.top.postMessage({highlight: data}, '*');
+  if(data.color != "DEFAULT") {
+    window.top.postMessage({highlight: data}, '*');
+  }
   return data;
 }
 
