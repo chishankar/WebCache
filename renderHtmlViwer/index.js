@@ -18,32 +18,68 @@ function serializeRange(range) {
   }
 }
 
+// traverses the DOM tree to get the next node until the endNode is reached
+function getNextNode(node, skipChildren, endNode) {
+  if(endNode == node) {
+    return null;
+  }
+
+  if (node.firstChild && !skipChildren) {
+    return node.firstChild;
+  }
+
+  if (!node.parentNode) {
+    return null;
+  }
+
+  return node.nextSibling || getNextNode(node.parentNode, true, endNode);
+}
+
 // Handles adding the highlight color to the highlighted text
 function highlight(color){
   let data = {};
+  var highlightId = generateRandomId();
+  var subranges = [];
+  var spans = [];
 
   sel = window.getSelection();
   data.text = sel.toString();
   if (sel.rangeCount && sel.getRangeAt) {
       range = sel.getRangeAt(0);
+      var startNode = range.startContainer;
+      do {
+        var nextNode = getNextNode(startNode, false, range.endContainer);
+        // check if the node is a TEXT node
+        if (startNode.nodeType == 3) {
+          var subrange = document.createRange();
+          subrange.setStart(startNode, startNode == range.startContainer ? range.startOffset : 0);
+          subrange.setEnd(startNode, startNode == range.endContainer ? range.endOffset : startNode.length);
+
+          var span = document.createElement('span');
+          span.style.backgroundColor = color;
+          span.style.display = 'inline';
+          span.classList.add(highlightId);
+
+          subranges.push(subrange);
+          spans.push(span);
+        }
+        if (!nextNode) {
+          break;
+        }
+        startNode = nextNode;
+      } while (true);
   }
-  document.designMode = "on";
-  if (range) {
-      sel.removeAllRanges();
-      sel.addRange(range);
+
+  for (let i = 0; i < subranges.length; i++) {
+    subranges[i].surroundContents(spans[i]);
   }
-  // Use HiliteColor since some browsers apply BackColor to the whole block
-  console.log('highlighting ' + color);
-  if (!document.execCommand("HiliteColor", false, color)) {
-      document.execCommand("BackColor", false, color);
-  }
-  document.designMode = "off";
 
   sel.removeAllRanges();
 
   data.range = serializeRange(range);
   data.color = color;
 
+  window.top.postMessage(data, '*');
   return data;
 }
 
@@ -69,10 +105,6 @@ window.parent.addEventListener('message',function(e){
   if (data.color){
     console.log('setting color to ' + data.color);
     color = data.color;
-    // let highlightResponse = {highlight: highlight(data.color)};
-    // if (highlightResponse.highlight){
-      // window.parent.postMessage(highlightResponse,"*");
-    // }
   }
 
   else if (data.src){
