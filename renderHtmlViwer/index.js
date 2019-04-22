@@ -79,7 +79,7 @@ function highlight(color){
   data.range = serializeRange(range);
   data.color = color;
 
-  window.top.postMessage(data, '*');
+  window.top.postMessage({highlight: data}, '*');
   return data;
 }
 
