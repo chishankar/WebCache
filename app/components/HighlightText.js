@@ -89,7 +89,7 @@ class HighlightText extends Component{
     this.setState({comment: value});
     let data = {
       id: this.id,
-      comment: this.addtext
+      comment: value
     }
     this.props.addComment(data);
   }

@@ -79,6 +79,7 @@ function highlight(color){
   data.range = serializeRange(range);
   data.color = color;
   data.id = highlightId;
+  data.comment = ""
 
   if(data.color != "DEFAULT") {
     window.top.postMessage({highlight: data}, '*');

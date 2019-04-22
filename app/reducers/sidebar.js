@@ -16,12 +16,11 @@ export default function highlighter(state=initialState, action) {
       });
 
     case 'COMMENT':
-      console.log('FINISHED!!!')
       let newCommentList = state.highlights
       for (var i = 0; i < newCommentList.length; i++) {
         let highlight = newCommentList[i];
-        if (highlight.id === action.commentData.id) {
-          highlight.comment = action.commentData.text;
+        if (highlight.id == action.commentData.id) {
+          newCommentList[i].comment = action.commentData.comment;
           return Object.assign({},state, {
             highlights: newCommentList
           });
