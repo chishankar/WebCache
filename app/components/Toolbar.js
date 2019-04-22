@@ -18,6 +18,7 @@ class Tools extends Component<Props>{
     super(props);
     this.state = {
       showHighlighter: false,
+      showUrlSearch: false,
       value: 0
     };
     this.store = this.props.store;
@@ -25,6 +26,10 @@ class Tools extends Component<Props>{
 
   _showHighlighter = () =>{
     this.setState({showHighlighter: !this.state.showHighlighter});
+  }
+
+  _showUrlSearch = () => {
+    this.setState({showUrlSearch: !this.state.showUrlSearch});
   }
 
   handleChange = (event, value) => {
@@ -48,7 +53,10 @@ class Tools extends Component<Props>{
               {this.state.showHighlighter && <Tab icon={<Highlight store={this.store} text="Pick Color: "/>} />}
 
               <Tab icon={<i className="far fa-comment"></i>} data-tip="Comment" />
-              <UrlSearch store={this.store}/>
+
+              <Tab icon={<i class="fas fa-wifi"></i>} data-tip="URL search" onClick={this._showUrlSearch}/>
+              {this.state.showUrlSearch && <UrlSearch store={this.store}/>}
+
             </Tabs>
           </Paper>
       </div>
