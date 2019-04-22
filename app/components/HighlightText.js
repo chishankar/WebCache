@@ -68,7 +68,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 class HighlightText extends Component{
-  // props: Props
 
   constructor(props){
     super(props)
