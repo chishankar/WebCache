@@ -112,7 +112,7 @@ class Home extends Component {
       <div>
         <div className={classes.toolbar}><h1 align='center'>WebCache</h1></div>
         <Divider />
-        <FileDialogue />
+        <FileDialogue store={this.store}/>
       </div>
     );
 

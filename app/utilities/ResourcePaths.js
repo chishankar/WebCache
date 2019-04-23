@@ -27,6 +27,10 @@ export class ResourcePaths{
   // Creates full path of resource with the index.html
   getFullPath = () => {
 
+    if(this.file_path.includes(this.curr_dir)){
+      return this.file_path;
+    }
+
     if (!this.file_path.startsWith("app") && !this.file_path.startsWith("render")){
 
       console.log(this.file_path);

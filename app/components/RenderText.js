@@ -23,7 +23,6 @@ function getResourcePath(path){
 
 // Renders dynamic iframe
 function getRenderText(filePath, iframeRef) {
-
   let resource = getResourceBuilder(filePath);
   let resourceDir = getResourcePath(filePath);
   let jsResource = getResourceBuilder('renderHtmlViwer/index.js');
