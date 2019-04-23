@@ -63,10 +63,6 @@ export default class UrlSearch extends Component<Props>{
     }
   }
 
-  // <input type="text" placeholder="https://<website>" onKeyUp={this.handleEnter} onChange={this.handleInput}/>
-  // {showValidate && validateHTML}
-  // {!showValidate && notValidateHTML}
-
   _setValidUrl = (vUrl) =>{
     this.setState({validUrl: vUrl});
   }
