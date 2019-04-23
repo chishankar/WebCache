@@ -29,6 +29,29 @@ const styles = theme => ({
   },
 });
 
+const red = {
+  color: 'red'
+}
+
+const blue = {
+  color: 'blue'
+}
+
+const green={
+  color: 'green'
+}
+
+const purple={
+  color: 'purple'
+}
+
+const yellow={
+  color: 'yellow'
+}
+
+const black={
+  color: 'black'
+}
 
 function preview(str){
   if (str.length > 15){
