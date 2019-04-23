@@ -14,6 +14,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
+import Footer from './Footer';
 import Tools from './Toolbar';
 import homeStyles from './Home.css';
 import FileDialogue from './FileSelector';
@@ -25,6 +26,7 @@ const drawerWidth = 250;
 const styles = theme => ({
   root: {
     display: 'flex',
+    padding: '0 !important'
   },
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
@@ -55,8 +57,9 @@ const styles = theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: 'darkslategrey',
-    color: 'black !importnat',
+    backgroundColor: '#232c39 !important',
+    color: 'black !important',
+    padding: '0 !important'
   },
   drawerHeader: {
     display: 'flex',
@@ -82,6 +85,13 @@ const styles = theme => ({
     marginLeft: 0,
   },
   toolbar: theme.mixins.toolbar,
+  toolbarRight: {
+    backgroundColor: 'white'
+  },
+  list:{
+    padding: '0px !important'
+  }
+
 });
 
 type Props = {};
@@ -171,8 +181,8 @@ class Home extends Component {
               paper: classes.drawerPaper,
             }}>
 
-            <div className={classes.toolbar} />
-            <List>
+            <div className={classNames(classes.toolbar, classes.toolbarRight)}/>
+            <List className={classes.list}>
               <SideBarPage store={this.store}/>
             </List>
           </Drawer>

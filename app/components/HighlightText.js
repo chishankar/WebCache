@@ -116,7 +116,7 @@ class HighlightText extends Component{
     return(
       <div>
         <ListItem button ref={this.listref} data-tip={this.text} onClick={this.handleClick}>
-        <ReactTooltip place="top" type="dark" effect="float" />
+
           <ListItemIcon >
             <i className="fas fa-highlighter" style={this.getHighlighterColorIcon(this.color)}/>
           </ListItemIcon>

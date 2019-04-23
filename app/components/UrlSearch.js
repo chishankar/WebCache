@@ -3,17 +3,34 @@ import styles from './UrlSearch.css';
 import 'font-awesome/css/font-awesome.min.css';
 import getSite from '../utilities/webscraper';
 import * as urlsearchActions from '../actions/urlsearch';
-
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Fade from '@material-ui/core/Fade';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 
+const UIstyles = theme => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  button: {
+    margin: theme.spacing.unit * 2,
+  },
+  placeholder: {
+    height: 40,
+  },
+});
+
 export default class UrlSearch extends Component<Props>{
+
 
   constructor(props){
     super(props);
     this.state = {
       showValidate: false,
-      validUrl: ''
+      validUrl: '',
+      loading: false
     };
     this.store = this.props.store;
   }
@@ -28,18 +45,23 @@ export default class UrlSearch extends Component<Props>{
     }
   }
 
+  handleClickLoading = () => {
+    this.setState(state => ({
+      loading: !state.loading,
+    }));
+  };
+
+
   handleEnter = (event) => {
     if (event.key === 'Enter' && this.state.showValidate){
       var save_location = "data/" + this.state.validUrl.replace(/https:\/\//g,"") + '-' + Date.now();
+      this.handleClickLoading();
       getSite.getSite(this.state.validUrl, save_location, () => {
         this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
+        this.handleClickLoading();
       });
     }
   }
-
-  // <input type="text" placeholder="https://<website>" onKeyUp={this.handleEnter} onChange={this.handleInput}/>
-  // {showValidate && validateHTML}
-  // {!showValidate && notValidateHTML}
 
   _setValidUrl = (vUrl) =>{
     this.setState({validUrl: vUrl});
@@ -84,6 +106,15 @@ export default class UrlSearch extends Component<Props>{
             onKeyUp={this.handleEnter}
             onChange={this.handleInput}
           />
+          <Fade
+              in={this.state.loading}
+              style={{
+                transitionDelay: this.state.loading ? '800ms' : '0ms',
+              }}
+              unmountOnExit
+          >
+            <CircularProgress />
+          </Fade>
           {showValidate && validateHTML}
           {!showValidate && notValidateHTML}
 
