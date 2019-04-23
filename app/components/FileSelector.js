@@ -20,11 +20,7 @@ export default class FileDialogue extends React.Component {
 
 handleFile = (file) =>{
   console.log(file.filePath);
-  this.store.dispatch(urlsearchActions.changeActiveUrl(file.filePath));
-  /*
-  return fs.readFileAsync(file.filePath)
-  .then(contents => console.log(contents.toString()))
-  .catch(console.error.bind(console)); */
+  this.store.dispatch(urlsearchActions.changeActiveUrl('LOCAL' + file.filePath));
 }
 
   render() {
