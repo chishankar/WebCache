@@ -1,12 +1,11 @@
 const scrape = require('website-scraper');
 
-exports.getSite = function (inputUrl, callback){
-  console.log(inputUrl)
+exports.getSite = function (inputUrl, save_location, callback){
   scrape({
     urls: [
       {url: inputUrl, filename: 'index.html'}
     ], // Will be saved with default filename 'index.html',
-    directory: "data/" + inputUrl.replace(/https:\/\//g,"").replace(/http:\/\//g, ""),
+    directory: save_location,
     recursive: true,
     maxDepth: 1,
     subdirectories: [
@@ -43,11 +42,11 @@ exports.getSite = function (inputUrl, callback){
     ]
 }).then((result) => {
     // Outputs HTML
-    // console.log(result);
+    console.log('result of scraping finishing: ' + result);
     console.log("Content succesfully downloaded");
     callback(true);
 }).catch((err) => {
-    console.log("Content is already cached");
+    console.log(err);
     callback(false);
 });
 }
