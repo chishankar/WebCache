@@ -20,7 +20,7 @@ export class ResourcePaths{
   // Gets base resource directory
   getResourceDir = () => {
 
-    return path.join(this.getBaseDirectory(),this.file_path)
+    return path.join(this.getBaseDirectory(),this.file_path) + '/'
 
   }
 

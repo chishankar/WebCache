@@ -35,7 +35,7 @@ function getRenderText(filePath, iframeRef) {
 
   // change all paths to become relative
   // check to see if the path is already changed - don't change it twice!!
-  console.log('this is the ifle path: ' + filePath);
+  console.log('this is the file path: ' + filePath);
   if (filePath != "app/default_landing_page.html") {
     resourceHtml = resourceHtml.replace(/href="([\.\/\w+]+)"/g, "href=\"" + resourceDir + "$1" + "\"");
     resourceHtml = resourceHtml.replace(/src="([\.\/\w+]+)"/g, "src=\"" + resourceDir + "$1" + "\"");
