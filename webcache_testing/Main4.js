@@ -33,7 +33,7 @@ module.exports['writeUint32ArrFileSync'] = writeUint32ArrFileSync;
   */
 function readUint32ArrFileSync(filePath) {
     // read out an array of 32-bit integers at the path
-    return new Float64Array((new Uint8Array(fs.readFileSync(filePath))).buffer);
+    return new Uint32Array((new Uint8Array(fs.readFileSync(filePath))).buffer);
 }
 module.exports['readUint32ArrFileSync'] = readUint32ArrFileSync;
 // #############################################################################
@@ -56,18 +56,18 @@ function checkIndexForChanges(lookup) {
 
     let file = lookup[i];
     console.log(lookup[i]);
-    let escapedFN = file.fileName.replace(/(\s+)/g, '\\$1');
-    let filePath = path.join(__dirname, '/test_docs/' + `${escapedFN}`);
+    //let escapedFN = file.fileName.replace(/(\s+)/g, '\\$1');
+    let filePath = path.join(__dirname, '/test_docs/' + `${file.fileName}`);
 
     fs.stat(filePath, function(err, stats){
 
       if(err) {
-        console.log(`${escapedFN}` + ' file deleted');
+        console.log(`${file.fileName}` + ' file deleted');
       } else {
 
         //assuming file[1] holds last modification date
         if (stats.mtimeMs != file.lastMod) {
-          console.log(`${escapedFN}` + ' file modified');
+          console.log(`${file.fileName}` + ' file modified');
         }
       }
     });
@@ -152,8 +152,8 @@ function getLastMod(fileName) {
   let lastMod = 0;
   return new Promise(resolve => {
 
-    let escapedFN = fileName.replace(/(\s+)/g, '\\$1');
-    let fp = path.join(__dirname, '/test_docs/' + `${escapedFN}`);
+    //let escapedFN = fileName.replace(/(\s+)/g, '\\$1');
+    let fp = path.join(__dirname, '/test_docs/' + `${fileName}`);
     fs.stat(fp, function(err, stats){
 
       if(err) {
@@ -218,7 +218,33 @@ function getFileIndex(fileName) {
   })
 }
 
-function addToMainIndex(fileIndex, mainIndex) {
+let tempIndex = [];
+
+let iocounter = 0;
+
+function addToMainIndex(fileIndex, mainIndex, tempIndex) {
+
+  //assumes unique words, and no preexisting entries for the file being added
+  fileIndex.forEach(fileWord => {
+
+    if (sizeof(tempIndex) > 100000) {
+      //console.log(sizeof(tempIndex));
+      addToMainAux(tempIndex, mainIndex);
+      tempIndex = [];
+
+    }
+    wordInd = tempIndex.findIndex(mainWord => mainWord.w == fileWord.w);
+    if (wordInd >= 0) {
+      tempIndex[wordInd].a = tempIndex[wordInd].a.concat(fileWord.a);
+    } else {
+      tempIndex.push(fileWord);
+    }
+  });
+}
+
+
+function addToMainAux(fileIndex, mainIndex) {
+
 
   //assumes unique words, and no preexisting entries for the file being added
   fileIndex.forEach(fileWord => {
@@ -227,35 +253,43 @@ function addToMainIndex(fileIndex, mainIndex) {
 
     if (wordInd >= 0) {
       let filePath = path.join(__dirname, "/word_inds/" + mainIndex[wordInd].fn);
-      let locArr =  readUint32ArrFileSync(filePath)
-      var locArrNew = new Float64Array(locArr.length + fileWord.a.length);
+      let locArr =  readUint32ArrFileSync(filePath);
+      iocounter++;
+      var locArrNew = new Uint32Array(locArr.length + fileWord.a.length);
       locArrNew.set(locArr);
       locArrNew.set(fileWord.a, locArr.length);
       writeUint32ArrFileSync(filePath, locArrNew);
+      iocounter++;
     } else {
       let fn = fileWord.w.replace(/\//g, "-") + "_BSON";
+
       mainIndex.push({w: fileWord.w, fn: fn});
       let filePath = path.join(__dirname, "/word_inds/" + fn);
-      writeUint32ArrFileSync(filePath, new Float64Array(fileWord.a));
+      writeUint32ArrFileSync(filePath, new Uint32Array(fileWord.a));
+      iocounter++;
     }
   });
 }
 
+
 function addFilesToMainIndex(fileNames, mainIndex) {
 
-  indexPromises = [];
+  let indexPromises = [];
 
   return new Promise(resolveAll => {
 
     fileNames.forEach(fileName => {
       indexPromises.push(new Promise(resolve => {
         getFileIndex(fileName).then(fileIndex => {
-          addToMainIndex(fileIndex, mainIndex);
+          addToMainIndex(fileIndex, mainIndex, tempIndex);
           resolve();
         });
       }));
     });
-    Promise.all(indexPromises).then(() => {resolveAll();});
+    Promise.all(indexPromises).then(() => {
+      addToMainAux(tempIndex, mainIndex);
+      resolveAll();
+    });
   });
 }
 
@@ -470,6 +504,7 @@ if(INDEX_DIRECTORY) {
       var t1 = performance.now();
       console.log("Indexing completed in  " + (t1 - t0) + " milliseconds.");
       console.log("Size of index: " + sizeof(mainIndex));
+      console.log("io calls: " + iocounter);
       saveIndexToFile(mainIndex, lookup, 'ind_bin.txt', 'tbl_bin.txt');
     });
 
@@ -569,7 +604,7 @@ rl.on("line", function (line) {
     // mainIndex.forEach( fileWord => {
     // console.log(fileWord.w + ":\n" + fileWord.a + "\n");
     // });
-    checkIndexForChanges(lookup);
+   // checkIndexForChanges(lookup);
     user_search(line);
 
 
