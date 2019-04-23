@@ -11,8 +11,11 @@ const BSON = require('bson');
 var readline = require("readline");
 
 const stopWords = ["i", "me", "my", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"];
-
 const INDEX_DIRECTORY = true;
+var rangeTbl = [];
+const maxIntPerFile = 1800;
+//ONLY WORKS FOR REINDEXING DIRECTORY
+var rngFileCnt = 0;
 
 // TODO: save array of N-bit integers as array of 8-bit integers
 module.exports = {};
@@ -191,8 +194,7 @@ function getFileIndex(fileName) {
         if (!err) {
           // TODO: REMOVE HTML TAGS
           // Case-sensitive indexing not implented for simplicity.
-
-          let cleanText = data.replace(/<\/?[^>]+(>|$)/g, "");
+          let cleanText = data.replace(/<\/?[^>]+(>|$)/g, "").replace(/[^\w\s]/gi, '');
           let fileWords = cleanText.toLowerCase().trim().split(/\s+/).filter(function(value, index, self){return self.indexOf(value) === index && !stopWords.includes(value);});
 
           //Iterate for each unique word in file
@@ -227,12 +229,6 @@ function addToMainIndex(fileIndex, mainIndex, tempIndex) {
   //assumes unique words, and no preexisting entries for the file being added
   fileIndex.forEach(fileWord => {
 
-    if (sizeof(tempIndex) > 100000) {
-      //console.log(sizeof(tempIndex));
-      addToMainAux(tempIndex, mainIndex);
-      tempIndex = [];
-
-    }
     wordInd = tempIndex.findIndex(mainWord => mainWord.w == fileWord.w);
     if (wordInd >= 0) {
       tempIndex[wordInd].a = tempIndex[wordInd].a.concat(fileWord.a);
@@ -244,10 +240,21 @@ function addToMainIndex(fileIndex, mainIndex, tempIndex) {
 
 
 function addToMainAux(fileIndex, mainIndex) {
-
+  // SORT FILE INDEX HERE
+  if (rangeTbl.length === 0) {
+    rangeTbl.push(
+      {
+        r: [fileIndex[0].w, fileIndex[fileIndex.length - 1].w],
+        fn: rngFileCnt.toString() + "_BSON",
+        s: 0
+      });
+  }
+  currRng = rangeTbl[0];
 
   //assumes unique words, and no preexisting entries for the file being added
   fileIndex.forEach(fileWord => {
+
+    if (withinRng(fileWord.w, currRng))
 
     wordInd = mainIndex.findIndex(mainWord => mainWord.w == fileWord.w);
 
@@ -282,6 +289,12 @@ function addFilesToMainIndex(fileNames, mainIndex) {
       indexPromises.push(new Promise(resolve => {
         getFileIndex(fileName).then(fileIndex => {
           addToMainIndex(fileIndex, mainIndex, tempIndex);
+          let tempSize = sizeof(tempIndex);
+          if (tempSize > 0) {
+            //console.log(sizeof(tempIndex));
+            addToMainAux(tempIndex, mainIndex);
+            tempIndex = [];
+          }
           resolve();
         });
       }));
