@@ -14,6 +14,30 @@ const stopWords = ["i", "me", "my", "we", "our", "ours", "ourselves", "you", "yo
 
 const INDEX_DIRECTORY = true;
 
+// TODO: save array of N-bit integers as array of 8-bit integers
+module.exports = {};
+// #############################################################################
+/**
+   Synchronously write an array of 32-bit integers at the specified location.
+   @param {string} filePath - the specified location on disk
+   @param {Uint32Array} uint32arr - the array of 32-bit integers
+  */
+function writeUint32ArrFileSync(filePath, uint32arr) {
+    fs.writeFileSync(filePath, new Buffer.from(uint32arr.buffer));
+}
+module.exports['writeUint32ArrFileSync'] = writeUint32ArrFileSync;
+/**
+   Read a file at the specified location as an array of 32-bit integers.
+   @param {string} filePath - the specified location on disk
+   @return Uint32Array
+  */
+function readUint32ArrFileSync(filePath) {
+    // read out an array of 32-bit integers at the path
+    return new Float64Array((new Uint8Array(fs.readFileSync(filePath))).buffer);
+}
+module.exports['readUint32ArrFileSync'] = readUint32ArrFileSync;
+// #############################################################################
+
 function avg(mainIndex) {
   let sum = 0;
   mainIndex.forEach(w => {
@@ -47,6 +71,13 @@ function checkIndexForChanges(lookup) {
         }
       }
     });
+  }
+}
+
+function delFilesFromIndex(mainIndex, fileNames, origData) {
+  // case for when files are removed outside of the application, whole index must be traversed
+  if (origData === undefined || origData.length == 0) {
+
   }
 }
 
@@ -195,9 +226,17 @@ function addToMainIndex(fileIndex, mainIndex) {
     wordInd = mainIndex.findIndex(mainWord => mainWord.w == fileWord.w);
 
     if (wordInd >= 0) {
-      mainIndex[wordInd].a = mainIndex[wordInd].a.concat(fileWord.a);
+      let filePath = path.join(__dirname, "/word_inds/" + mainIndex[wordInd].fn);
+      let locArr =  readUint32ArrFileSync(filePath)
+      var locArrNew = new Float64Array(locArr.length + fileWord.a.length);
+      locArrNew.set(locArr);
+      locArrNew.set(fileWord.a, locArr.length);
+      writeUint32ArrFileSync(filePath, locArrNew);
     } else {
-      mainIndex.push(fileWord);
+      let fn = fileWord.w.replace(/\//g, "-") + "_BSON";
+      mainIndex.push({w: fileWord.w, fn: fn});
+      let filePath = path.join(__dirname, "/word_inds/" + fn);
+      writeUint32ArrFileSync(filePath, new Float64Array(fileWord.a));
     }
   });
 }
@@ -220,13 +259,20 @@ function addFilesToMainIndex(fileNames, mainIndex) {
   });
 }
 
+//Enter the array we have stored in the index,
+//return a list of words with filenames locations
+//that we can use in search method
 function getWordLocs(codes) {
   let wordLocs = [];
 
   for (i = 0; i < codes.length; i++) {
+    //gets number of locations in specific file
     let numLocs = codes[i++];
+    //returns file ID number
     let fileID = codes[i];
     let fn = lookup[fileID].fileName;
+
+    //adds all locations
     let locs = [];
     for (j = 1; j <= numLocs; j++) {
       locs.push(codes[i + j]);
@@ -257,7 +303,8 @@ function search(searchStr, index) {
     //if not found return empty
     if (results == null) return;
     //Changes into filename and location format
-    wordLocs = getWordLocs(results.a);
+    let filePath = path.join(__dirname, "/word_inds/" + results.fn);
+    wordLocs = getWordLocs(readUint32ArrFileSync(filePath));
     wordResults.push(wordLocs);
     wordLocs.forEach(fileLocs => {
       wordFiles.push(fileLocs.fileName);
