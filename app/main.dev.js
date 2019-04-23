@@ -10,7 +10,7 @@
  *
  * @flow
  */
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu, MenuItem } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -95,6 +95,15 @@ app.on('ready', async () => {
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
+
+  const contextMenu = new Menu();
+  contextMenu.append(new MenuItem({ label: 'MenuItem1', click() { console.log('item 1 clicked') } }))
+  contextMenu.append(new MenuItem({ type: 'separator' }))
+  contextMenu.append(new MenuItem({ label: 'MenuItem2', type: 'checkbox', checked: true }))
+
+  mainWindow.webContents.on('context-menu',function(e, params){
+    contextMenu.popup(mainWindow,params.x,params.y)
+  })
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
