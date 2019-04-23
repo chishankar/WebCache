@@ -14,30 +14,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Divider } from '@material-ui/core';
 
-const red = {
-  color: 'red'
-};
-
-const blue = {
-  color: 'blue'
-};
-
-const green={
-  color: 'green'
-};
-
-const purple={
-  color: 'purple'
-};
-
-const yellow={
-  color: 'yellow'
-};
-
-const black={
-  color: 'black'
-};
-
 const styles = theme => ({
   root: {
     width: '100%',
@@ -53,6 +29,29 @@ const styles = theme => ({
   },
 });
 
+const red = {
+  color: 'red'
+}
+
+const blue = {
+  color: 'blue'
+}
+
+const green={
+  color: 'green'
+}
+
+const purple={
+  color: 'purple'
+}
+
+const yellow={
+  color: 'yellow'
+}
+
+const black={
+  color: 'black'
+}
 
 function preview(str){
   if (str.length > 15){
@@ -94,17 +93,7 @@ class HighlightText extends Component{
   }
 
   getHighlighterColorIcon = (color) => {
-    if (color === 'red'){
-      return red
-    } else if (color === 'blue'){
-      return blue
-    }else if (color === 'green'){
-      return green
-    }else if (color === 'purple'){
-      return purple
-    }else if (color === 'yellow'){
-      return yellow
-    }
+    return {color: color};
   }
 
   handleClick = () => {

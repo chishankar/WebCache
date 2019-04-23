@@ -30,9 +30,9 @@ export default class UrlSearch extends Component<Props>{
 
   handleEnter = (event) => {
     if (event.key === 'Enter' && this.state.showValidate){
-      getSite.getSite(this.state.validUrl, () => {
-        // this.store.dispatch(urlsearchActions.changeActiveUrl("data/" + this.state.validUrl.replace(/https:\/\//g,"").replace(/http:\/\//g, "") + "/index.html"));
-        this.store.dispatch(urlsearchActions.changeActiveUrl("data/" + this.state.validUrl.replace(/https:\/\//g,"").replace(/http:\/\//g, "")));
+      var save_location = "data/" + this.state.validUrl.replace(/https:\/\//g,"") + '-' + Date.now();
+      getSite.getSite(this.state.validUrl, save_location, () => {
+        this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
       });
     }
   }
