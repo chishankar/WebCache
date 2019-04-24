@@ -12,8 +12,8 @@ var readline = require("readline");
 
 const stopWords = ["i", "me", "my", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"];
 const INDEX_DIRECTORY = true;
-var rangeTbl = [];
-const maxIntPerFile = 1800;
+var rngTbl = [];
+const MAX_INT_PER_FILE = 1800;
 //ONLY WORKS FOR REINDEXING DIRECTORY
 var rngFileCnt = 0;
 
@@ -238,45 +238,190 @@ function addToMainIndex(fileIndex, mainIndex, tempIndex) {
   });
 }
 
+// takes rng struct, gets list from range file, formats as index
+function extractRngIndex(rng) {
+  let filePath = path.join(__dirname, "/word_inds/" + rng.fn);
+  let listInRng = readUint32ArrFileSync(filePath);
+  let rngIndex = [];
+  let i = _.findKey(mainIndex, wordInd => {return wordInd.w === rng.r[0]});
+  var wordInd;
+  while (i < mainIndex.length && (wordInd = mainIndex[i++]).w <= rng.r[1]) {
+    rngIndex.push({
+      w: wordInd.w,
+      a: listInRng.slice(wordInd.st, wordInd.st + wordInd.sz)
+    });
+  }
+  return rngIndex;
+}
+
+// takes rngIndex, converts to single list and stores to respective file
+function storeRngIndex(rng, rngIndex) {
+  var locArrNew = new Uint32Array(rng.sz);
+  let i = _.findKey(mainIndex, wordInd => {return wordInd.w === rng.r[0]});
+  let j = 0;
+  var wordInd;
+  while (i < mainIndex.length && (wordInd = mainIndex[i++]).w <= rng.r[1]) {
+    locArrNew.set(rngIndex[j++].a, wordInd.st);
+  }
+  let filePath = path.join(__dirname, "/word_inds/" + rng.fn);
+  writeUint32ArrFileSync(filePath, locArrNew);
+}
 
 function addToMainAux(fileIndex, mainIndex) {
-  // SORT FILE INDEX HERE
-  if (rangeTbl.length === 0) {
-    rangeTbl.push(
+
+  fileIndex = _.sortBy(fileIndex, wordInd => {return wordInd.w});
+
+  // if rngTbl is empty, init with range of fileIndex
+  if (rngTbl.length === 0) {
+    rngTbl.push(
       {
         r: [fileIndex[0].w, fileIndex[fileIndex.length - 1].w],
-        fn: rngFileCnt.toString() + "_BSON",
-        s: 0
+        fn: (rngFileCnt++).toString() + "_BSON",
+        sz: 0
       });
   }
-  currRng = rangeTbl[0];
 
-  //assumes unique words, and no preexisting entries for the file being added
-  fileIndex.forEach(fileWord => {
-
-    if (withinRng(fileWord.w, currRng))
-
-    wordInd = mainIndex.findIndex(mainWord => mainWord.w == fileWord.w);
-
-    if (wordInd >= 0) {
-      let filePath = path.join(__dirname, "/word_inds/" + mainIndex[wordInd].fn);
-      let locArr =  readUint32ArrFileSync(filePath);
-      iocounter++;
-      var locArrNew = new Uint32Array(locArr.length + fileWord.a.length);
-      locArrNew.set(locArr);
-      locArrNew.set(fileWord.a, locArr.length);
-      writeUint32ArrFileSync(filePath, locArrNew);
-      iocounter++;
-    } else {
-      let fn = fileWord.w.replace(/\//g, "-") + "_BSON";
-
-      mainIndex.push({w: fileWord.w, fn: fn});
-      let filePath = path.join(__dirname, "/word_inds/" + fn);
-      writeUint32ArrFileSync(filePath, new Uint32Array(fileWord.a));
-      iocounter++;
+  // Predetermine if fileindex will require first and/or last ranges to be expanded
+  else {
+    if (fileIndex[0].w < rngTbl[0].r[0]) {
+      rngTbl[0].r[0] = fileIndex[0].w;
     }
-  });
+    if (fileIndex[fileIndex.length - 1].w > rngTbl[rngTbl.length - 1].r[1]) {
+      rngTbl[rngTbl.length - 1].r[1] = fileIndex[fileIndex.length - 1].w;
+    }
+  }
+
+  let currRng = 0;
+  let i = 0;
+  let newWords = [];
+
+  while(i < fileIndex.length) {
+    let fileWord = fileIndex[i]
+
+    // find correct range for fileWord
+    while (fileWord.w > rngTbl[currRng].r[1]) { currRng++ };
+
+    // convert rngFile for currRng to an index format
+    let rngIndex = rngTbl[currRng].sz === 0 ? [] : extractRngIndex(rngTbl[currRng]);
+
+    while(i < fileIndex.length && (fileWord = fileIndex[i++]).w <= rngTbl[currRng].r[1]) {
+
+      // find index of fileWord word in both rngIndex and mainIndex, or would-be index if fileWord hasn't been indexed.
+
+      let wordIndRng = rngIndex.findIndex(rngWord => rngWord.w >= fileWord.w);
+      let wordIndMain = mainIndex.findIndex(mainWord => mainWord.w >= fileWord.w);
+
+      let hasBeenIndexed = (wordIndRng >= 0 && rngIndex[wordIndRng].w === fileWord.w);
+
+      // if new locations fit in rng, add them accordingly
+      if (rngTbl[currRng].sz + fileWord.a.length <= MAX_INT_PER_FILE) {
+
+        // if word is already indexed, update location array and size value stored in main index
+        if (hasBeenIndexed) {
+          let locArr = rngIndex[wordIndRng].a;
+          var locArrNew = new Uint32Array(locArr.length + fileWord.a.length);
+          locArrNew.set(locArr);
+          locArrNew.set(fileWord.a, locArr.length);
+          rngIndex[wordIndRng].a = locArrNew;
+          mainIndex[wordIndMain].sz = locArrNew.length;
+        }
+        // ...otherwise, insert new array into rng index & main index
+        else {
+          // if either is empty or word is last in range, just push
+          if (wordIndMain < 0) {
+            mainIndex.push({w: fileWord.w, fn: rngTbl[currRng].fn, st: 0, sz: fileWord.a.length});
+            rngIndex.push({w: fileWord.w, a: new Uint32Array(fileWord.a)});
+            wordIndMain = mainIndex.length-1;
+            wordIndRng.length = rngIndex.length-1;
+          }
+          else if (wordIndRng < 0) {
+            rngIndex.push({w: fileWord.w, a: new Uint32Array(fileWord.a)});
+            mainIndex.splice(wordIndMain, 0, {w: fileWord.w, fn: rngTbl[currRng].fn, st:0 , sz: fileWord.a.length});
+            wordIndRng.length = rngIndex.length-1;
+          }
+          else { // o.w. splice into rng index & main index
+            let st = wordIndRng == 0 ? 0 : mainIndex[wordIndMain - 1].st + mainIndex[wordIndMain - 1].sz;
+            rngIndex.splice(wordIndRng, 0, {w: fileWord.w, a: new Uint32Array(fileWord.a)});
+            mainIndex.splice(wordIndMain, 0, {w: fileWord.w, fn: rngTbl[currRng].fn, st: st , sz: fileWord.a.length});
+          }
+        }
+        // update start values in main index and size in rngTbl
+        if (wordIndRng + 1 < rngIndex.length) {
+          let j = wordIndMain + 1;
+          while (j < mainIndex.length && mainIndex[j].w <= rngTbl[currRng].r[1]) {
+            mainIndex[j++].st += fileWord.a.length;
+          }
+        }
+        rngTbl[currRng].sz += fileWord.a.length;
+      }
+
+      // overflow:
+      else {
+        // case in which word been indexed...
+        if (hasBeenIndexed) {
+          // case in which locations for new word alone occupy more than max threshold
+          if (fileWord.a.length + mainIndex[wordIndMain].sz > MAX_INT_PER_FILE) {
+            //NOTHING IMPLEMENTED YET! Throw error!
+            console.log("Error - Single word index exceeds file threshold")
+            return;
+          }
+          // case in which overflowing word is last in range
+          if (wordIndRng = rngIndex.length - 1) {
+
+          }
+
+          else {
+
+          }
+        }
+        else { // has not been indexed
+
+          if (fileWord.a.length > MAX_INT_PER_FILE) {
+            // NOTHING IMPLEMENTED YET! Throw error!
+            console.log("Error - Single word index exceeds file threshold")
+            return;
+          }
+
+          // case in which overflowing word is last in range
+          if (wordIndRng = rngIndex.length - 1) {
+
+          }
+
+          else {
+
+          }
+        }
+      }
+    }
+    storeRngIndex(rngTbl[currRng], rngIndex);
+  }
 }
+
+
+
+
+
+
+
+/*
+      if (wordInd >= 0) {
+        let filePath = path.join(__dirname, "/word_inds/" + mainIndex[wordInd].fn);
+        let locArr =  readUint32ArrFileSync(filePath);
+        iocounter++;
+        var locArrNew = new Uint32Array(locArr.length + fileWord.a.length);
+        locArrNew.set(locArr);
+        locArrNew.set(fileWord.a, locArr.length);
+        writeUint32ArrFileSync(filePath, locArrNew);
+        iocounter++;
+      } else {
+        let fn = fileWord.w.replace(/\//g, "-") + "_BSON";
+
+        mainIndex.push({w: fileWord.w, fn: fn});
+        let filePath = path.join(__dirname, "/word_inds/" + fn);
+        writeUint32ArrFileSync(filePath, new Uint32Array(fileWord.a));
+        iocounter++;
+
+      */
 
 
 function addFilesToMainIndex(fileNames, mainIndex) {
@@ -300,7 +445,9 @@ function addFilesToMainIndex(fileNames, mainIndex) {
       }));
     });
     Promise.all(indexPromises).then(() => {
-      addToMainAux(tempIndex, mainIndex);
+      if (tempIndex.length != 0) {
+        addToMainAux(tempIndex, mainIndex);
+      }
       resolveAll();
     });
   });
