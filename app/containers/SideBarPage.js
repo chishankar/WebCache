@@ -12,7 +12,7 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
-    addComment: sideBarActions.addComment
+    addComment: sideBarActions.addComment,
   },dispatch);
 }
 

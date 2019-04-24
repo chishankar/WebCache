@@ -3,7 +3,8 @@ import type { Action } from './types';
 const initialState = {
     highlights: [],
     url: "",
-    delete: ""
+    delete: "",
+    hideHighlights: false
 }
 
 export default function highlighter(state=initialState, action) {
@@ -38,6 +39,11 @@ export default function highlighter(state=initialState, action) {
 
     case 'CLEAR':
       return Object.assign({}, state, {highlights: []});
+
+      case 'HIDEHIGHLIGHTS':
+        return Object.assign({},state,{
+          hideHighlights: !state.hideHighlights
+        })
 
     default:
       return state;

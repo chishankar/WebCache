@@ -65,7 +65,8 @@ type Props = {
   addHighlight: Function,
   clearHighlights: Function,
   delete: String,
-  annotations: Object
+  annotations: Object,
+  hideHighlights: Boolean
 }
 
 export default class RenderText extends Component<Props> {
@@ -120,6 +121,16 @@ export default class RenderText extends Component<Props> {
       if (this.props.delete !== ""){
         data = {delete: this.props.delete};
         window.postMessage(data, '*');
+      }
+
+      if (this.props.hideHighlights){
+        data = 'hide'
+        window.postMessage(data,"*");
+      }
+
+      if (!this.props.hideHighlights){
+        data = 'show'
+        window.postMessage(data,"*");
       }
   }
 

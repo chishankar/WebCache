@@ -9,7 +9,8 @@ function mapStateToProps(state) {
     color: state.highlighter.color,
     activeUrl: state.urlsearch.activeUrl,
     delete: state.sidebar.delete,
-    annotations: state.sidebar.highlights
+    annotations: state.sidebar.highlights,
+    hideHighlights: state.sidebar.hideHighlights
   };
 }
 

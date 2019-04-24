@@ -21,6 +21,12 @@ export const deleteHighlights = (deleteId) => {
   }
 }
 
+export const hideHighlights = () => {
+  return {
+      type: "HIDEHIGHLIGHTS"
+    }
+}
+
 export const clearHighlights = () => {
   return {
       type: "CLEAR"
