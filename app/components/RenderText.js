@@ -27,7 +27,13 @@ function getRenderText(filePath, iframeRef) {
   let resourceDir = getResourcePath(filePath);
   let jsResource = getResourceBuilder('renderHtmlViwer/index.js');
 
-  var resourceHtml = fs.readFileSync(resource).toString();
+  var resourceHtml; 
+  if(!filePath.startsWith("LOCAL")){
+    resourceHtml = fs.readFileSync(resource).toString();
+  } else {
+    resourceHtml = fs.readFileSync(filePath.substr(5, filePath.length));
+  }
+  
   var injectScript = fs.readFileSync(jsResource).toString();
 
   resourceHtml += "<script>" + injectScript + "<\/script>";
@@ -35,7 +41,7 @@ function getRenderText(filePath, iframeRef) {
   // change all paths to become relative
   // check to see if the path is already changed - don't change it twice!!
   console.log('this is the file path: ' + filePath);
-  if (filePath != "app/default_landing_page.html") {
+  if (filePath != "app/default_landing_page.html" && !filePath.startsWith("LOCAL")) {
     resourceHtml = resourceHtml.replace(/href="([\.\/\w+]+)"/g, "href=\"" + resourceDir + "$1" + "\"");
     resourceHtml = resourceHtml.replace(/src="([\.\/\w+]+)"/g, "src=\"" + resourceDir + "$1" + "\"");
 
