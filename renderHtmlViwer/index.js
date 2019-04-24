@@ -87,6 +87,27 @@ function highlight(color){
   return data;
 }
 
+// given a class id, this will return all spans with that class id
+function getSpansWithHighlight(classId) {
+  return document.querySelectorAll("span." + classId);
+}
+
+// takes in a list of spans, passed in from getSpansWithHighlight, and
+// removes the span and leaves the innerHTML
+function unwrap(spanList) {
+  spanList.forEach(wrapper => {
+    var docFrag = document.createDocumentFragment();
+    while (wrapper.firstChild) {
+        var child = wrapper.removeChild(wrapper.firstChild);
+        docFrag.appendChild(child);
+    }
+
+    // replace wrapper with document fragment
+    wrapper.parentNode.replaceChild(docFrag, wrapper);
+  });
+}
+
+
 // Handles returning the data in the iFrame to send back for re-writing the file
 function handleSave(){
   console.log("Saving ...");
@@ -105,6 +126,11 @@ window.parent.addEventListener('message',function(e){
     console.log('iFrame received: ' + JSON.stringify(e.data))
   }
   let data = e.data;
+
+  if (data.delete) {
+    console.log(data.delete);
+    unwrap(getSpansWithHighlight(data.delete));
+  }
 
   if (data.color){
     console.log('setting color to ' + data.color);

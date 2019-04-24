@@ -27,13 +27,13 @@ function getRenderText(filePath, iframeRef) {
   let resourceDir = getResourcePath(filePath);
   let jsResource = getResourceBuilder('renderHtmlViwer/index.js');
 
-  var resourceHtml; 
+  var resourceHtml;
   if(!filePath.startsWith("LOCAL")){
     resourceHtml = fs.readFileSync(resource).toString();
   } else {
     resourceHtml = fs.readFileSync(filePath.substr(5, filePath.length));
   }
-  
+
   var injectScript = fs.readFileSync(jsResource).toString();
 
   resourceHtml += "<script>" + injectScript + "<\/script>";
@@ -55,8 +55,9 @@ function getRenderText(filePath, iframeRef) {
 }
 
 type Props = {
-  color: string,
-  addHighlightColor: Function
+  color: String,
+  addHighlightColor: Function,
+  delete: String
 }
 
 export default class RenderText extends Component<Props> {
@@ -74,9 +75,15 @@ export default class RenderText extends Component<Props> {
 
   // Upon URL change, change the URL
   componentDidUpdate(prevProps){
-      console.log("updating data source for iframe")
+      console.log("updating data source for iframe");
       let data = {color: this.props.color};
       window.postMessage(data,'*');
+
+      if (this.props.delete !== ""){
+        console.log("sending the delete message");
+        data = {delete: this.props.delete};
+        window.postMessage(data, '*');
+      }
   }
 
   // Takes in data returned by window.postMessage from the iframe rendered within the component

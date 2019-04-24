@@ -61,6 +61,10 @@ class SideBar extends Component<Props>{
     }
   }
 
+  // deleteHighlightItem = (id) => {
+  //   var index = this.props.highlights.findIndex((element) => element.id == id);
+  // }
+
   getHighlighterColorIcon = (color) => {
     if (color === 'red'){
       return red

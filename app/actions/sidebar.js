@@ -14,3 +14,10 @@ export const addComment = (commentData) => {
   }
 }
 
+export const deleteHighlights = (deleteId) => {
+  return {
+      type: "DELETE",
+      deleteId
+  }
+}
+

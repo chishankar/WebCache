@@ -2,7 +2,8 @@ import type { Action } from './types';
 
 const initialState = {
     highlights: [],
-    url: ""
+    url: "",
+    delete: ""
 }
 
 export default function highlighter(state=initialState, action) {
@@ -26,6 +27,14 @@ export default function highlighter(state=initialState, action) {
           });
         }
       }
+
+      case 'DELETE':
+        const newHighlightList = state.highlights.filter(highlight => highlight.id !== action.deleteId);
+
+        return Object.assign({},state,{
+          delete: action.deleteId,
+          highlights: newHighlightList
+        })
 
     default:
       return state;

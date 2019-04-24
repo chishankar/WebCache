@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import * as sideBarActions from '../actions/sidebar';
 
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
+
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -63,6 +67,7 @@ function preview(str){
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     addComment: sideBarActions.addComment,
+    delete: sideBarActions.deleteHighlights
   },dispatch)
 }
 
@@ -99,6 +104,10 @@ class HighlightText extends Component{
   handleClick = () => {
     this.setState(state => ({ open: !state.open }));
   };
+
+  handleDeleteClick = () => {
+    this.props.delete(this.id);
+  }
 
   render(){
     const commentBox =
@@ -138,6 +147,11 @@ class HighlightText extends Component{
               <i className="fas fa-align-left"></i>
             </ListItemIcon>
             <ListItemText inset primary={this.text} />
+            <ListItemSecondaryAction onClick={this.handleDeleteClick}>
+              <IconButton aria-label="Delete">
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
         </ListItem>
         </List>
         </Collapse>
