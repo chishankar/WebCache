@@ -118,22 +118,26 @@ export default class RenderText extends Component<Props> {
       let data = {color: this.props.color};
       window.postMessage(data,'*');
 
+      // Sends delete request to the iFrame
       if (this.props.delete !== ""){
         data = {delete: this.props.delete};
         window.postMessage(data, '*');
       }
 
+      // Sends hideHighlights request to the iFrame
       if (this.props.hideHighlights){
         data = 'hide'
         window.postMessage(data,"*");
       }
 
+      // Sends show highlight request to the iframe
       if (!this.props.hideHighlights){
         data = 'show'
         window.postMessage(data,"*");
       }
   }
 
+  // Logic for saving file
   handleSave = (htmlData) => {
     var fd = fs.openSync(getResourcePath(this.props.activeUrl) + ANNOTATIONS_FILE, 'w');
     fs.writeFileSync(fd, JSON.stringify(this.props.annotations));

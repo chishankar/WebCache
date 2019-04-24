@@ -105,6 +105,7 @@ class Home extends Component {
     this.store = this.props.store;
   }
 
+  // These two functions handle opening and closes the file tree menu component
   handleDrawerOpen = () => {
     this.setState({ open: true });
   };

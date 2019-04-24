@@ -44,6 +44,7 @@ class Tools extends Component<Props>{
     this.store = this.props.store;
   }
 
+  // Handles the logic for showing the highlighter color options
   _showHighlighter = () =>{
     this.setState({
       showHighlighter: !this.state.showHighlighter,
@@ -51,6 +52,7 @@ class Tools extends Component<Props>{
     });
   }
 
+  // Handles the logic for showing the the URL search input
   _showUrlSearch = () => {
     this.setState({
       showUrlSearch: !this.state.showUrlSearch,
@@ -58,6 +60,7 @@ class Tools extends Component<Props>{
     });
   }
 
+  // Handles the change of the indicator bar to indicate current selection
   handleChange = (event, value) => {
     this.setState({ value });
   };
@@ -71,7 +74,6 @@ class Tools extends Component<Props>{
               value={this.state.value}
               onChange={this.handleChange}
               variant="fullWidth"
-              class={{indicator: selectionstyles.indicator}}
               indicatorColor="primary"
               textColor="primary"
             >

@@ -69,6 +69,7 @@ class SideBar extends Component<Props>{
     }
   }
 
+  // Updates highlighter icon to the currently selected color
   getHighlighterColorIcon = (color) => {
     if (color === 'red'){
       return red
@@ -81,10 +82,6 @@ class SideBar extends Component<Props>{
     }else if (color === 'yellow'){
       return yellow
     }
-  }
-
-  componentDidMount(){
-    console.log(this.props)
   }
 
   render(){

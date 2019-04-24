@@ -58,6 +58,7 @@ const black={
   color: 'black'
 }
 
+// Makes a small preview of the highlighted text to show as the face of the hightext component
 function preview(str){
   if (str.length > 15){
     return str.substring(0,15) + "...";
@@ -65,6 +66,7 @@ function preview(str){
   return str;
 }
 
+// Binding sideBarActions to this component for each of these components to be able to talk to the store
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     addComment: sideBarActions.addComment,
@@ -89,6 +91,8 @@ class HighlightText extends Component{
     }
   }
 
+  // This handles updating the comment data for the specific highlighted text
+  // Updates current state and updates the state in the store
   handleInput = (event) => {
     let value = event.target.value;
     this.setState({comment: value});
@@ -99,18 +103,24 @@ class HighlightText extends Component{
     this.props.addComment(data);
   }
 
+  // This updates the color of the highlighter to indicate the current color that is selected
   getHighlighterColorIcon = (color) => {
     return {color: color};
   }
 
+  // Handles the first drop down to show the comments and full text drop down
   handleClick = () => {
     this.setState(state => ({ open: !state.open }));
   };
 
+  // This is invoked when a user clicks on the delete button. It dispatches a delete action
+  // to the store
   handleDeleteClick = () => {
     this.props.delete(this.id);
   }
 
+
+  // This handles the state for full text drop down
   handleFullClick = () => {
     this.setState(state => ({ fullText: !state.fullText }));
   }

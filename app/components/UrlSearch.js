@@ -35,6 +35,7 @@ export default class UrlSearch extends Component<Props>{
     this.store = this.props.store;
   }
 
+  // Handles the validation of the input
   handleInput = (event) => {
     let value = event.target.value;
     if (this.validURL(value)){
@@ -45,13 +46,14 @@ export default class UrlSearch extends Component<Props>{
     }
   }
 
+  // Logic for showing and not showing loading bar
   handleClickLoading = () => {
     this.setState(state => ({
       loading: !state.loading,
     }));
   };
 
-
+  // Handles logic for when user presses enter on a valid website
   handleEnter = (event) => {
     if (event.key === 'Enter' && this.state.showValidate){
       var save_location = "data/" + this.state.validUrl.replace(/https:\/\//g,"") + '-' + Date.now();
@@ -63,18 +65,22 @@ export default class UrlSearch extends Component<Props>{
     }
   }
 
+  // Sets state of url search component with valid url
   _setValidUrl = (vUrl) =>{
     this.setState({validUrl: vUrl});
   }
 
+  // turns on validation light
   _turnOnValidation= () =>{
     this.setState({showValidate: true});
   }
 
+  // turns off validation light
   _turnOffValidation = () =>{
     this.setState({showValidate: false});
   }
 
+  // handles logic of validating input for valid url
   validURL = (str) => {
     var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
       '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name

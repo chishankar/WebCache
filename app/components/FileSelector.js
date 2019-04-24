@@ -5,6 +5,7 @@ import * as resourcePath from '../utilities/ResourcePaths';
 
 const fs = require('fs');
 
+// Builds the data directory path
 function getDataDirectory() {
   return new resourcePath.ResourcePaths(null).getBaseDirectory() + '/data';
 }
@@ -18,13 +19,15 @@ export default class FileDialogue extends React.Component {
     this.store = this.props.store;
   }
 
+  // Handles path changes and updates state
   onChange = (e) => {
     this.setState({ path: e.target.files[0].path });
   }
 
-handleFile = (file) =>{
-  this.store.dispatch(urlsearchActions.changeActiveUrl('LOCAL' + file.filePath));
-}
+  // Dispatches new file path to url store on file click from file browser
+  handleFile = (file) =>{
+    this.store.dispatch(urlsearchActions.changeActiveUrl('LOCAL' + file.filePath));
+  }
 
   render() {
     return (
