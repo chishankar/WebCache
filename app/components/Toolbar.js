@@ -25,11 +25,17 @@ class Tools extends Component<Props>{
   }
 
   _showHighlighter = () =>{
-    this.setState({showHighlighter: !this.state.showHighlighter});
+    this.setState({
+      showHighlighter: !this.state.showHighlighter,
+        showUrlSearch: false
+    });
   }
 
   _showUrlSearch = () => {
-    this.setState({showUrlSearch: !this.state.showUrlSearch});
+    this.setState({
+      showUrlSearch: !this.state.showUrlSearch,
+      showHighlighter: false
+    });
   }
 
   handleChange = (event, value) => {
@@ -48,15 +54,16 @@ class Tools extends Component<Props>{
               indicatorColor="secondary"
               textColor="secondary"
             >
-              <Tab icon={<i className="far fa-comment-alt" />} data-tip="Annotation"/>
 
               <Tab icon={<i className="fas fa-highlighter" />}  data-tip="Highlighter" onClick={this._showHighlighter}/>
               {this.state.showHighlighter && <Tab icon={<Highlight store={this.store} text="Pick Color: "/>} />}
 
-              <Tab icon={<i className="far fa-comment"></i>} data-tip="Comment" />
-
               <Tab icon={<i className="fas fa-wifi"></i>} data-tip="URL search" onClick={this._showUrlSearch}/>
               {this.state.showUrlSearch && <UrlSearch store={this.store}/>}
+
+              <Tab icon={<i className="far fa-comment"></i>} data-tip="Comment" />
+
+              <Tab icon={<i className="far fa-comment-alt" />} data-tip="Annotation"/>
 
             </Tabs>
           </Paper>

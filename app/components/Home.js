@@ -58,7 +58,8 @@ const styles = theme => ({
   drawerPaper: {
     width: drawerWidth,
     backgroundColor: '#232c39 !important',
-    padding: '0 !important'
+    padding: '0 !important',
+    border: 'inherit'
   },
   drawerHeader: {
     display: 'flex',

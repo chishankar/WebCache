@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import * as sideBarActions from '../actions/sidebar';
+import { withStyles } from '@material-ui/core/styles';
 
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -22,7 +23,7 @@ const styles = theme => ({
   root: {
     width: '100%',
     maxWidth: 360,
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
   },
   nested: {
     paddingLeft: theme.spacing.unit * 4,
@@ -83,7 +84,8 @@ class HighlightText extends Component{
     this.addComment = this.props.addComment;
     this.state = {
       open: false,
-      comment: ""
+      comment: "",
+      fullText: false,
     }
   }
 
@@ -109,6 +111,10 @@ class HighlightText extends Component{
     this.props.delete(this.id);
   }
 
+  handleFullClick = () => {
+    this.setState(state => ({ fullText: !state.fullText }));
+  }
+
   render(){
     const commentBox =
       <TextField
@@ -125,35 +131,53 @@ class HighlightText extends Component{
     return(
       <div>
         <ListItem button ref={this.listref} data-tip={this.text} onClick={this.handleClick}>
-
           <ListItemIcon >
             <i className="fas fa-highlighter" style={this.getHighlighterColorIcon(this.color)}/>
           </ListItemIcon>
+
           <ListItemText primary={this.preview} />
           {this.state.open ?
             <ExpandLess style={black}/> :
             <ExpandMore style={black}/>}
         </ListItem>
+
         <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
+          <List component="div" disablePadding>
+            <ListItem button className={styles.nested} onClick={this.handleDeleteClick}>
+              <ListItemIcon>
+                  <IconButton aria-label="Delete">
+                    <DeleteIcon />
+                  </IconButton>
+              </ListItemIcon>
+              <ListItemText inset primary={"Delete"} />
+            </ListItem>
+
             <ListItem button className={styles.nested}>
                 <ListItemIcon>
                   <i className="far fa-comment-alt" />
                 </ListItemIcon>
                 <ListItemText inset primary={commentBox} />
             </ListItem>
-            <ListItem button className={styles.nested}>
-            <ListItemIcon>
-              <i className="fas fa-align-left"></i>
-            </ListItemIcon>
-            <ListItemText inset primary={this.text} />
-            <ListItemSecondaryAction onClick={this.handleDeleteClick}>
-              <IconButton aria-label="Delete">
-                <DeleteIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-        </ListItem>
-        </List>
+
+            <ListItem button onClick={this.handleFullClick}>
+              <ListItemIcon>
+                <i className="fas fa-align-left"></i>
+              </ListItemIcon>
+              <ListItemText inset primary="Full Text" />
+              {this.state.fullText ? <ExpandLess style={black}/> : <ExpandMore style={black}/>}
+            </ListItem>
+
+            <Collapse in={this.state.fullText} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem button className={styles.nested}>
+                  <ListItemIcon>
+                    <i className="fas fa-align-left"></i>
+                  </ListItemIcon>
+                  <ListItemText inset primary={this.text} />
+                </ListItem>
+              </List>
+            </Collapse>
+          </List>
         </Collapse>
         <Divider />
       </div>
@@ -164,4 +188,4 @@ class HighlightText extends Component{
 export default connect(
   null,
   mapDispatchToProps
-)(HighlightText)
+)(withStyles(styles)(HighlightText))
