@@ -96,7 +96,7 @@ class SideBar extends Component<Props>{
       component='nav'
       subheader={
         <ListSubheader component='div'><i className='fas fa-highlighter' style={this.getHighlighterColorIcon(this.props.color)}/>
-          Highlighted Texts
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Highlighted Texts
         <ListItemSecondaryAction>
         <HideButton />
       </ListItemSecondaryAction>
