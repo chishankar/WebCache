@@ -58,7 +58,6 @@ const styles = theme => ({
   drawerPaper: {
     width: drawerWidth,
     backgroundColor: '#232c39 !important',
-    color: 'black !important',
     padding: '0 !important'
   },
   drawerHeader: {
