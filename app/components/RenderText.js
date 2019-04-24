@@ -22,18 +22,24 @@ function getResourcePath(path){
   return new resourcePath.ResourcePaths(path).getResourceDir();
 }
 
+// Return the base Resource directory
+function getResourceBase(path){
+  return new resourcePath.ResourcePaths(path).getResourceBase();
+}
+
 // Renders dynamic iframe
-function getRenderText(filePath, iframeRef) {
+function getRenderText(filePath, iframeRef, addHighlights) {
   let resource = getResourceBuilder(filePath);
   let resourceDir = getResourcePath(filePath);
   let jsResource = getResourceBuilder('renderHtmlViwer/index.js');
+  let local = false;
 
-  var resourceHtml;
-  if(!filePath.startsWith("LOCAL")){
-    resourceHtml = fs.readFileSync(resource).toString();
-  } else {
-    resourceHtml = fs.readFileSync(filePath.substr(5, filePath.length));
+  if(filePath.startsWith("LOCAL")) {
+    local = true;
+    resource = filePath.substr(5, filePath.length);
   }
+
+  var resourceHtml = fs.readFileSync(resource).toString();
 
   var injectScript = fs.readFileSync(jsResource).toString();
 
@@ -41,12 +47,11 @@ function getRenderText(filePath, iframeRef) {
 
   // change all paths to become relative
   // check to see if the path is already changed - don't change it twice!!
-  if (filePath != "app/default_landing_page.html" && !filePath.startsWith("LOCAL")) {
+  if (filePath != "app/default_landing_page.html" && !local) {
     resourceHtml = resourceHtml.replace(/href="([\.\/\w+]+)"/g, "href=\"" + resourceDir + "$1" + "\"");
     resourceHtml = resourceHtml.replace(/src="([\.\/\w+]+)"/g, "src=\"" + resourceDir + "$1" + "\"");
   }
 
-  //TODO: check if an annotations.json exists in resourceDir - if it does, load it into the store
 
   return (
 
@@ -57,7 +62,7 @@ function getRenderText(filePath, iframeRef) {
 
 type Props = {
   color: String,
-  addHighlightColor: Function,
+  addHighlight: Function,
   clearHighlights: Function,
   delete: String,
   annotations: Object
@@ -81,6 +86,33 @@ export default class RenderText extends Component<Props> {
       if (this.props.activeUrl != prevProps.activeUrl) {
         // clear highlights when a new page is loaded
         this.props.clearHighlights();
+
+        var filePath = this.props.activeUrl;
+        // load the annotations from the json file
+        let resource = getResourceBuilder(filePath);
+        let resourceDir = getResourcePath(filePath);
+        let jsResource = getResourceBuilder('renderHtmlViwer/index.js');
+        let local = false;
+
+        if(filePath.startsWith("LOCAL")) {
+          local = true;
+          resource = filePath.substr(5, filePath.length);
+        }
+        try {
+          var fd = fs.openSync(resource + '/../' + ANNOTATIONS_FILE, 'r');
+          var highlights = JSON.parse(fs.readFileSync(fd));
+          // add each highlight to the store
+          highlights.forEach(highlight => {
+            // only add it if it isn't arleady in the store
+            if (!this.props.annotations.some(element => {
+              return element.id == highlight.id;
+            })) {
+              this.props.addHighlight(highlight);
+            }
+          })
+        } catch (err) {
+          console.log('annotations.json does not exist!');
+        }
       }
       let data = {color: this.props.color};
       window.postMessage(data,'*');
@@ -114,13 +146,13 @@ export default class RenderText extends Component<Props> {
       if (this.props.activeUrl !== 'app/default_landing_page.html') {
         this.handleSave(e.data.savedData);
       } else {
-        console.log("what to do about saving annotations on the home page??");
+        console.log("can't save annotations on the home page!");
       }
 
     } else if (e.data.highlight){
-      if(e.data.highlight.text !== "" && e.data.highlight.color !== "DEFAULT"){
+      if(e.data.highlight.text !== "" && e.data.highlight.color){
         // add highlight to store
-        this.props.addHighlightColor(e.data.highlight);
+        this.props.addHighlight(e.data.highlight);
       }
     }
   }

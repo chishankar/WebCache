@@ -1,15 +1,19 @@
 import React from 'react';
 import FileTree from 'react-filetree-electron';
 import * as urlsearchActions from '../actions/urlsearch';
+import * as resourcePath from '../utilities/ResourcePaths';
 
 const fs = require('fs');
 
+function getDataDirectory() {
+  return new resourcePath.ResourcePaths(null).getBaseDirectory() + '/data';
+}
 
 export default class FileDialogue extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      path: null
+      path: ''
     };
     this.store = this.props.store;
   }
@@ -19,7 +23,6 @@ export default class FileDialogue extends React.Component {
   }
 
 handleFile = (file) =>{
-  console.log(file.filePath);
   this.store.dispatch(urlsearchActions.changeActiveUrl('LOCAL' + file.filePath));
 }
 
