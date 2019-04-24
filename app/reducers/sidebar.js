@@ -3,7 +3,8 @@ import type { Action } from './types';
 const initialState = {
     highlights: [],
     url: "",
-    delete: ""
+    delete: "",
+    hideHighlights: false
 }
 
 export default function highlighter(state=initialState, action) {
@@ -34,6 +35,12 @@ export default function highlighter(state=initialState, action) {
         return Object.assign({},state,{
           delete: action.deleteId,
           highlights: newHighlightList
+        })
+
+      case 'HIDEHIGHLIGHTS':
+        console.log("GETS HERE")
+        return Object.assign({},state,{
+          hideHighlights: !state.hideHighlights
         })
 
     default:

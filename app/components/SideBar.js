@@ -11,7 +11,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import VisibilityOnIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
-
 import HighlightText from './HighlightText';
 import { Divider } from '@material-ui/core';
 
@@ -39,12 +38,7 @@ const black={
   color: 'black'
 }
 
-type Props = {
-  highlights: Array,
-  url: String,
-  addComment: Function,
-  color: String
-};
+
 
 const styles = theme => ({
   root: {
@@ -57,31 +51,42 @@ const styles = theme => ({
   },
 });
 
+type Props = {
+  highlights: Array,
+  url: String,
+  addComment: Function,
+  color: String,
+  hideHighlights: Function,
+};
+
+
 class HideButton extends Component<Props>{
+  props: Props
+
   constructor(props){
     super(props)
     this.state = {
-      hideHiglights: false,
+      hideHighlights: false,
     }
   }
 
-  onHideIconClick = (prevProps) => {
+  onHideIconClick = () => {
     this.setState({
-      hideHighlights: !prevProps
+      hideHighlights: !this.state.hideHighlights
     })
-    console.log(this.state.hideHighlights)
+    console.log(this.props)
+    // this.props.hideHighlights()
   }
 
   render(){
     return(
       <IconButton aria-label="Delete" onClick={this.onHideIconClick} >
-        {this.state.highlightData ? <VisibilityOffIcon />  : <VisibilityOnIcon />  }
+        {this.state.hideHighlights ? <VisibilityOffIcon />  : <VisibilityOnIcon />  }
       </IconButton>
     )
   }
 
 }
-
 
 class SideBar extends Component<Props>{
   props: Props
@@ -93,15 +98,6 @@ class SideBar extends Component<Props>{
       hideHighlights: false,
     }
   }
-
-  // deleteHighlightItem = (id) => {
-  //   var index = this.props.highlights.findIndex((element) => element.id == id);
-  // }
-
-  // onHideIconClick = () => {
-  //   this.setState({hideHighlights: !this.state.hideHighlights})
-  //   console.log(this.state.hideHighlights)
-  // }
 
   getHighlighterColorIcon = (color) => {
     if (color === 'red'){
@@ -117,6 +113,10 @@ class SideBar extends Component<Props>{
     }
   }
 
+  componentDidMount(){
+    console.log(this.props)
+  }
+
   render(){
 
     const { classes } = this.props;
@@ -124,16 +124,15 @@ class SideBar extends Component<Props>{
     return(
       <List
       component='nav'
-      subheader={<ListSubheader component='div'><i className='fas fa-highlighter' style={this.getHighlighterColorIcon(this.props.color)}/>  Highlighted Texts</ListSubheader>}
+      subheader={
+        <ListSubheader component='div'><i className='fas fa-highlighter' style={this.getHighlighterColorIcon(this.props.color)}/>
+          Highlighted Texts
+        <ListItemSecondaryAction>
+        <HideButton />
+      </ListItemSecondaryAction>
+        </ListSubheader>}
       className={classes.root}>
-      <ListItem>
-          <ListItemText
-            primary="Hide Highlights"
-          />
-          <ListItemSecondaryAction>
-            <HideButton />
-          </ListItemSecondaryAction>
-        </ListItem>,
+
 
       <Divider />
 

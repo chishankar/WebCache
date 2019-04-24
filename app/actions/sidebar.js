@@ -21,3 +21,9 @@ export const deleteHighlights = (deleteId) => {
   }
 }
 
+export const hideHighlights = () => {
+  return {
+      type: "HIDEHIGHLIGHTS"
+    }
+}
+

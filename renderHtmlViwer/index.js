@@ -1,4 +1,6 @@
 var color;
+var highlightIdentifier = 'webcache-highlight-mark'
+
 // Event listener to highlighting within the iframe
 document.onmouseup = function(event){
   highlight(color);
@@ -59,6 +61,7 @@ function highlight(color){
           span.style.backgroundColor = color;
           span.style.display = 'inline';
           span.classList.add(highlightId);
+          span.classList.add(highlightIdentifier);
 
           subranges.push(subrange);
           spans.push(span);
