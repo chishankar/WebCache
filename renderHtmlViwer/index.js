@@ -1,6 +1,11 @@
 var color;
 var highlightIdentifier = 'webcache-highlight-mark'
 
+var hideStyle = document.createElement('style');
+hideStyle.type = 'text/css';
+hideStyle.innerHTML = '.hide-webcache-highlight { background-color: inherit !important; }';
+document.getElementsByTagName('head')[0].appendChild(hideStyle);
+
 // Event listener to highlighting within the iframe
 document.onmouseup = function(event){
   highlight(color);
@@ -107,6 +112,20 @@ function changeIFrameSrc(path){
   document.getElementById('content').src = path;
 }
 
+function hideHighlights(){
+  let highlightList = getSpansWithHighlight(highlightIdentifier);
+  highlightList.forEach(wrapper => {
+    wrapper.classList.add('hide-webcache-highlight')
+  })
+}
+
+function showHighlights(){
+  let highlightList = getSpansWithHighlight(highlightIdentifier);
+  highlightList.forEach(wrapper => {
+    wrapper.classList.remove('hide-webcache-highlight')
+  })
+}
+
 // Event listener for events coming from the parent
 window.parent.addEventListener('message',function(e){
   // if (!e.data.type){
@@ -128,6 +147,15 @@ window.parent.addEventListener('message',function(e){
 
   else if (data === "save"){
     handleSave();
+  }
+
+  else if (data == "show"){
+    showHighlights()
+  }
+
+  else if (data === "hide"){
+    // console.log("here")
+    hideHighlights()
   }
 
 });

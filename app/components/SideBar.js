@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-
 import { withStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
@@ -8,8 +7,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ListItemText from '@material-ui/core/ListItemText';
-import VisibilityOnIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import HideButton from './HideHighlights';
 
 import HighlightText from './HighlightText';
 import { Divider } from '@material-ui/core';
@@ -56,37 +54,10 @@ type Props = {
   url: String,
   addComment: Function,
   color: String,
-  hideHighlights: Function,
 };
 
 
-class HideButton extends Component<Props>{
-  props: Props
 
-  constructor(props){
-    super(props)
-    this.state = {
-      hideHighlights: false,
-    }
-  }
-
-  onHideIconClick = () => {
-    this.setState({
-      hideHighlights: !this.state.hideHighlights
-    })
-    console.log(this.props)
-    // this.props.hideHighlights()
-  }
-
-  render(){
-    return(
-      <IconButton aria-label="Delete" onClick={this.onHideIconClick} >
-        {this.state.hideHighlights ? <VisibilityOffIcon />  : <VisibilityOnIcon />  }
-      </IconButton>
-    )
-  }
-
-}
 
 class SideBar extends Component<Props>{
   props: Props
@@ -95,15 +66,8 @@ class SideBar extends Component<Props>{
     super(props)
     this.state = {
       open: true,
-      hideHighlights: false,
     }
   }
-
-
-  // onHideIconClick = () => {
-  //   this.setState({hideHighlights: !this.state.hideHighlights})
-  //   console.log(this.state.hideHighlights)
-  // }
 
   getHighlighterColorIcon = (color) => {
     if (color === 'red'){
@@ -139,7 +103,6 @@ class SideBar extends Component<Props>{
         </ListSubheader>}
       className={classes.root}>
 
-
       <Divider />
 
      {highlightData.map(highlight =>
@@ -150,5 +113,7 @@ class SideBar extends Component<Props>{
     )
   }
 }
+
+
 
 export default withStyles(styles)(SideBar);

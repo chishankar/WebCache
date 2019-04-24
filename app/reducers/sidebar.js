@@ -41,7 +41,6 @@ export default function highlighter(state=initialState, action) {
       return Object.assign({}, state, {highlights: []});
 
       case 'HIDEHIGHLIGHTS':
-        console.log("GETS HERE")
         return Object.assign({},state,{
           hideHighlights: !state.hideHighlights
         })
