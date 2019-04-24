@@ -15,7 +15,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
-    addHighlightColor: sideBarActions.addHighlight
+    addHighlightColor: sideBarActions.addHighlight,
+    clearHighlights: sideBarActions.clearHighlights
   },dispatch);
 }
 

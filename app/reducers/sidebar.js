@@ -18,7 +18,7 @@ export default function highlighter(state=initialState, action) {
       });
 
     case 'COMMENT':
-      let newCommentList = state.highlights
+      let newCommentList = state.highlights;
       for (var i = 0; i < newCommentList.length; i++) {
         let highlight = newCommentList[i];
         if (highlight.id == action.commentData.id) {
@@ -29,13 +29,16 @@ export default function highlighter(state=initialState, action) {
         }
       }
 
-      case 'DELETE':
-        const newHighlightList = state.highlights.filter(highlight => highlight.id !== action.deleteId);
+    case 'DELETE':
+      const newHighlightList = state.highlights.filter(highlight => highlight.id !== action.deleteId);
 
-        return Object.assign({},state,{
-          delete: action.deleteId,
-          highlights: newHighlightList
-        })
+      return Object.assign({},state,{
+        delete: action.deleteId,
+        highlights: newHighlightList
+      });
+
+    case 'CLEAR':
+      return Object.assign({}, state, {highlights: []});
 
       case 'HIDEHIGHLIGHTS':
         console.log("GETS HERE")

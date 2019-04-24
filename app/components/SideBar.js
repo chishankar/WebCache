@@ -99,6 +99,12 @@ class SideBar extends Component<Props>{
     }
   }
 
+
+  // onHideIconClick = () => {
+  //   this.setState({hideHighlights: !this.state.hideHighlights})
+  //   console.log(this.state.hideHighlights)
+  // }
+
   getHighlighterColorIcon = (color) => {
     if (color === 'red'){
       return red

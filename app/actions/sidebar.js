@@ -27,3 +27,8 @@ export const hideHighlights = () => {
     }
 }
 
+export const clearHighlights = () => {
+  return {
+      type: "CLEAR"
+  }
+}

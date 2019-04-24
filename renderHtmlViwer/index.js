@@ -6,20 +6,6 @@ document.onmouseup = function(event){
   highlight(color);
 };
 
-// make the range into a JSON object so that it can be passed to the parent
-function serializeRange(range) {
-  if (!range || ((range.startContainer === range.endContainer) && (range.startOffset === range.endOffset))) {
-    return null;
-  }
-
-  return {
-    startContainer: JSON.parse(JSON.stringify(range.startContainer)),
-    startOffset: range.startOffset,
-    endContainer: JSON.parse(JSON.stringify(range.endContainer)),
-    endOffset: range.endOffset
-  }
-}
-
 // traverses the DOM tree to get the next node until the endNode is reached
 function getNextNode(node, skipChildren, endNode) {
   if(endNode == node) {
@@ -79,7 +65,6 @@ function highlight(color){
 
   sel.removeAllRanges();
 
-  data.range = serializeRange(range);
   data.color = color;
   data.id = highlightId;
   data.comment = ""
@@ -113,7 +98,6 @@ function unwrap(spanList) {
 
 // Handles returning the data in the iFrame to send back for re-writing the file
 function handleSave(){
-  console.log("Saving ...");
   let data = {savedData: document.documentElement.innerHTML};
   window.parent.postMessage(data,"*");
 }
@@ -125,18 +109,16 @@ function changeIFrameSrc(path){
 
 // Event listener for events coming from the parent
 window.parent.addEventListener('message',function(e){
-  if (!e.data.type){
-    console.log('iFrame received: ' + JSON.stringify(e.data))
-  }
+  // if (!e.data.type){
+  //   console.log('iFrame received: ' + JSON.stringify(e.data))
+  // }
   let data = e.data;
 
   if (data.delete) {
-    console.log(data.delete);
     unwrap(getSpansWithHighlight(data.delete));
   }
 
   if (data.color){
-    console.log('setting color to ' + data.color);
     color = data.color;
   }
 
