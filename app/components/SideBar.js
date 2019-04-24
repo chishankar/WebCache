@@ -3,6 +3,14 @@ import React, {Component} from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ListItemText from '@material-ui/core/ListItemText';
+import VisibilityOnIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+
 
 import HighlightText from './HighlightText';
 import { Divider } from '@material-ui/core';
@@ -49,6 +57,30 @@ const styles = theme => ({
   },
 });
 
+class HideButton extends Component<Props>{
+  constructor(props){
+    super(props)
+    this.state = {
+      hideHiglights: false,
+    }
+  }
+
+  onHideIconClick = (prevProps) => {
+    this.setState({
+      hideHighlights: !prevProps
+    })
+    console.log(this.state.hideHighlights)
+  }
+
+  render(){
+    return(
+      <IconButton aria-label="Delete" onClick={this.onHideIconClick} >
+        {this.state.highlightData ? <VisibilityOffIcon />  : <VisibilityOnIcon />  }
+      </IconButton>
+    )
+  }
+
+}
 
 
 class SideBar extends Component<Props>{
@@ -58,11 +90,17 @@ class SideBar extends Component<Props>{
     super(props)
     this.state = {
       open: true,
+      hideHighlights: false,
     }
   }
 
   // deleteHighlightItem = (id) => {
   //   var index = this.props.highlights.findIndex((element) => element.id == id);
+  // }
+
+  // onHideIconClick = () => {
+  //   this.setState({hideHighlights: !this.state.hideHighlights})
+  //   console.log(this.state.hideHighlights)
   // }
 
   getHighlighterColorIcon = (color) => {
@@ -88,6 +126,14 @@ class SideBar extends Component<Props>{
       component='nav'
       subheader={<ListSubheader component='div'><i className='fas fa-highlighter' style={this.getHighlighterColorIcon(this.props.color)}/>  Highlighted Texts</ListSubheader>}
       className={classes.root}>
+      <ListItem>
+          <ListItemText
+            primary="Hide Highlights"
+          />
+          <ListItemSecondaryAction>
+            <HideButton />
+          </ListItemSecondaryAction>
+        </ListItem>,
 
       <Divider />
 

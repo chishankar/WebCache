@@ -8,7 +8,8 @@ function mapStateToProps(state) {
   return {
     color: state.highlighter.color,
     activeUrl: state.urlsearch.activeUrl,
-    delete: state.sidebar.delete
+    delete: state.sidebar.delete,
+    annotations: state.sidebar.highlights
   };
 }
 

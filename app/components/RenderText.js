@@ -57,7 +57,8 @@ function getRenderText(filePath, iframeRef) {
 type Props = {
   color: String,
   addHighlightColor: Function,
-  delete: String
+  delete: String,
+  annotations: Object
 }
 
 export default class RenderText extends Component<Props> {
@@ -100,7 +101,8 @@ export default class RenderText extends Component<Props> {
 
     } else if (e.data.savedData){
 
-      console.log(e.data.savedData);
+      console.log(this.props.annotations);
+      // console.log(e.data.savedData);
 
     } else if (e.data.highlight){
 
