@@ -13,6 +13,26 @@ import Tab from '@material-ui/core/Tab';
 import Grid from '@material-ui/core/Grid';
 
 
+const selectionstyles = themes => ({
+  root:{
+    flexGrow: 1,
+    maxWidth: 500,
+  },
+  primary:{
+    backgroundColor: '#232c39',
+    color: '#232c39',
+    textColor: '#232c39'
+  },
+  indicator:{
+    color: '#232c39',
+    backgroundColor: '#232c39'
+  },
+  textColor:{
+    color: '#232c39',
+    backgroundColor: '#232c39'
+  }
+})
+
 class Tools extends Component<Props>{
   constructor(props){
     super(props);
@@ -51,8 +71,9 @@ class Tools extends Component<Props>{
               value={this.state.value}
               onChange={this.handleChange}
               variant="fullWidth"
-              indicatorColor="secondary"
-              textColor="secondary"
+              class={{indicator: selectionstyles.indicator}}
+              indicatorColor="primary"
+              textColor="primary"
             >
 
               <Tab icon={<i className="fas fa-highlighter" />}  data-tip="Highlighter" onClick={this._showHighlighter}/>
@@ -75,4 +96,4 @@ class Tools extends Component<Props>{
 }
 
 
-export default withStyles(styles)(Tools);
+export default withStyles(selectionstyles)(Tools);
