@@ -21,3 +21,8 @@ export const deleteHighlights = (deleteId) => {
   }
 }
 
+export const clearHighlights = () => {
+  return {
+      type: "CLEAR"
+  }
+}

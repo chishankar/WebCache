@@ -94,9 +94,6 @@ class SideBar extends Component<Props>{
     }
   }
 
-  // deleteHighlightItem = (id) => {
-  //   var index = this.props.highlights.findIndex((element) => element.id == id);
-  // }
 
   // onHideIconClick = () => {
   //   this.setState({hideHighlights: !this.state.hideHighlights})
