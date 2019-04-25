@@ -20,6 +20,42 @@ var ioCount =0;
 var fileParseTime = 0;
 var sizeCheckTime = 0;
 
+function wordLocsMapping(str, delimiter=/\s/) {
+  var out = new Map();
+  var word = '';
+  var c;
+  var i;
+
+  // generate locations of all words in one pass
+  for (i = 0; i < str.length; i++) {
+      c = str.charAt(i);
+      if (!delimiter.test(c)) { // if not whitespace
+          word += c; // continue building a word
+      } else if (word) {
+          // if it is whitespace, check if we have built a word
+          // and add it to the map
+          if (!stopWords.includes(word)) {
+            if (!out.has(word)) {
+                out.set(word, []); // create the array if it doesn't exist
+            } // push the word to the array
+            out.get(word).push(i - word.length);
+          }
+          word = '';
+      }
+  }
+
+  // add word to map if we have built a word
+  // this the same as in the for loop
+  if (!stopWords.includes(word)) {
+    if (!out.has(word)) {
+        out.set(word, []); // create the array if it doesn't exist
+    } // push the word to the array
+    out.get(word).push(i - word.length);
+  }
+
+  return out;
+}
+
 // TODO: save array of N-bit integers as array of 8-bit integers
 module.exports = {};
 // #############################################################################
@@ -201,21 +237,12 @@ function getFileIndex(fileName) {
           // TODO: REMOVE HTML TAGS
           // Case-sensitive indexing not implented for simplicity.
           let cleanText = data.replace(/<\/?[^>]+(>|$)/g, "").replace(/[^\w\s]/gi, '');
-          let fileWords = cleanText.toLowerCase().trim().split(/\s+/).filter(function(value, index, self){return self.indexOf(value) === index && !stopWords.includes(value);});
-
-          //Iterate for each unique word in file
-          fileWords.forEach( word => {
-            //Will hold a list of IDs for each word, one for each location
-            let IDList = [];
-            let locations = getIndicesOf(word,cleanText);
-            IDList.push(locations.length);
-            IDList.push(fileNum);
-            //Calculates ID for unique location
-            locations.forEach(loc => {
-              IDList.push(loc);
+          wordMapping = wordLocsMapping(cleanText);
+          wordMapping.forEach(function(value, key) {
+            fileIndex.push({
+              w: key,
+              a: [value.length, fileNum].concat(value)
             });
-            //Push object of word and its locations to return
-            fileIndex.push({w: word, a: IDList});
           });
           //returns the list
           resolve(fileIndex);
@@ -514,12 +541,13 @@ function search(searchStr, index) {
   let startIndex = 0;
 
   // populate fileLists with lists of files holding each word.
-  searchWords.forEach(word => {
+  for (var i = 0 ; i < searchWords.length ; i ++) {
+    let word = searchWords[i];
     let wordFiles = [];
     //returns a list of all unique location IDs associated with the current word
-    results = _.findWhere(index, {w: word});
+    let results = _.findWhere(index, {w: word});
     //if not found return empty
-    if (results == null) return;
+    if (results == null) return finalResults;
     //Changes into filename and location format
     let filePath = path.join(__dirname, "/word_inds/" + results.fn);
     wordLocs = getWordLocs(readUint32ArrFileSync(filePath)).slice(results.st, results.st + results.sz);
@@ -528,7 +556,7 @@ function search(searchStr, index) {
       wordFiles.push(fileLocs.fileName);
     });
     fileLists.push(wordFiles);
-  });
+  }
 
   if (searchWords.length <= 1) {
     wordResults.forEach(obj => {
@@ -692,6 +720,7 @@ if(INDEX_DIRECTORY) {
       console.log("Size of index: " + sizeof(mainIndex));
       console.log("io calls: " + ioCount);
       saveIndexToFile(mainIndex, lookup, 'ind_bin.txt', 'tbl_bin.txt');
+      let results = search("git add main5.js",mainIndex);
     });
 
   // addFilesToSecondIndex(dirFiles, secondInd);
@@ -705,7 +734,7 @@ if(INDEX_DIRECTORY) {
     console.log("Loaded index from file in  " + (t1 - t0) + " milliseconds.");
     console.log("Size of index: " + sizeof(mainIndex));
     console.log("lookup table size: " + sizeof(lookup));
-    let results = search("performance",mainIndex);
+
   });
 }
 
