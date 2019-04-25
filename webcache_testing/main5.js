@@ -550,7 +550,7 @@ function search(searchStr, index) {
     if (results == null) return finalResults;
     //Changes into filename and location format
     let filePath = path.join(__dirname, "/word_inds/" + results.fn);
-    wordLocs = getWordLocs(readUint32ArrFileSync(filePath)).slice(results.st, results.st + results.sz);
+    let wordLocs = getWordLocs((readUint32ArrFileSync(filePath)).slice(results.st, results.st + results.sz));
     wordResults.push(wordLocs);
     wordLocs.forEach(fileLocs => {
       wordFiles.push(fileLocs.fileName);
@@ -720,7 +720,7 @@ if(INDEX_DIRECTORY) {
       console.log("Size of index: " + sizeof(mainIndex));
       console.log("io calls: " + ioCount);
       saveIndexToFile(mainIndex, lookup, 'ind_bin.txt', 'tbl_bin.txt');
-      let results = search("git add main5.js",mainIndex);
+      let results = search("displeasure",mainIndex);
     });
 
   // addFilesToSecondIndex(dirFiles, secondInd);
