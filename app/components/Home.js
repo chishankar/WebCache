@@ -98,13 +98,18 @@ type Props = {};
 class Home extends Component {
   // props: Props
 
-  state = {
-    open: false, 
-    showSearchSideBar: false
-  }
   constructor(props){
     super(props);
     this.store = this.props.store;
+  }
+
+  state = {
+    open: false, 
+    showSearchSideBar: false
+  };
+
+  showSearchSideBarFalse(){
+    this.setState({showSearchSideBar: false});
   }
 
   // These two functions handle opening and closes the file tree menu component
@@ -118,15 +123,16 @@ class Home extends Component {
 
   componentDidUpdate(prevProps){
     console.log('props updated: ' + this.props.searchTerms + ' ' + prevProps.searchTerms);
-     if (!(this.props.searchTerms === prevProps.searchTerms)) {
-        this.setState({
+  
+    if (!(this.props.searchTerms === prevProps.searchTerms) && !(this.props.searchTerms === "")) {
+      this.setState({
           showSearchSideBar: true
-        });
+       });
      }
   }
 
   render(){
-    console.log('search bar status: ' + this.state.showSearchSideBar);
+    console.log("render side bar state: " + this.state.showSearchSideBar);
     const { classes, theme } = this.props;
     const { open } = this.state;
 
@@ -147,7 +153,7 @@ class Home extends Component {
               [classes.appBarShift]: open,
             },{colorPrimary: homeStyles.appBar})}
           >
-            <Toolbar disableGutters={!open}>
+            <Toolbar greeting={this.showSearchSideBarFalse.bind(this)} disableGutters={!open}>
               <IconButton
                 aria-label='Open drawer'
                 onClick={this.handleDrawerOpen}
@@ -196,8 +202,8 @@ class Home extends Component {
             <div className={classNames(classes.toolbar, classes.toolbarRight)}/>
             <List className={classes.list}>
               {!this.state.showSearchSideBar && <SideBarPage store={this.store}/>}
+              {this.state.showSearchSideBar && <SearchSideBar/>}
             </List>
-            {this.state.showSearchSideBar && <SearchSideBar/>}
           </Drawer>
         </div>
       );
