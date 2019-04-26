@@ -220,6 +220,6 @@ class Home extends Component {
         </div>
       );
     };
-}
+
 
   export default withStyles(styles, { withTheme: true })(Home);
