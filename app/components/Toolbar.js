@@ -5,6 +5,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import Highlight from './Highlight';
 import ReactTooltip from 'react-tooltip';
 import UrlSearch from './UrlSearch';
+import FileSearch from './FileSearch';
 
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
@@ -39,6 +40,7 @@ class Tools extends Component<Props>{
     this.state = {
       showHighlighter: false,
       showUrlSearch: false,
+      showFileSearch: false, 
       value: 0
     };
     this.store = this.props.store;
@@ -48,7 +50,8 @@ class Tools extends Component<Props>{
   _showHighlighter = () =>{
     this.setState({
       showHighlighter: !this.state.showHighlighter,
-        showUrlSearch: false
+        showUrlSearch: false,
+        showFileSearch: false
     });
   }
 
@@ -56,7 +59,18 @@ class Tools extends Component<Props>{
   _showUrlSearch = () => {
     this.setState({
       showUrlSearch: !this.state.showUrlSearch,
-      showHighlighter: false
+      showHighlighter: false,
+      showFileSearch: false
+    });
+  }
+
+  _showFileSearch = () => {
+    console.log(!this.state.showFileSearch);
+
+    this.setState({
+      showFileSearch: !this.state.showFileSearch,
+      showHighlighter: false,
+      showUrlSearch: false
     });
   }
 
@@ -87,6 +101,9 @@ class Tools extends Component<Props>{
               <Tab icon={<i className="far fa-comment"></i>} data-tip="Comment" />
 
               <Tab icon={<i className="far fa-comment-alt" />} data-tip="Annotation"/>
+
+              <Tab icon={<i className="fa fa-search" />} data-tip="File Search" onClick={this._showFileSearch}/>
+              {this.state.showFileSearch && <FileSearch store={this.store}/>}
 
             </Tabs>
           </Paper>

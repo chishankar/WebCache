@@ -5,6 +5,7 @@ import counter from './counter';
 import highlighter from './highlighter';
 import urlsearch from './urlsearch';
 import sidebar from './sidebar';
+import filesearch from './filesearch';
 
 export default function createRootReducer(history: History) {
   return combineReducers({
@@ -12,6 +13,7 @@ export default function createRootReducer(history: History) {
     counter,
     highlighter,
     urlsearch,
+    filesearch,
     sidebar
   });
 }

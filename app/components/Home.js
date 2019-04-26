@@ -18,6 +18,7 @@ import Tools from './Toolbar';
 import homeStyles from './Home.css';
 import FileDialogue from './FileSelector';
 import SideBarPage from '../containers/SideBarPage';
+import SearchSideBar from '../components/SearchSideBar';
 import RenderTextPage from '../containers/RenderTextPage';
 
 const drawerWidth = 250;
@@ -183,7 +184,8 @@ class Home extends Component {
 
             <div className={classNames(classes.toolbar, classes.toolbarRight)}/>
             <List className={classes.list}>
-              <SideBarPage store={this.store}/>
+              {true && <SideBarPage store={this.store}/>}
+              {false && <SearchSideBar/>}
             </List>
           </Drawer>
         </div>

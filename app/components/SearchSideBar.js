@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 
-import HighlightText from './HighlightText';
 import { Divider } from '@material-ui/core';
 
 
@@ -44,11 +43,6 @@ class SearchSideBar extends Component<Props>{
       className={styles.root}>
 
       <Divider />
-
-     {highlightData.map(highlight =>
-      <HighlightText key={highlight.id} text={highlight.text} color={highlight.color} id={highlight.id} func={this.props.addComment}/>
-      )}
-
     </List>
     )
 
