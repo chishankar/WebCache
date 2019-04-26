@@ -99,7 +99,8 @@ class Home extends Component {
   // props: Props
 
   state = {
-    open: false
+    open: false, 
+    showSearchSideBar: false
   }
   constructor(props){
     super(props);
@@ -115,7 +116,17 @@ class Home extends Component {
     this.setState({ open: false });
   };
 
+  componentDidUpdate(prevProps){
+    console.log('props updated: ' + this.props.searchTerms + ' ' + prevProps.searchTerms);
+     if (!(this.props.searchTerms === prevProps.searchTerms)) {
+        this.setState({
+          showSearchSideBar: true
+        });
+     }
+  }
+
   render(){
+    console.log('search bar status: ' + this.state.showSearchSideBar);
     const { classes, theme } = this.props;
     const { open } = this.state;
 
@@ -184,9 +195,9 @@ class Home extends Component {
 
             <div className={classNames(classes.toolbar, classes.toolbarRight)}/>
             <List className={classes.list}>
-              {true && <SideBarPage store={this.store}/>}
-              {false && <SearchSideBar/>}
+              {!this.state.showSearchSideBar && <SideBarPage store={this.store}/>}
             </List>
+            {this.state.showSearchSideBar && <SearchSideBar/>}
           </Drawer>
         </div>
       );
