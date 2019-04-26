@@ -334,6 +334,8 @@ function addToMainAux(fileIndex, mainIndex) {
   while(i < fileIndex.length) {
     let fileWord = fileIndex[i]
 
+    if (fileWord.a.length > MAX_INT_PER_FILE) { return; }
+
     // find correct range for fileWord
     while (fileWord.w > rngTbl[currRng].r[1]) { currRng++ };
 
@@ -341,9 +343,9 @@ function addToMainAux(fileIndex, mainIndex) {
     let rngIndex = rngTbl[currRng].sz === 0 ? [] : extractRngIndex(rngTbl[currRng]);
 
     while(i < fileIndex.length && (fileWord = fileIndex[i++]).w <= rngTbl[currRng].r[1]) {
-      if (fileWord.w == "1993") {
-      }
       // find index of fileWord word in both rngIndex and mainIndex, or would-be index if fileWord hasn't been indexed.
+
+
 
       let wordIndRng = rngIndex.findIndex(rngWord => rngWord.w >= fileWord.w);
       let wordIndMain = mainIndex.findIndex(mainWord => mainWord.w >= fileWord.w);
@@ -422,10 +424,11 @@ function addToMainAux(fileIndex, mainIndex) {
         }
 
         rngTbl[currRng].sz = count;
+        let tempRng = rngTbl[currRng].r[1];
         rngTbl[currRng].r[1] = lowerRng[lowerRng.length - 1].w;
 
         let newRng = {
-          r: [upperRng[0].w, upperRng[upperRng.length - 1].w],
+          r: [upperRng[0].w, tempRng],
           fn: (rngFileCnt++).toString() + "_BSON",
           sz: totalLen - count
         }
@@ -510,7 +513,7 @@ function addFilesToMainIndex(fileNames, mainIndex) {
 function getWordLocs(codes) {
   let wordLocs = [];
 
-  for (i = 0; i < codes.length; i++) {
+  for (let i = 0; i < codes.length; i++) {
     //gets number of locations in specific file
     let numLocs = codes[i++];
     //returns file ID number
@@ -734,6 +737,7 @@ if(INDEX_DIRECTORY) {
     console.log("Loaded index from file in  " + (t1 - t0) + " milliseconds.");
     console.log("Size of index: " + sizeof(mainIndex));
     console.log("lookup table size: " + sizeof(lookup));
+    let results = search("libertarian",mainIndex);
 
   });
 }
