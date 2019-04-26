@@ -99,12 +99,16 @@ class Home extends Component {
   // props: Props
 
   state = {
-    open: false, 
+    open: false,
     showSearchSideBar: false
   }
   constructor(props){
     super(props);
     this.store = this.props.store;
+    this.state = {
+      showSearchSideBar: false,
+      showHighlightSideBar: true,
+    }
   }
 
   // These two functions handle opening and closes the file tree menu component
@@ -116,13 +120,27 @@ class Home extends Component {
     this.setState({ open: false });
   };
 
-  componentDidUpdate(prevProps){
-    console.log('props updated: ' + this.props.searchTerms + ' ' + prevProps.searchTerms);
-     if (!(this.props.searchTerms === prevProps.searchTerms)) {
-        this.setState({
-          showSearchSideBar: true
-        });
-     }
+  handleSideBarSearch = () => {
+    this.setState({
+      showSearchSideBar: true,
+      showHighlightSideBar: false
+    });
+  }
+
+  handleHighlightSideBar = () => {
+    this.setState({
+      showSearchSideBar: false,
+      showHighlightSideBar: true
+    });
+  }
+
+  // componentDidUpdate(prevProps){
+  //   console.log('props updated: ' + this.props.searchTerms + ' ' + prevProps.searchTerms);
+  //    if (!(this.props.searchTerms === prevProps.searchTerms)) {
+  //       this.setState({
+  //         showSearchSideBar: true
+  //       });
+  //    }
   }
 
   render(){
@@ -195,9 +213,9 @@ class Home extends Component {
 
             <div className={classNames(classes.toolbar, classes.toolbarRight)}/>
             <List className={classes.list}>
-              {!this.state.showSearchSideBar && <SideBarPage store={this.store}/>}
+               {this.state.showHighlightSideBar && <SideBarPage store={this.store}/>}
+               {this.state.showSearchSideBar ** <SearchSideBar store={this.store}/>}
             </List>
-            {this.state.showSearchSideBar && <SearchSideBar/>}
           </Drawer>
         </div>
       );
