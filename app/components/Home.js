@@ -18,8 +18,8 @@ import Tools from './Toolbar';
 import homeStyles from './Home.css';
 import FileDialogue from './FileSelector';
 import SideBarPage from '../containers/SideBarPage';
-import SearchSideBar from '../components/SearchSideBar';
-  import RenderTextPage from '../containers/RenderTextPage';
+import SearchSideBarPage from '../containers/SearchSideBarPage';
+import RenderTextPage from '../containers/RenderTextPage';
 
 const drawerWidth = 250;
 
@@ -125,7 +125,6 @@ class Home extends Component {
   }
 
   render(){
-    console.log("render side bar state: " + this.state.showSearchSideBar);
     const { classes, theme } = this.props;
     const { open } = this.state;
 
@@ -199,7 +198,7 @@ class Home extends Component {
             </List>}
             {this.state.showSearchSideBar &&
             <List className={classes.list}>
-               <SearchSideBar store={this.store}/>
+               <SearchSideBarPage store={this.store}/>
             </List>}
 
           </Drawer>

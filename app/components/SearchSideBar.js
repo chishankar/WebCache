@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
-
 import { withStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+
+import SearchResult from './SearchResult';
+
 
 import { Divider } from '@material-ui/core';
 
@@ -18,34 +21,30 @@ const styles = theme => ({
   },
 });
 
-type Props = {
-  searchResults: Array
-}
-
 class SearchSideBar extends Component<Props>{
   props: Props
 
   constructor(props){
     super(props)
-    this.state = {
-      open: true
-    }
   }
 
   render(){
-
-    const searchData = this.props.searchData;
-
+    const searchData = JSON.parse(this.props.searchData);
+    const { classes } = this.props;
     return(
       <List
       component='nav'
-      subheader={<ListSubheader component='div'><i className='fas fa-highlighter'/>Search Results</ListSubheader>}
-      className={styles.root}>
-
+      subheader={
+        <ListSubheader component='div'>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Search Results
+        </ListSubheader>}
+      className={classes.root}>
       <Divider />
+      {searchData.results.map(result =>
+      <SearchResult filename={result.filename} count={result.count}/>
+      )}
     </List>
     )
-
   }
 }
 
