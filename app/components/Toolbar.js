@@ -7,7 +7,7 @@ import ReactTooltip from 'react-tooltip';
 import UrlSearch from './UrlSearch';
 import FileSearch from './FileSearch';
 
-import * as fileSearchActions from '../actions/filesearch';
+import * as sideBarStateActions from '../actions/sidebarstate';
 
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
@@ -55,7 +55,7 @@ class Tools extends Component<Props>{
         showUrlSearch: false,
         showFileSearch: false
     });
-    this.props.action();
+    this.store.dispatch(sideBarStateActions.changeSideBarState(false));
   }
 
   // Handles the logic for showing the the URL search input
@@ -68,6 +68,7 @@ class Tools extends Component<Props>{
   }
 
   _showFileSearch = () => {
+    this.store.dispatch(sideBarStateActions.changeSideBarState(true));
     this.setState({
       showFileSearch: !this.state.showFileSearch,
       showHighlighter: false,

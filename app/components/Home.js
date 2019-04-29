@@ -19,7 +19,7 @@ import homeStyles from './Home.css';
 import FileDialogue from './FileSelector';
 import SideBarPage from '../containers/SideBarPage';
 import SearchSideBar from '../components/SearchSideBar';
-import RenderTextPage from '../containers/RenderTextPage';
+  import RenderTextPage from '../containers/RenderTextPage';
 
 const drawerWidth = 250;
 
@@ -97,7 +97,6 @@ const styles = theme => ({
 type Props = {};
 class Home extends Component {
   // props: Props
-
   constructor(props){
     super(props);
     this.store = this.props.store;
@@ -108,10 +107,6 @@ class Home extends Component {
     showSearchSideBar: false
   };
 
-  showSearchSideBarFalse(){
-    this.setState({showSearchSideBar: false});
-  }
-
   // These two functions handle opening and closes the file tree menu component
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -121,12 +116,10 @@ class Home extends Component {
     this.setState({ open: false });
   };
 
-  componentDidUpdate(prevProps){
-    console.log('props updated: ' + this.props.searchTerms + ' ' + prevProps.searchTerms);
-  
-    if (!(this.props.searchTerms === prevProps.searchTerms) && !(this.props.searchTerms === "")) {
+  componentDidUpdate(prevProps){  
+    if (!(this.props.sidebarState === prevProps.sidebarState)) {
       this.setState({
-          showSearchSideBar: true
+          showSearchSideBar: this.props.sidebarState
        });
      }
   }
@@ -153,7 +146,7 @@ class Home extends Component {
               [classes.appBarShift]: open,
             },{colorPrimary: homeStyles.appBar})}
           >
-            <Toolbar greeting={this.showSearchSideBarFalse.bind(this)} disableGutters={!open}>
+            <Toolbar disableGutters={!open}>
               <IconButton
                 aria-label='Open drawer'
                 onClick={this.handleDrawerOpen}
@@ -200,14 +193,20 @@ class Home extends Component {
             }}>
 
             <div className={classNames(classes.toolbar, classes.toolbarRight)}/>
+            {!this.state.showSearchSideBar &&
             <List className={classes.list}>
-              {!this.state.showSearchSideBar && <SideBarPage store={this.store}/>}
-              {this.state.showSearchSideBar && <SearchSideBar/>}
-            </List>
+                <SideBarPage store={this.store}/>
+            </List>}
+            {this.state.showSearchSideBar &&
+            <List className={classes.list}>
+               <SearchSideBar store={this.store}/>
+            </List>}
+
           </Drawer>
         </div>
       );
     };
-}
+  }
+
 
   export default withStyles(styles, { withTheme: true })(Home);

@@ -6,7 +6,8 @@ import Home from '../components/Home';
 // type Props = {};
 function mapStateToProps(state) {
   return {
-    searchTerms: state.filesearch.searchTerms
+    searchTerms: state.filesearch.searchTerms,
+    sidebarState: state.sidebarstate.sideBarState
   };
 }
 
