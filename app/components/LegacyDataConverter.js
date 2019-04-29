@@ -65,6 +65,25 @@ class LegacyDataConverter extends React.Component {
   }
 }
 
+function FindFile(dirPath) {
+  fs.readdir(dirPath, (err, files) => {
+    // console.log(items);
+    if (!err) {
+      for (var i = 0; i < files.length; i++) {
+        var filePath = path.join(dirPath,files[i]);
+        var stat = fs.lstatSync(filePath);
+        if (stat.isDirectory()) {
+          FindFile(filePath);
+        } else if (files[i].indexOf('index.html') >= 0) {
+          var datFilePath = path.join(dirPath,'index.dat');
+          ScrapbookToWebcacheFormat(filePath, datFilePath);
+        }
+      }
+    }
+  });
+}
+
+//By Vincent Choo
 /**
    Gets the converted HTML, inline annotations, sticky annotations, & comment of
    the specified ScrapBook HTML file & DAT file. These files should refer
@@ -89,23 +108,6 @@ async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
   return [...jsonish, comment];
 }
 
-function FindFile(dirPath) {
-  fs.readdir(dirPath, (err, files) => {
-    // console.log(items);
-    if (!err) {
-      for (var i = 0; i < files.length; i++) {
-        var filePath = path.join(dirPath,files[i]);
-        var stat = fs.lstatSync(filePath);
-        if (stat.isDirectory()) {
-          FindFile(filePath);
-        } else if (files[i].indexOf('index.html') >= 0) {
-          var datFilePath = path.join(dirPath,'index.dat');
-          ScrapbookToWebcacheFormat(filePath, datFilePath);
-        }
-      }
-    }
-  });
-}
 /**
  Gets the converted HTML, inline annotations, & sticky annnotations of the
  specified ScrapBook HTML file.
