@@ -13,7 +13,7 @@ var readline = require("readline");
 const stopWords = ["i", "me", "my", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"];
 const INDEX_DIRECTORY = true;
 var rngTbl = [];
-const MAX_INT_PER_FILE = 250000;
+const MAX_INT_PER_FILE = 1000;
 //ONLY WORKS FOR REINDEXING DIRECTORY
 var rngFileCnt = 0;
 var ioCount =0;
@@ -34,6 +34,7 @@ function wordLocsMapping(str, delimiter=/\s/) {
       } else if (word) {
           // if it is whitespace, check if we have built a word
           // and add it to the map
+          word = word.toLowerCase();
           if (!stopWords.includes(word)) {
             if (!out.has(word)) {
                 out.set(word, []); // create the array if it doesn't exist
@@ -46,7 +47,7 @@ function wordLocsMapping(str, delimiter=/\s/) {
 
   // add word to map if we have built a word
   // this the same as in the for loop
-  if (!stopWords.includes(word)) {
+  if (word && !stopWords.includes(word)) {
     if (!out.has(word)) {
         out.set(word, []); // create the array if it doesn't exist
     } // push the word to the array
@@ -334,8 +335,6 @@ function addToMainAux(fileIndex, mainIndex) {
   while(i < fileIndex.length) {
     let fileWord = fileIndex[i]
 
-    if (fileWord.a.length > MAX_INT_PER_FILE) { return; }
-
     // find correct range for fileWord
     while (fileWord.w > rngTbl[currRng].r[1]) { currRng++ };
 
@@ -344,8 +343,6 @@ function addToMainAux(fileIndex, mainIndex) {
 
     while(i < fileIndex.length && (fileWord = fileIndex[i++]).w <= rngTbl[currRng].r[1]) {
       // find index of fileWord word in both rngIndex and mainIndex, or would-be index if fileWord hasn't been indexed.
-
-
 
       let wordIndRng = rngIndex.findIndex(rngWord => rngWord.w >= fileWord.w);
       let wordIndMain = mainIndex.findIndex(mainWord => mainWord.w >= fileWord.w);
@@ -389,9 +386,10 @@ function addToMainAux(fileIndex, mainIndex) {
           mainIndex[j++].st += fileWord.a.length;
         }
       }
+
       rngTbl[currRng].sz += fileWord.a.length;
 
-      if (rngTbl[currRng].sz + fileWord.a.length > MAX_INT_PER_FILE) {
+      if (rngTbl[currRng].sz > MAX_INT_PER_FILE) {
 
         //stores current size of words seen
         let count = 0;
@@ -401,35 +399,63 @@ function addToMainAux(fileIndex, mainIndex) {
         let lowerRng = [];
         let upperRng = [];
         //target size for each
-        let totalLen = rngTbl[currRng].sz + fileWord.a.length
+        let totalLen = rngTbl[currRng].sz;
         let target = totalLen / 2;
         let currIndMain = mainIndex.findIndex(mainWord => mainWord.w === rngIndex[0].w);
 
-        while (lowerRng.length === 0) {
+        while (count < target) {
 
           count += mainIndex[currIndMain++].sz;
-          if (count > target) {
-
-            if (count > MAX_INT_PER_FILE) {
-              lowerRng = rngIndex.slice(0,i);
-              upperRng = rngIndex.slice(i);
-              count -= mainIndex[currIndMain - 1].sz;
-
-            } else {
-              lowerRng = rngIndex.slice(0,++i);
-              upperRng = rngIndex.slice(i);
-            }
-          }
           i++;
+        }
+
+        if (count >= target) {
+
+          if (count > MAX_INT_PER_FILE) {
+            count -= mainIndex[currIndMain - 1].sz;
+
+            // special case in which single word index exceeds max int per file
+            if (totalLen - count >= MAX_INT_PER_FILE) {
+              newFn1 = SINGLE_WORD_FLAG + (rngFileCnt++).toString() + "_BSON";
+              newFn2 = SINGLE_WORD_FLAG + (rngFileCnt++).toString() + "_BSON";
+
+                let newRng = {
+                  r: [fileWord.w, fileWord.w],
+                  fn: newFn1,
+                  sz: rngIndex[wordIndRng].a.length,
+                  af: [newFn1, newFn2]
+                }
+              // sub-case: said word is first word in range
+              if (count == 0) {
+
+                // sub-sub-case: said word is only word in range
+                // NEED TODO : DELETE OLD FILE!!
+                if (rngIndex.length == 1) {
+                  rngTbl[currRng] = newRng;
+                } else {
+                  rngTbl.splice(currRng,0, newRng);
+                  rngTbl[++currRng].r[0] = rngIndex[wordIndRng + 1];
+                }
+              }
+
+            }
+            lowerRng = rngIndex.slice(0,--i);
+            upperRng = rngIndex.slice(i);
+
+          } else {
+            lowerRng = rngIndex.slice(0,i);
+            upperRng = rngIndex.slice(i);
+          }
         }
 
         rngTbl[currRng].sz = count;
         let tempRng = rngTbl[currRng].r[1];
         rngTbl[currRng].r[1] = lowerRng[lowerRng.length - 1].w;
 
+        let newFn = (rngFileCnt++).toString() + "_BSON";
         let newRng = {
           r: [upperRng[0].w, tempRng],
-          fn: (rngFileCnt++).toString() + "_BSON",
+          fn: newFn,
           sz: totalLen - count
         }
 
@@ -438,20 +464,17 @@ function addToMainAux(fileIndex, mainIndex) {
         let wordIndMain = mainIndex.findIndex(mainWord => mainWord.w === upperRng[0].w);
         let j = wordIndMain;
         while (j < mainIndex.length && mainIndex[j].w <= rngTbl[currRng+1].r[1]) {
+          mainIndex[j].fn = newFn;
           mainIndex[j++].st -= count;
         }
+
         storeRngIndex(rngTbl[currRng + 1], upperRng);
       }
     }
-    rngTbl[currRng].r[0] = rngIndex[0].w;
-    storeRngIndex(rngTbl[currRng], rngIndex);
+      rngTbl[currRng].r[0] = rngIndex[0].w;
+      storeRngIndex(rngTbl[currRng], rngIndex);
   }
 }
-
-
-
-
-
 
 
 /*
@@ -723,7 +746,7 @@ if(INDEX_DIRECTORY) {
       console.log("Size of index: " + sizeof(mainIndex));
       console.log("io calls: " + ioCount);
       saveIndexToFile(mainIndex, lookup, 'ind_bin.txt', 'tbl_bin.txt');
-      let results = search("displeasure",mainIndex);
+      let results = search("dayton",mainIndex);
     });
 
   // addFilesToSecondIndex(dirFiles, secondInd);
@@ -737,7 +760,7 @@ if(INDEX_DIRECTORY) {
     console.log("Loaded index from file in  " + (t1 - t0) + " milliseconds.");
     console.log("Size of index: " + sizeof(mainIndex));
     console.log("lookup table size: " + sizeof(lookup));
-    let results = search("libertarian",mainIndex);
+    //let results = search("libertarian",mainIndex);
 
   });
 }
@@ -756,7 +779,7 @@ function user_search(str) {
     console.log(obj.fileName + " at " + obj.locations);
   });
 
-  console.log("Test results\n");
+ // console.log("Test results\n");
   // results2.forEach(obj => {
   //   console.log(obj.name + " at " + obj.locs);
   // });
