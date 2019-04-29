@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
-const fs = require('fs');
+const fs = require('fs-extra');
 
 const styles = theme => ({
   button: {
@@ -31,11 +31,19 @@ class FileDialogue extends React.Component {
     this.store = this.props.store;
   }
 
-  // Handles path changes and updates state
+  // Handles path changes, updates state, and copies to data dir
   onChange = (e) => {
     if (e.target.files[0]!=null){
       this.setState({ path: e.target.files[0].path });
     }
+
+    const destFolder = 'data';
+    const sourceFolder = e.target.files[0].path;
+    fs.emptydir(destFolder);
+    fs.copy(sourceFolder, destFolder, function (err) {
+      if (err) return console.error(err)
+      console.log('success! moved files to data directory')
+    });
   }
 
   // Dispatches new file path to url store on file click from file browser
