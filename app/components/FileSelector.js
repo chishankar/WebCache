@@ -2,15 +2,27 @@ import React from 'react';
 import FileTree from 'react-filetree-electron';
 import * as urlsearchActions from '../actions/urlsearch';
 import * as resourcePath from '../utilities/ResourcePaths';
+import classNames from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
 const fs = require('fs');
+
+const styles = theme => ({
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    display: 'none',
+  },
+});
 
 // Builds the data directory path
 function getDataDirectory() {
   return new resourcePath.ResourcePaths(null).getBaseDirectory() + '/data';
 }
 
-export default class FileDialogue extends React.Component {
+class FileDialogue extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,7 +33,9 @@ export default class FileDialogue extends React.Component {
 
   // Handles path changes and updates state
   onChange = (e) => {
-    this.setState({ path: e.target.files[0].path });
+    if (e.target.files[0]!=null){
+      this.setState({ path: e.target.files[0].path });
+    }
   }
 
   // Dispatches new file path to url store on file click from file browser
@@ -30,14 +44,23 @@ export default class FileDialogue extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
       <div>
-        <input type="file" webkitdirectory="true" onChange={this.onChange} />
+        <input type="file" webkitdirectory="true" onChange={this.onChange} className={classes.input} id="choose-directory" />
+        <label htmlFor="choose-directory">
+          <Button variant="contained" component="span" className={classes.button}>
+            Choose Directory
+          </Button>
+        </label>
         <h3>Files</h3>
         <h4>{console.log(this.state.path)}</h4>
         <FileTree directory={this.state.path}
         onFileClick={this.handleFile} fileTreeStyle="light"/>
+
       </div>
     );
   }
 }
+
+export default withStyles(styles, { withTheme: true })(FileDialogue);
