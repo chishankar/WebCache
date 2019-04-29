@@ -308,6 +308,25 @@ function extractRngIndex(rng) {
 }
 // takes rngIndex, converts to single list and stores to respective file
 function storeRngIndex(rng, rngIndex) {
+  if (rng.sz >= MAX_INT_PER_FILE) {
+    let wordList = rngIndex[0].a;
+    let currInt = 0;
+    let reqExtraFiles = Math.ceil(rng.sz / MAX_INT_PER_FILE) - rng.af.length;
+    while (reqExtraFiles > 0) {
+      let newFn = SINGLE_WORD_FLAG + (rngFileCnt++).toString() + "_BSON";
+      af.push(newFn);
+      reqExtraFiles--;
+    }
+    rng.af.forEach(fn => {
+      let remainder = rng.size - currInt
+      if (remainder > 0) {
+        let fileSz = remainder < MAX_INT_PER_FILE ? remainder : MAX_INT_PER_FILE;
+        let filePath = path.join(__dirname, "/word_inds/" + rng.fn);
+        writeUint32ArrFileSync(filePath, wordList.slice(currInt, currInt + fileSz));
+        currInt += fileSz;
+      }
+    });
+  }
   var locArrNew = new Uint32Array(rng.sz);
   let i = mainIndex.findIndex(wordInd => {return wordInd.w === rng.r[0]});
   let j = 0;
@@ -361,7 +380,7 @@ function addToMainAux(fileIndex, mainIndex) {
         var locArrNew = new Uint32Array(locArr.length + fileWord.a.length);
         locArrNew.set(locArr);
         locArrNew.set(fileWord.a, locArr.length);
-        storeRngIndex(rngTbl[currRng], locArrNew);
+        storeRngIndex(rngTbl[currRng], [{w: fileWord.w , a: locArrNew}]);
         // WE HAVE TO BREAK OUT OF THE MAIN LOOP HERE!! IDK IF THIS DOES IT:
         break;
       }
@@ -541,21 +560,21 @@ function addToMainAux(fileIndex, mainIndex) {
 
           rngTbl[currRng].sz = count;
           let tempRng = rngTbl[currRng].r[1];
-          rngTbl[currRng].r[1] = lowerRng[lowerRng.length - 1].w;
+          rngTbl[currRng].r[1] = rngIndex[rngIndex.length - 1].w;
           newFn = (rngFileCnt++).toString() + "_BSON";
           let newRng = {
-            r: [upperRng[0].w, tempRng],
+            r: [upperRngIndex[0].w, tempRng],
             fn: newFn,
             sz: totalLen - count
           }
           rngTbl.splice(currRng + 1, 0, newRng);
 
-          let j = mainIndex.findIndex(mainWord => mainWord.w === upperRng[0].w);
+          let j = mainIndex.findIndex(mainWord => mainWord.w === upperRngIndex[0].w);
           while (j < mainIndex.length && mainIndex[j].w <= rngTbl[currRng+1].r[1]) {
             mainIndex[j].fn = newFn;
             mainIndex[j++].st -= count;
           }
-          storeRngIndex(rngTbl[currRng + 1], upperRng);
+          storeRngIndex(rngTbl[currRng + 1], upperRngIndex);
         }
       }
     }
