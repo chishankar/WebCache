@@ -9,11 +9,13 @@ const sizeof = require('object-sizeof');
 const { PerformanceObserver, performance } = require('perf_hooks');
 const BSON = require('bson');
 var readline = require("readline");
+var emptyRng = []
 
 const stopWords = ["i", "me", "my", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"];
 const INDEX_DIRECTORY = true;
+const SINGLE_WORD_FLAG = 'x';
 var rngTbl = [];
-const MAX_INT_PER_FILE = 1000;
+const MAX_INT_PER_FILE = 500;
 //ONLY WORKS FOR REINDEXING DIRECTORY
 var rngFileCnt = 0;
 var ioCount =0;
@@ -47,7 +49,7 @@ function wordLocsMapping(str, delimiter=/\s/) {
 
   // add word to map if we have built a word
   // this the same as in the for loop
-  if (word && !stopWords.includes(word)) {
+  if (word &&!stopWords.includes(word)) {
     if (!out.has(word)) {
         out.set(word, []); // create the array if it doesn't exist
     } // push the word to the array
@@ -277,20 +279,32 @@ function addToMainIndex(fileIndex, mainIndex, tempIndex) {
 
 // takes rng struct, gets list from range file, formats as index
 function extractRngIndex(rng) {
-
-  //console.log("reading from file: " + rng.fn);
-  let filePath = path.join(__dirname, "/word_inds/" + rng.fn);
-  let listInRng = readUint32ArrFileSync(filePath);
-  let rngIndex = [];
-  let i = mainIndex.findIndex(wordInd => {return wordInd.w === rng.r[0]});
-  var wordInd;
-  while (i < mainIndex.length && (wordInd = mainIndex[i++]).w <= rng.r[1]) {
-    rngIndex.push({
-      w: wordInd.w,
-      a: listInRng.slice(wordInd.st, wordInd.st + wordInd.sz)
-    });
+  if (rng.sz >= MAX_INT_PER_FILE) {
+    let wordList = new Uint32Array(rng.sz);
+    let currInd = 0;
+    rng.af.forEach(fn => {
+      let filePath = path.join(__dirname, "/word_inds/" + rng.fn);
+      let listInFile = readUint32ArrFileSync(filePath);
+      wordList.set(listInFile, currInd);
+      currInd += listInFile.length;
+    })
+    return wordList
   }
-  return rngIndex;
+  else {
+    //console.log("reading from file: " + rng.fn);
+    let filePath = path.join(__dirname, "/word_inds/" + rng.fn);
+    let listInRng = readUint32ArrFileSync(filePath);
+    let rngIndex = [];
+    let i = mainIndex.findIndex(wordInd => {return wordInd.w === rng.r[0]});
+    var wordInd;
+    while (i < mainIndex.length && (wordInd = mainIndex[i++]).w <= rng.r[1]) {
+      rngIndex.push({
+        w: wordInd.w,
+        a: listInRng.slice(wordInd.st, wordInd.st + wordInd.sz)
+      });
+    }
+    return rngIndex;
+  }
 }
 // takes rngIndex, converts to single list and stores to respective file
 function storeRngIndex(rng, rngIndex) {
@@ -335,14 +349,46 @@ function addToMainAux(fileIndex, mainIndex) {
   while(i < fileIndex.length) {
     let fileWord = fileIndex[i]
 
+    if (fileWord.a.length > MAX_INT_PER_FILE) { return; }
+
     // find correct range for fileWord
     while (fileWord.w > rngTbl[currRng].r[1]) { currRng++ };
+
+    // if range is occupied by single word, check if word should be added to exclusive range, or expand previous range and use that range
+    if (rngTbl[currRng].fn.slice(0,1) == SINGLE_WORD_FLAG) {
+      if (fileWord.w == rngTbl[currRng].r[1]) {
+        let locArr = extractRngIndex(rngTbl[currRng]);
+        var locArrNew = new Uint32Array(locArr.length + fileWord.a.length);
+        locArrNew.set(locArr);
+        locArrNew.set(fileWord.a, locArr.length);
+        storeRngIndex(rngTbl[currRng], locArrNew);
+        // WE HAVE TO BREAK OUT OF THE MAIN LOOP HERE!! IDK IF THIS DOES IT:
+        break;
+      }
+      else {
+        let newUpperInd = fileIndex.findIndex(fileWord => {fileWord.w >= rngTbl[currRng].r[1]}) - 1;
+        // if previous rng is also exclusive, need to make a new range
+        if (rngTbl[currRng - 1].fn.slice(0,1) == SINGLE_WORD_FLAG) {
+          let newFn = (rngFileCnt++).toString() + "_BSON";
+          let newRng = {
+            r: [fileWord.w, fileIndex[newUpperInd].w],
+            fn: newFn,
+            sz: 0
+          }
+          rngTbl.splice(currRng--, 0, newRng)
+        } else {
+          rngTbl[--currRange].r[1] = fileWord.w;
+        }
+      }
+    }
 
     // convert rngFile for currRng to an index format
     let rngIndex = rngTbl[currRng].sz === 0 ? [] : extractRngIndex(rngTbl[currRng]);
 
     while(i < fileIndex.length && (fileWord = fileIndex[i++]).w <= rngTbl[currRng].r[1]) {
       // find index of fileWord word in both rngIndex and mainIndex, or would-be index if fileWord hasn't been indexed.
+
+
 
       let wordIndRng = rngIndex.findIndex(rngWord => rngWord.w >= fileWord.w);
       let wordIndMain = mainIndex.findIndex(mainWord => mainWord.w >= fileWord.w);
@@ -386,7 +432,6 @@ function addToMainAux(fileIndex, mainIndex) {
           mainIndex[j++].st += fileWord.a.length;
         }
       }
-
       rngTbl[currRng].sz += fileWord.a.length;
 
       if (rngTbl[currRng].sz > MAX_INT_PER_FILE) {
@@ -395,86 +440,134 @@ function addToMainAux(fileIndex, mainIndex) {
         let count = 0;
         //current rngIndex index we are looking at
         let i = 0;
-        //The two range indices we are going to split the current one into
-        let lowerRng = [];
-        let upperRng = [];
         //target size for each
         let totalLen = rngTbl[currRng].sz;
         let target = totalLen / 2;
         let currIndMain = mainIndex.findIndex(mainWord => mainWord.w === rngIndex[0].w);
 
         while (count < target) {
-
           count += mainIndex[currIndMain++].sz;
           i++;
         }
+        // at the end of loop, i is the index after the last word summed in count.
 
-        if (count >= target) {
+        if (count > MAX_INT_PER_FILE) {
+          count -= mainIndex[currIndMain - 1].sz;
+          i--;
+        }
+        // special case in which single word index exceeds max int per file
+        if (totalLen - count  >= MAX_INT_PER_FILE) {
 
-          if (count > MAX_INT_PER_FILE) {
-            count -= mainIndex[currIndMain - 1].sz;
+          newFn1 = SINGLE_WORD_FLAG + (rngFileCnt++).toString() + "_BSON";
+          newFn2 = SINGLE_WORD_FLAG + (rngFileCnt++).toString() + "_BSON";
 
-            // special case in which single word index exceeds max int per file
-            if (totalLen - count >= MAX_INT_PER_FILE) {
-              newFn1 = SINGLE_WORD_FLAG + (rngFileCnt++).toString() + "_BSON";
-              newFn2 = SINGLE_WORD_FLAG + (rngFileCnt++).toString() + "_BSON";
+          let newRng = {
+            r: [fileWord.w, fileWord.w],
+            fn: newFn1,
+            sz: rngIndex[wordIndRng].a.length,
+            af: [newFn1, newFn2]
+          }
 
-                let newRng = {
-                  r: [fileWord.w, fileWord.w],
-                  fn: newFn1,
-                  sz: rngIndex[wordIndRng].a.length,
-                  af: [newFn1, newFn2]
-                }
-              // sub-case: said word is first word in range
-              if (count == 0) {
+          mainIndex[wordIndMain].fn = newFn1;
+          mainIndex[wordIndMain].st = 0;
 
-                // sub-sub-case: said word is only word in range
-                // NEED TODO : DELETE OLD FILE!!
-                if (rngIndex.length == 1) {
-                  rngTbl[currRng] = newRng;
-                } else {
-                  rngTbl.splice(currRng,0, newRng);
-                  rngTbl[++currRng].r[0] = rngIndex[wordIndRng + 1];
-                }
-              }
-
+          // sub-case: said word is first word in range
+          if (wordIndRng == 0) {
+            // sub-sub-case: said word is only word in range
+            // NEED TODO : DELETE OLD FILE!!
+            if (rngIndex.length === 1) {
+              rngTbl[currRng] = newRng;
+              // let exclRngIndex = rngIndex;
+              // storeRngIndex(rngTbl[currRng], exclRngIndex);
+            } else {
+              rngTbl.splice(currRng,0, newRng);
+              //update currRng (from just inserted exlusive range to next range) and update bounds
+              rngTbl[++currRng].r[0] = rngIndex[wordIndRng + 1];
+              let exclRngIndex = rngIndex.slice(0,1);
+              rngIndex = rngIndex.slice(1); // rngIndex is now the remainder of rngIndex after the added word
+              storeRngIndex(rngTbl[currRng - 1], exclRngIndex);
             }
-            lowerRng = rngIndex.slice(0,--i);
-            upperRng = rngIndex.slice(i);
-
-          } else {
-            lowerRng = rngIndex.slice(0,i);
-            upperRng = rngIndex.slice(i);
+          }
+          else {
+            // update lower rng (currently currRng)
+            let lowerRngIndex = rngIndex.slice(0, wordIndRng)
+            rngTbl[currRng].r[1] = rngIndex[wordIndRng - 1];
+            rngTbl[currRng].sz = count;
+            // if said word is in middle of range, need to create 2nd new range (non exclusive)
+            if (wordIndRng != rngIndex.length - 1) {
+              let newFn3 = (rngFileCnt++).toString() + "_BSON";
+              let newRng2 = {
+                r: [rngIndex[wordIndRng + 1], rngTbl[currRng].r[1]],
+                fn: newFn3,
+                sz: rngTbl[currRng].sz - count - rngIndex[wordIndRng].a.length
+              }
+              // if curr range is last in table, just push new ranges, o.w. splice.
+              // Set currRng to index of newRng2;
+              if (currRng = rngTbl.length - 1) {
+                rngTbl.push(newRng);
+                rngTbl.push(newRng2);
+                currRng = rngTbl.length - 1;
+              } else {
+                rngTbl.splice(++currRng,0, newRng);
+                rngTbl.splice(++currRng,0, newRng2);
+              }
+              let exclRngIndex = rngIndex.slice(wordIndRng,wordIndRng + 1);
+              rngIndex = rngIndex.slice(wordIndRng + 1);
+              // done with lower and exclusive ranges, so store them
+              // first need to update mainIndex entries for
+              storeRngIndex(rngTbl[currRng-2], lowerRngIndex);
+              storeRngIndex(rngTbl[currRng-1], exclRngIndex);
+              let j = wordIndMain + 1;
+              while (j < mainIndex.length && mainIndex[j].w <= rngTbl[currRng].r[1]) {
+                mainIndex[j].fn = newFn3;
+                mainIndex[j++].st -= mainIndex[wordIndMain + 1].st;
+              }
+            }
+            // if word is last in range:
+            else {
+              if (currRng = rngTbl.length - 1) {
+                rngTbl.push(newRng);
+                currRng = rngTbl.length - 1;
+              } else {
+                rngTbl.splice(++currRng,0, newRng);
+              }
+              storeRngIndex(rngTbl[currRng-1], lowerRngIndex);
+            }
           }
         }
+        else {
+          rngIndex = rngIndex.slice(0,i);
+          upperRngIndex = rngIndex.slice(i);
 
-        rngTbl[currRng].sz = count;
-        let tempRng = rngTbl[currRng].r[1];
-        rngTbl[currRng].r[1] = lowerRng[lowerRng.length - 1].w;
+          rngTbl[currRng].sz = count;
+          let tempRng = rngTbl[currRng].r[1];
+          rngTbl[currRng].r[1] = lowerRng[lowerRng.length - 1].w;
+          newFn = (rngFileCnt++).toString() + "_BSON";
+          let newRng = {
+            r: [upperRng[0].w, tempRng],
+            fn: newFn,
+            sz: totalLen - count
+          }
+          rngTbl.splice(currRng + 1, 0, newRng);
 
-        let newFn = (rngFileCnt++).toString() + "_BSON";
-        let newRng = {
-          r: [upperRng[0].w, tempRng],
-          fn: newFn,
-          sz: totalLen - count
+          let j = mainIndex.findIndex(mainWord => mainWord.w === upperRng[0].w);
+          while (j < mainIndex.length && mainIndex[j].w <= rngTbl[currRng+1].r[1]) {
+            mainIndex[j].fn = newFn;
+            mainIndex[j++].st -= count;
+          }
+          storeRngIndex(rngTbl[currRng + 1], upperRng);
         }
-
-        rngTbl.splice(currRng + 1, 0, newRng);
-
-        let wordIndMain = mainIndex.findIndex(mainWord => mainWord.w === upperRng[0].w);
-        let j = wordIndMain;
-        while (j < mainIndex.length && mainIndex[j].w <= rngTbl[currRng+1].r[1]) {
-          mainIndex[j].fn = newFn;
-          mainIndex[j++].st -= count;
-        }
-
-        storeRngIndex(rngTbl[currRng + 1], upperRng);
       }
     }
-      rngTbl[currRng].r[0] = rngIndex[0].w;
-      storeRngIndex(rngTbl[currRng], rngIndex);
+    rngTbl[currRng].r[0] = rngIndex[0].w;
+    storeRngIndex(rngTbl[currRng], rngIndex);
   }
 }
+
+
+
+
+
 
 
 /*
@@ -746,7 +839,7 @@ if(INDEX_DIRECTORY) {
       console.log("Size of index: " + sizeof(mainIndex));
       console.log("io calls: " + ioCount);
       saveIndexToFile(mainIndex, lookup, 'ind_bin.txt', 'tbl_bin.txt');
-      let results = search("dayton",mainIndex);
+      let results = search("displeasure",mainIndex);
     });
 
   // addFilesToSecondIndex(dirFiles, secondInd);
@@ -760,7 +853,7 @@ if(INDEX_DIRECTORY) {
     console.log("Loaded index from file in  " + (t1 - t0) + " milliseconds.");
     console.log("Size of index: " + sizeof(mainIndex));
     console.log("lookup table size: " + sizeof(lookup));
-    //let results = search("libertarian",mainIndex);
+    let results = search("libertarian",mainIndex);
 
   });
 }
@@ -779,7 +872,7 @@ function user_search(str) {
     console.log(obj.fileName + " at " + obj.locations);
   });
 
- // console.log("Test results\n");
+  console.log("Test results\n");
   // results2.forEach(obj => {
   //   console.log(obj.name + " at " + obj.locs);
   // });
