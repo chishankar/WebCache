@@ -14,13 +14,15 @@ var emptyRng = []
 const stopWords = ["i", "me", "my", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"];
 const INDEX_DIRECTORY = true;
 const SINGLE_WORD_FLAG = 'x';
+const MAX_CLUSTER = 1000000;
 var rngTbl = [];
-const MAX_INT_PER_FILE = 50;
+const MAX_INT_PER_FILE = 1000;
 //ONLY WORKS FOR REINDEXING DIRECTORY
 var rngFileCnt = 0;
 var ioCount =0;
 var fileParseTime = 0;
 var sizeCheckTime = 0;
+var fileCount = 0;
 
 function wordLocsMapping(str, delimiter=/\s/) {
   var out = new Map();
@@ -345,6 +347,7 @@ function storeRngIndex(rng, rngIndex) {
 }
 
 function addToMainAux(fileIndex, mainIndex) {
+  fileCount++;
 
   fileIndex = _.sortBy(fileIndex, wordInd => {return wordInd.w});
 
@@ -384,6 +387,10 @@ function addToMainAux(fileIndex, mainIndex) {
   while(i < fileIndex.length) {
     let fileWord = fileIndex[i];
 
+    // if (fileWord.w == "another" || fileWord.w == "announcer") {
+    //   console.log("here");
+    // }
+
     // find correct range for fileWord
     while (fileWord.w > rngTbl[currRng].r[1]) { currRng++ };
 
@@ -420,20 +427,18 @@ function addToMainAux(fileIndex, mainIndex) {
     let rngIndex = rngTbl[currRng].sz === 0 ? [] : extractRngIndex(rngTbl[currRng]);
 
     while(i < fileIndex.length && (fileWord = fileIndex[i]).w <= rngTbl[currRng].r[1]) {
-
-      if (fileWord.w == "back") {
-        console.log("here");
-      }
       // find index of fileWord word in both rngIndex and mainIndex, or would-be index if fileWord hasn't been indexed.
 
-
+      // if (fileWord.w == "another" || fileWord.w == "announcer") {
+      //   console.log("here");
+      // }
 
       let wordIndRng = rngIndex.findIndex(rngWord => rngWord.w >= fileWord.w);
       let wordIndMain = mainIndex.findIndex(mainWord => mainWord.w >= fileWord.w);
 
       let hasBeenIndexed = (wordIndRng >= 0 && rngIndex[wordIndRng].w === fileWord.w);
 
-      // if new locations fit in rng, add them accordingly
+      // if locations fit in rng, add them accordingly
 
 
       if (hasBeenIndexed) {
@@ -521,7 +526,7 @@ function addToMainAux(fileIndex, mainIndex) {
             } else {
               rngTbl.splice(currRng,0, newRng);
               //update currRng (from just inserted exlusive range to next range) and update bounds
-              if ((rngTbl[++currRng].sz -= fileWord.a.length) == 0) {
+              if ((rngTbl[++currRng].sz -= newRng.sz) == 0) {
                 rngTbl[currRng].r[0] = fileIndex[i + 1].w;
               } else {
                 rngTbl[currRng].r[0] = rngIndex[wordIndRng + 1].w;
@@ -531,13 +536,13 @@ function addToMainAux(fileIndex, mainIndex) {
               storeRngIndex(rngTbl[currRng - 1], exclRngIndex);
               let j = wordIndMain + 1;
               while (j < mainIndex.length && mainIndex[j].w <= rngTbl[currRng].r[1]) {
-                mainIndex[j++].st -= mainIndex[wordIndMain + 1].st;
+                mainIndex[j++].st -= mainIndex[wordIndMain].sz;
               }
             }
           }
           else {
             let lowerRngIndex = rngIndex.slice(0, wordIndRng);
-            // if said word is in middle of range, need to create 2nd new range (non exclusive)
+            // if said word is in middle of range, need to create 2nd new ranges (non exclusive)
             if (wordIndRng != rngIndex.length - 1 || rngTbl[currRng].r[1] != fileWord.w) {
               let newFn3 = (rngFileCnt++).toString() + "_BSON";
               let newSize = rngTbl[currRng].sz - count - rngIndex[wordIndRng].a.length;
@@ -548,6 +553,7 @@ function addToMainAux(fileIndex, mainIndex) {
                 sz: newSize
               }
               // update lower rng (currently currRng)
+              rngTbl[currRng].r[0] = rngIndex[0].w;
               rngTbl[currRng].r[1] = rngIndex[wordIndRng - 1].w;
               rngTbl[currRng].sz = count;
               // if curr range is last in table, just push new ranges, o.w. splice.
@@ -570,12 +576,13 @@ function addToMainAux(fileIndex, mainIndex) {
               let j = wordIndMain + 1;
               while (j < mainIndex.length && mainIndex[j].w <= rngTbl[currRng].r[1]) {
                 mainIndex[j].fn = newFn3;
-                mainIndex[j++].st -= mainIndex[wordIndMain + 1].st;
+                mainIndex[j++].st -= (mainIndex[wordIndMain].sz + count);
               }
             }
             // if word is last in range:
             else {
               // update lower rng (currently currRng)
+              rngTbl[currRng].r[0] = rngIndex[0].w;
               rngTbl[currRng].r[1] = rngIndex[wordIndRng - 1].w;
               rngTbl[currRng].sz = count;
               if (currRng == rngTbl.length - 1) {
@@ -584,11 +591,15 @@ function addToMainAux(fileIndex, mainIndex) {
               } else {
                 rngTbl.splice(++currRng,0, newRng);
               }
+              rngIndex = rngIndex.slice(wordIndRng);
               storeRngIndex(rngTbl[currRng-1], lowerRngIndex);
             }
           }
         }
         else {
+          if (rngIndex.length <= k) {
+            console.log("ERRORRRR");
+          }
           let upperRngIndex = rngIndex.slice(k);
           rngIndex = rngIndex.slice(0,k);
 
@@ -600,7 +611,7 @@ function addToMainAux(fileIndex, mainIndex) {
             r: [upperRngIndex[0].w, tempRng],
             fn: newFn,
             sz: totalLen - count
-          }
+          };
           rngTbl.splice(currRng + 1, 0, newRng);
 
           let j = mainIndex.findIndex(mainWord => mainWord.w === upperRngIndex[0].w);
@@ -608,13 +619,22 @@ function addToMainAux(fileIndex, mainIndex) {
             mainIndex[j].fn = newFn;
             mainIndex[j++].st -= count;
           }
-          storeRngIndex(rngTbl[currRng + 1], upperRngIndex);
+          try {
+            storeRngIndex(rngTbl[currRng + 1], upperRngIndex);
+          } catch(error) {
+            console.log("ERROR: Storage issue at word " + fileWord.w + " at file " + fileCount + ":\n" + error);
+          }
+
         }
       }
       i++;
     }
     rngTbl[currRng].r[0] = rngIndex[0].w;
-    storeRngIndex(rngTbl[currRng], rngIndex);
+    try {
+      storeRngIndex(rngTbl[currRng], rngIndex);
+    } catch(error) {
+      console.log("ERROR: Storage issue at word " + fileWord.w + ":\n" + error);
+    }
   }
 }
 
@@ -659,7 +679,7 @@ function addFilesToMainIndex(fileNames, mainIndex) {
           let tempSize = sizeof(tempIndex);
           var t2 = performance.now();
           sizeCheckTime += (t2 - t1);
-          if (tempSize > 1000000) {
+          if (tempSize > MAX_CLUSTER) {
             //console.log(sizeof(tempIndex));
             addToMainAux(tempIndex, mainIndex);
             tempIndex = [];
