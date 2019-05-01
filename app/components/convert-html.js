@@ -129,6 +129,14 @@ async function extractCommentFromDatFile(datFilePath) {
 
 // #############################################################################
 
+/**
+   Converts the ScrapBook highlight results to a list of JSON.
+
+   @param {Cheerio Object results} highlights - the ScrapBook highlights
+
+   @return {List<JSON>} - each highlight, as a JSON object with fields "id",
+   "text", "color"
+  */
 function cheerioObjsToHighlightJSON(highlights) {
     var out = new Array(highlights.length);
     for (var i = 0; i < highlights.length; i++) {
