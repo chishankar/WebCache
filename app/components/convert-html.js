@@ -38,10 +38,11 @@ const readFile = util.promisify(fs.readFile);
    @param {string} htmlFilePath - the associated HTML file
    @param {string} datFilePath - the associated DAT file
 
-   @return {[string, List<JSON>, List<JSON>, string]} - the modified HTML,
-   list of inline annotations, list of sticky annotations, and comment
+   @return {[string, List<JSON>, List<JSON>, List<JSON>, string]} - the
+   modified HTML, list of highlights, list of inline annotations, list of
+   sticky annotations, and comment
   */
-async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
+export default async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
     // split the annotations & comments into different functions so they
     // could be done in parallel
     var [jsonish, comment] = await Promise.all([
@@ -61,8 +62,9 @@ async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
 
    @param {string} htmlFilePath - the path to the specified HTML file
 
-   @return {[string, List<JSON>, List<JSON>]} - the modified HTML, list of
-   inline annotations, and list of sticky annotations.
+   @return {[string, List<JSON>, List<JSON>, List<JSON>]} - the modified HTML,
+   list of highlights, list of inline annotations, and list of sticky
+   annotations.
   */
 async function ScrapbookToWebcacheHTML(htmlFilePath) {
     // contents of the file, assumed to be an HTML file
@@ -77,7 +79,8 @@ async function ScrapbookToWebcacheHTML(htmlFilePath) {
         stickies = doc('div[class=scrapbook-sticky]');
 
     // get the JSON objects
-    var inlineJSONs = cheerioObjsToInlineAnnotationJSON(inlines),
+    var highlightJSONs = cheerioObjsToHighlightJSON(highlights),
+        inlineJSONs = cheerioObjsToInlineAnnotationJSON(inlines),
         stickyJSONs = cheerioObjsToStickyAnnotationJSON(stickies);
 
     // remove the sticky annotations from the HTML
@@ -92,11 +95,11 @@ async function ScrapbookToWebcacheHTML(htmlFilePath) {
 
     for (i = 0; i < highlights.length; i++) {
         // set "class" attribute of i-th highlight
-        highlights.eq(i).attr('class', randomID());
+        highlights.eq(i).attr('class', highlightJSONs[i].id);
     }
 
     // return the modified HTML & the annotations
-    return [doc.html(), inlineJSONs, stickyJSONs];
+    return [doc.html(), highlightJSONs, inlineJSONs, stickyJSONs];
 }
 
 
@@ -123,6 +126,21 @@ async function extractCommentFromDatFile(datFilePath) {
 }
 
 // #############################################################################
+
+function cheerioObjsToHighlightJSON(highlights) {
+    var out = new Array(highlights.length);
+    for (var i = 0; i < highlights.length; i++) {
+        var highlight = highlights.eq(i);
+        out[i] = {
+            id: randomID(),
+            text: highlight.text(),
+            // assume that there is only one hashtag in the style attribute
+            // assume the color is right after
+            color: highlight.attr('style').split('#').substring(0, 6)
+        };
+    }
+    return out;
+}
 
 /**
    Converts the ScrapBook inline annotation results to a list of JSON.
