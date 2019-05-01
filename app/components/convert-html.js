@@ -1,11 +1,12 @@
-import React, { Component }from 'react';
+import React from 'react';
+
 const fs = require('fs');
 const util = require('util');
 const cheerio = require('cheerio');
 
 const readFile = util.promisify(fs.readFile);
 
-// NOTE: This file has only been very light tested.
+// NOTE: This file has only been very lightly tested.
 // TODO: MORE TESTING
 // TODO: more robust error handling
 
@@ -22,7 +23,7 @@ const readFile = util.promisify(fs.readFile);
   // print output of async function
   async function printAsync(f) { console.log(await f()); }
 
-  // print output
+  // print output of conversion
   printAsync(() => ScrapbookToWebcacheFormat(htmlFilePath, datFilePath));
 
  */
@@ -41,7 +42,7 @@ const readFile = util.promisify(fs.readFile);
    @return {[string, List<JSON>, List<JSON>, string]} - the modified HTML,
    list of inline annotations, list of sticky annotations, and comment
   */
- export async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
+export default async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
     // split the annotations & comments into different functions so they
     // could be done in parallel
     var [jsonish, comment] = await Promise.all([
@@ -83,20 +84,16 @@ async function ScrapbookToWebcacheHTML(htmlFilePath) {
     // remove the sticky annotations from the HTML
     stickies.replaceWith('');
 
-    // TODO: change placeholder class names to proper class names
     var i;
-    // change the inline annotations to the correct class & add an ID
-    inlines.attr('class', 'webcache-inline');
     for (i = 0; i < inlines.length; i++) {
-        // set "id" attribute of i-th inline annotation
-        inlines.eq(i).attr('id', inlineJSONs[i].id);
+        // set "class" attribute of i-th inline annotation
+        // the convention is to use the class of the tag as an id
+        inlines.eq(i).attr('class', inlineJSONs[i].id);
     }
 
-    // change the highlights to the correct class & add an ID
-    highlights.attr('class', 'webcache-highlight');
     for (i = 0; i < highlights.length; i++) {
-        // set "id" attribute of i-th highlight
-        highlights.eq(i).attr('id', randomID());
+        // set "class" attribute of i-th highlight
+        highlights.eq(i).attr('class', randomID());
     }
 
     // return the modified HTML & the annotations
@@ -119,6 +116,7 @@ async function extractCommentFromDatFile(datFilePath) {
     while(i--) {
         // comment should be the last field
         if (lines[i].substring(0, 7) === 'comment') {
+            // TODO: test multiline comments
             return lines[i].substring(8);
         }
     }
@@ -167,7 +165,7 @@ function cheerioObjsToStickyAnnotationJSON(stickies) {
 
         // The attributes of the i-th sticky annotations.
         // Example:
-        // attrsI === ('left: 222px; top: 194px; position: absolute;'
+        // attrs === ('left: 222px; top: 194px; position: absolute;'
         // + ' width: 250px; height: 100px;')
         var attrs = sticky.attr('style').split(';');
 
@@ -195,16 +193,14 @@ function cheerioObjsToStickyAnnotationJSON(stickies) {
 
 
 /**
-   Get a random ID, up to 10 digits long.
-   TODO: Chirag was talking about using 10-digit IDs. Should they be random
-   strings instead?
+   Get a random ID. It's a copy of "generateRandomID()" somewhere else
+   in the code.
 
    @return {string} - the random ID
 */
 function randomID() {
-    return Math.floor(Math.random() * (10 ** 10)).toString();
+    return (Math.random().toString(36)
+            .replace(/[^a-z]+/g, '').substr(2,10));
 }
 
-// #############################################################################
-//module.exports = {};
-//module.exports['ScrapbookToWebcacheFormat'] = ScrapbookToWebcacheFormat;
+// ############################################################################/
