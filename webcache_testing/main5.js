@@ -973,7 +973,7 @@ function getWordLocs(codes) {
   return wordLocs;
 }
 
-function search(searchStr, index) {
+function search(searchStr) {
   let finalResults = [];
   let fileLists = []; // will hold all files for each search word
   let wordResults = [];
@@ -986,7 +986,7 @@ function search(searchStr, index) {
     let word = searchWords[i];
     let wordFiles = [];
     //returns a list of all unique location IDs associated with the current word
-    let results = _.findWhere(index, {w: word});
+    let results = _.findWhere(mainIndex, {w: word});
     //if not found return empty
     if (results == null) return finalResults;
     //Changes into filename and location format
@@ -1181,7 +1181,6 @@ if(INDEX_DIRECTORY) {
       //   }
       // });
 
-
     });
 
 
@@ -1203,7 +1202,7 @@ if(INDEX_DIRECTORY) {
 function user_search(str) {
   console.log("Search Results for " + str + ":");
   var t0 = performance.now();
-  let results = search(str,mainIndex);
+  let results = search(str);
   //let results2 = searchSecond(str, secondInd);
   var t1 = performance.now();
   var resultCnt = 0;
