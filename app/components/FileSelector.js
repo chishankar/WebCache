@@ -35,13 +35,14 @@ class FileDialogue extends React.Component {
     if (e.target.files[0]!=null){
       this.setState({ path: e.target.files[0].path });
     }
+  }
 
   // Dispatches new file path to url store on file click from file browser
   handleFile = (file) =>{
     this.store.dispatch(urlsearchActions.changeActiveUrl('LOCAL' + file.filePath));
   };
 
-  render() {
+  render(){
     const { classes } = this.props;
     return (
       <div>
