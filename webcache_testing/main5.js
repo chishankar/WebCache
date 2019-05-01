@@ -202,6 +202,8 @@ function deleteFile(filename) {
               word = deleteWords[c];
               wordIndMain = mainIndex.findIndex(wordInd => {return wordInd.w === deleteWords[c]});
 
+              if (wordIndMain === -1) {return;}
+
               let i = mainIndex[wordIndMain].st;
                 //removes all aspects of word from file
                 while (i < mainIndex[wordIndMain].st + mainIndex[wordIndMain].sz) {
@@ -340,20 +342,31 @@ function getLastMod(fileName) {
 function getFileIndex(fileName) {
 
   //Assigns file ID and adds to lookup table
-  let fileNum = lookup.length;
-  var fileIndex = [];
 
-  var newEntry = {
-    fileName: fileName,
-    ID: fileNum,
-    lastMod: 0
-  };
+  let fileNum = lookup.findIndex(entry => entry.fileName == fileName);
+
+  if (fileNum === -1) {
+    let fileNum = lookup.length;
+    var fileIndex = [];
+
+    var newEntry = {
+      fileName: fileName,
+      ID: fileNum,
+      lastMod: 0
+    };
+
+    getLastMod(fileName).then( result => {
+      newEntry.lastMod = result;
+    });
+
+    lookup.push(newEntry);
+} else {
 
   getLastMod(fileName).then( result => {
-    newEntry.lastMod = result;
+    lookup[fileNum].lastMod = result;
   });
 
-  lookup.push(newEntry);
+}
 
   let filePath = path.join(__dirname, '/test_docs/' + fileName);
 
@@ -815,6 +828,12 @@ function addFilesToMainIndex(fileNames, mainIndex) {
 //Enter the array we have stored in the index,
 //return a list of words with filenames locations
 //that we can use in search method
+
+function update(oldFilename, newFilename) {
+
+}
+
+
 function getWordLocs(codes) {
   let wordLocs = [];
 
