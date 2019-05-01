@@ -8,6 +8,7 @@ import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import * as resourcePath from '../utilities/ResourcePaths';
 import * as highlightActions from '../actions/sidebar';
+const searchAPI = require('../../webcache_testing/main5.js');
 
 const fs = require('fs');
 const ANNOTATIONS_FILE = 'annotations.json';
@@ -139,10 +140,32 @@ export default class RenderText extends Component<Props> {
 
   // Logic for saving file
   handleSave = (htmlData) => {
-    var fd = fs.openSync(getResourcePath(this.props.activeUrl) + ANNOTATIONS_FILE, 'w');
-    fs.writeFileSync(fd, JSON.stringify(this.props.annotations));
+    var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
+    var annotationsUrl = path.join(saveUrl, '..') + '/' + ANNOTATIONS_FILE;
+    console.log("SAVING HTML TO: " + saveUrl);
+    console.log("SAVING ANNOTATIONS TO: " + annotationsUrl);
+    var fd = fs.openSync(annotationsUrl, 'w');
 
-    //TODO: handle the regular save stuff @akbar
+    console.log(this.props.annotations)
+
+    let annotationJSON = Object.assign({},
+      {"highlightData":this.props.annotations},
+      {"lastUpdated":this.props.save}
+    )
+
+    //update the old index of the annotations json page
+    fs.readFile(annotationsUrl, (err, buf) => {
+      fs.writeFileSync(fd, JSON.stringify(annotationJSON));
+      searchAPI.update(annotationsUrl, buf.toString());
+    });
+  
+    var end = htmlData.indexOf("<script id=\"webcache-script\">");
+    let updatedHtml = htmlData.substring(0, end - 1); //remove our injected script tag from the document
+    // re write the current version of the html page and update the old index
+    fs.readFile(saveUrl, (err, buf) => {
+      fs.writeFileSync(saveUrl, updatedHtml);
+      searchAPI.update(annotationJSON, buf.toString());
+    });
   }
 
   // Takes in data returned by window.postMessage from the iframe rendered within the component

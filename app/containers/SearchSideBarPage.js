@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
 import SearchSideBar from '../components/SearchSideBar';
 
-function mapStateToProps(state){
+function mapStateToProps(state, ownProps){
   return {
-    searchData: state.filesearch.searchData,
+    searchData: state.filesearch.searchData, 
+    store: ownProps.store
   };
 }
 

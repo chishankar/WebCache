@@ -4,6 +4,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import LabelIcon from '@material-ui/icons/Label';
+import * as urlsearchActions from '../actions/urlsearch';
 
 const styles = theme => ({
   root: {
@@ -19,12 +20,18 @@ const styles = theme => ({
 class SearchResult extends React.Component {
  constructor(props){
     super(props)
+    this.store = this.props.store;
   }
+
+  handleClick = () => {
+  console.log("Search result got pressed!");
+  this.store.dispatch(urlsearchActions.changeActiveUrl("app/default_landing_page.html"));
+  };
 
   render() {
 
     return (
-        <ListItem>
+        <ListItem button onClick={this.handleClick}>
           <ListItemIcon>
             <LabelIcon />
           </ListItemIcon>

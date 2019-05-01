@@ -6,6 +6,7 @@ import * as fileSearchActions from '../actions/filesearch';
 import Fade from '@material-ui/core/Fade';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
+const searchAPI = require('../../webcache_testing/main5.js');
 
 const UIstyles = theme => ({
   root: {
@@ -33,9 +34,9 @@ export default class FileSearch extends Component<Props>{
     if (event.key === 'Enter'){
       var elem = event.srcElement || event.target;
       console.log("Search term: " + elem.value);
-      //searchResults = search(elem.value); //searches for the specified word among all archived pages
-      var text = JSON.stringify({results : [{filename: "app/where/who/what/index.html", count: 5}, {filename: "Boring", count: 9}]});
-      this.store.dispatch(fileSearchActions.changeSearchData(text));
+      //var searchResults = searchAPI.search(elem.value); //searches for the specified word among all archived pages
+      var searchResults = JSON.stringify({results : [{filename: "app/where/who/what/index.html", count: 5}, {filename: "Boring", count: 9}]});
+      this.store.dispatch(fileSearchActions.changeSearchData(searchResults));
     }
   }
 

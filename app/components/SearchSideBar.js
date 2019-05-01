@@ -41,7 +41,7 @@ class SearchSideBar extends Component<Props>{
       className={classes.root}>
       <Divider />
       {searchData.results.map(result =>
-      <SearchResult filename={result.filename} count={result.count}/>
+      <SearchResult key={result.count} store={this.props.store} filename={result.filename} count={result.count}/>
       )}
     </List>
     )
