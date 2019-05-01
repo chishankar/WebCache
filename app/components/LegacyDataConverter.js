@@ -8,8 +8,7 @@ import ScrapbookToWebcacheFormat from './convert-html.js';
 var path = require('path');
 
 const util = require('util');
-const fs = require('fs');
-const cheerio = require('cheerio')
+const fs = require('fs-extra');
 
 // Convert fs.readFile into Promise version of same
 const readFile = util.promisify(fs.readFile);
@@ -37,14 +36,13 @@ class LegacyDataConverter extends React.Component {
   onChange = (e) => {
     if (e.target.files[0] != null) {
       //this.setState({ path: e.target.files[0].path });
+      const destFolder = 'data';
+      const sourceFolder = e.target.files[0].path;
+      fs.copy(sourceFolder, destFolder, (err) => {
+        if (err) return console.error(err)
+        console.log('success! moved files to data directory')
+      });
       FindFile(e.target.files[0].path);
-      // const destFolder = 'data';
-      // const sourceFolder = e.target.files[0].path;
-      // fs.emptydir(destFolder);
-      // fs.copy(sourceFolder, destFolder, (err) => {
-      //   if (err) return console.error(err)
-      //   console.log('success! moved files to data directory')
-      // });
     }
   };
 
@@ -69,8 +67,8 @@ class LegacyDataConverter extends React.Component {
   }
 }
 
-function FindFile(dirPath) {
-  fs.readdir(dirPath, (err, files) => {
+async function FindFile(dirPath) {
+  fs.readdir(dirPath, async (err, files) => {
     // console.log(items);
     if (!err) {
       for (var i = 0; i < files.length; i++) {
@@ -80,9 +78,11 @@ function FindFile(dirPath) {
           FindFile(filePath);
         } else if (files[i].indexOf('index.html') == 0) {
           var datFilePath = path.join(dirPath,'index.dat');
-          var fileArr= ScrapbookToWebcacheFormat(filePath, datFilePath);
-
-          //WriteToFile(filePath, fileArr[0].toString);
+          var fileArr = await ScrapbookToWebcacheFormat(filePath, datFilePath);
+          console.log(fileArr[2])
+          //var fileArr = ScrapbookFunctions(filePath,datFilePath)
+          WriteToFile(filePath, fileArr[0]);
+          //WriteToFile(+'/.', fileArr[0]);
         }
       }
     }
@@ -91,8 +91,8 @@ function FindFile(dirPath) {
 
 async function WriteToFile(filePath, replacement) {
   try {
-    const filehandle = await fsPromises.open('test.txt', 'w');
-    console.log(replacement);
+    const filehandle = await fsPromises.open(filePath, 'w');
+    //console.log(replacement);
     await filehandle.writeFile(replacement);
     await filehandle.close();
   } catch (err) {

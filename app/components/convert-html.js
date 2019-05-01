@@ -1,7 +1,6 @@
 const fs = require('fs');
 const util = require('util');
 const cheerio = require('cheerio');
-
 const readFile = util.promisify(fs.readFile);
 
 // NOTE: This file has only been very lightly tested.
@@ -42,7 +41,8 @@ const readFile = util.promisify(fs.readFile);
    modified HTML, list of highlights, list of inline annotations, list of
    sticky annotations, and comment
   */
-/* export default */ async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
+
+export default async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
     // split the annotations & comments into different functions so they
     // could be done in parallel
     var [jsonish, comment] = await Promise.all([
@@ -228,5 +228,5 @@ function randomID() {
 
 // ############################################################################/
 
-module.exports = {};
-module.exports['ScrapbookToWebcacheFormat'] = ScrapbookToWebcacheFormat;
+// module.exports = {};
+// module.exports['ScrapbookToWebcacheFormat'] = ScrapbookToWebcacheFormat;
