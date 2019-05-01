@@ -42,7 +42,7 @@ class FileDialogue extends React.Component {
     fs.emptydir(destFolder);
     fs.copy(sourceFolder, destFolder, function (err) {
       if (err) return console.error(err)
-      console.log('success! moved files to data directory')
+        console.log('success! moved files to data directory');
     });
   }
 
