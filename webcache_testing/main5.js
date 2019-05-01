@@ -12,7 +12,7 @@ var readline = require("readline");
 var emptyRng = []
 
 const stopWords = ["i", "me", "my", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"];
-const INDEX_DIRECTORY = true;
+const INDEX_DIRECTORY = false;
 const SINGLE_WORD_FLAG = 'x';
 const MAX_CLUSTER = 1000000;
 var rngTbl = [];
@@ -123,6 +123,11 @@ function checkIndexForChanges(lookup) {
     });
   }
 }
+
+
+
+
+
 
 function delFilesFromIndex(mainIndex, fileNames, origData) {
   // case for when files are removed outside of the application, whole index must be traversed
@@ -369,7 +374,7 @@ function deleteFileFromDirectory(filename) {
   });
 }
 
-function saveIndexToFile(mainIndex, table, indexFn, tableFn) {
+function saveIndexToFile(mainIndex, fileTable, rngTbl, indexFn, fileTableFn, rngTableFn) {
 
   let filePath = path.join(__dirname, indexFn);
   return new Promise(resolve => {
@@ -377,30 +382,40 @@ function saveIndexToFile(mainIndex, table, indexFn, tableFn) {
     fs.writeFile(filePath, BSON.serialize(mainIndex), function (err) {
       if (err) throw err;
       console.log('Index saved to file');
-      let filePath = path.join(__dirname, tableFn);
-      fs.writeFile(filePath, BSON.serialize(table), function (err) {
+      let filePath = path.join(__dirname, fileTableFn);
+      fs.writeFile(filePath, BSON.serialize(fileTable), function (err) {
         if (err) throw err;
-        resolve();
+        let filePath = path.join(__dirname, rngTableFn);
+        fs.writeFile(filePath, BSON.serialize(rngTbl), function (err) {
+          if (err) throw err;
+          resolve();
+        });
       });
     });
   });
 }
 
-function loadIndexFromFile(indexFn, tableFn) {
+function loadIndexFromFile(indexFn, tableFn, rngTableFn) {
 
   let filePath = path.join(__dirname, indexFn);
   let index;
-  let table;
+  let fileTable;
+  let rngTbl;
   return new Promise(resolve => {
     fs.readFile(filePath, function(err,data){
       if (err) throw err;
       index = BSON.deserialize(data);
       console.log('Index loaded from file');
-      let filePath2 = path.join(__dirname, tableFn);
-      fs.readFile(filePath2, function(err,data){
+      let filePath = path.join(__dirname, tableFn);
+      fs.readFile(filePath, function(err,data){
         if (err) throw err;
-        table = BSON.deserialize(data);
-        resolve([index, table]);
+        fileTable = BSON.deserialize(data);
+        let filePath = path.join(__dirname, rngTableFn);
+        fs.readFile(filePath, function(err,data){
+          if (err) throw err;
+          rngTbl = BSON.deserialize(data);
+          resolve([index, fileTable, rngTbl]);
+        });
       });
 
     });
@@ -873,7 +888,6 @@ function addToMainAux(fileIndex) {
           } catch(error) {
             console.log("ERROR: Storage issue at word " + fileWord.w + " at file " + fileCount + ":\n" + error);
           }
-
         }
       }
       i++;
@@ -1168,18 +1182,11 @@ if(INDEX_DIRECTORY) {
       console.log("Size of index: " + sizeof(mainIndex));
       console.log("io calls: " + ioCount);
       console.log("Test word: " + mainIndex[mainIndex.findIndex(word => word.sz >= 50)].w);
-      saveIndexToFile(mainIndex, lookup, 'ind_bin.txt', 'tbl_bin.txt');
+      saveIndexToFile(mainIndex, lookup, rngTbl, 'ind_bin.txt', 'tbl_bin.txt', 'rng_tbl.txt');
       console.log("wordcount: " + wordcount);
       console.log("indexCount: " + mainIndex.length);
 
-      // let filePath = path.join(__dirname, "/test_docs/abortion.txt");
-      // fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data) {
-      //   if (err) {
-      //   throw err;
-      //   } else {
-      //     update("abortion.txt", data);
-      //   }
-      // });
+
 
     });
 
@@ -1188,14 +1195,23 @@ if(INDEX_DIRECTORY) {
   });
 } else {
   var t0 = performance.now();
-  loadIndexFromFile('ind_bin.txt', 'tbl_bin.txt').then(result => {
-    mainIndex = result[0];
-    lookup = result[1];
+  loadIndexFromFile('ind_bin.txt', 'tbl_bin.txt', 'rng_tbl.txt').then(result => {
+    mainIndex = Object.values(result[0]);
+    lookup = Object.values(result[1]);
+    rngTbl = Object.values(result[2]);
     var t1 = performance.now();
     console.log("Loaded index from file in  " + (t1 - t0) + " milliseconds.");
     console.log("Size of index: " + sizeof(mainIndex));
     console.log("lookup table size: " + sizeof(lookup));
-    user_search("abortion");
+
+    let filePath = path.join(__dirname, "/test_docs/abortion.txt");
+      fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data) {
+        if (err) {
+        throw err;
+        } else {
+          update("abortion.txt", data);
+        }
+      })
   });
 }
 
