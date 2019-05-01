@@ -62,7 +62,6 @@ function wordLocsMapping(str, delimiter=/\s/) {
 }
 
 // TODO: save array of N-bit integers as array of 8-bit integers
-module.exports = {};
 // #############################################################################
 /**
    Synchronously write an array of 32-bit integers at the specified location.
@@ -73,7 +72,7 @@ function writeUint32ArrFileSync(filePath, uint32arr) {
     fs.writeFileSync(filePath, new Buffer.from(uint32arr.buffer));
     ioCount++;
 }
-module.exports['writeUint32ArrFileSync'] = writeUint32ArrFileSync;
+
 /**
    Read a file at the specified location as an array of 32-bit integers.
    @param {string} filePath - the specified location on disk
@@ -84,7 +83,6 @@ function readUint32ArrFileSync(filePath) {
     return new Uint32Array((new Uint8Array(fs.readFileSync(filePath))).buffer);
     ioCount++;
 }
-module.exports['readUint32ArrFileSync'] = readUint32ArrFileSync;
 // #############################################################################
 
 function avg(mainIndex) {
@@ -1026,10 +1024,10 @@ var mainIndex = [];
 var lastFileStats = [];
 
 if(INDEX_DIRECTORY) {
-  var proc = exec('ls test_docs', (err, stdout, stderr) => {
+  var proc = exec('ls data', (err, stdout, stderr) => {
     if (err) {
       // node couldn't execute the command
-      reject(Error("ls did not execute correctly"));
+      console.log("error!");
     }
 
     dirFiles = stdout.split(/\r?\n/);

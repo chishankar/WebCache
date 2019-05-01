@@ -7,7 +7,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Fade from '@material-ui/core/Fade';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
-import * as searchAPI from '../webcache_testing/main5.js';
+const searchAPI = require('../../webcache_testing/main5.js');
 
 const fs = require('fs');
 
@@ -67,11 +67,11 @@ export default class UrlSearch extends Component<Props>{
         fs.readdir('./' + save_location + '/', (err, files) => {
           if(err){
             console.log("Error in reading data folder");
-          }  
+          }
           let update = files.map((x) => {
             return urlPath + x});
           searchAPI.addFilesToMainIndex(update);
-          
+
         });
         this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
         this.handleClickLoading();
