@@ -139,7 +139,7 @@ function checkExclusiveWord(word) {
 
 function deleteFile(filename) {
 
-  let filePath = path.join(__dirname, "/test_docs/" + filename);
+  let filePath = path.join(__dirname, "/../data/" + filename);
 
   return new Promise(resolve => {
     fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data) {
@@ -343,9 +343,6 @@ function getFileIndex(fileName) {
 
   //Assigns file ID and adds to lookup table
 
-  let fileNum = lookup.findIndex(entry => entry.fileName == fileName);
-
-  if (fileNum === -1) {
     let fileNum = lookup.length;
     var fileIndex = [];
 
@@ -360,15 +357,8 @@ function getFileIndex(fileName) {
     });
 
     lookup.push(newEntry);
-} else {
 
-  getLastMod(fileName).then( result => {
-    lookup[fileNum].lastMod = result;
-  });
-
-}
-
-  let filePath = path.join(__dirname, '/test_docs/' + fileName);
+  let filePath = path.join(__dirname, '/../data/' + fileName);
 
   return new Promise(resolve => {
     fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
@@ -793,7 +783,7 @@ function addToMainAux(fileIndex, mainIndex) {
       */
 
 
-function addFilesToMainIndex(fileNames, mainIndex) {
+function addFilesToMainIndex(fileNames) {
 
   let indexPromises = [];
 
@@ -1046,7 +1036,7 @@ if(INDEX_DIRECTORY) {
     dirFiles.pop();
 
     var t0 = performance.now();
-    addFilesToMainIndex(dirFiles, mainIndex).then(result => {
+    addFilesToMainIndex(dirFiles).then(result => {
       var t1 = performance.now();
       console.log("Indexing completed in " + (t1 - t0) + " milliseconds.");
       console.log("File parsing took up " + fileParseTime + " milliseconds.");
@@ -1055,10 +1045,6 @@ if(INDEX_DIRECTORY) {
       console.log("io calls: " + ioCount);
       console.log("Test word: " + mainIndex[mainIndex.findIndex(word => word.sz >= 50)].w);
       saveIndexToFile(mainIndex, lookup, 'ind_bin.txt', 'tbl_bin.txt');
-
-      deleteFile("abortion.txt").then(result => {
-        console.log("file deleted");
-      });
     });
 
   // addFilesToSecondIndex(dirFiles, secondInd);
