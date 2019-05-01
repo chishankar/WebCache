@@ -16,7 +16,11 @@ const INDEX_DIRECTORY = true;
 const SINGLE_WORD_FLAG = 'x';
 const MAX_CLUSTER = 1000000;
 var rngTbl = [];
+<<<<<<< HEAD
 const MAX_INT_PER_FILE = 10000;
+=======
+const MAX_INT_PER_FILE = 1000;
+>>>>>>> search-index-testing
 //ONLY WORKS FOR REINDEXING DIRECTORY
 var rngFileCnt = 0;
 var ioCount =0;
@@ -614,6 +618,7 @@ function addToMainAux(fileIndex, mainIndex) {
           k++;
         }
         // at the end of loop, i is the index after the last word summed in count.
+<<<<<<< HEAD
 
         if (count > MAX_INT_PER_FILE) {
           count -= mainIndex[currIndMain - 1].sz;
@@ -632,6 +637,26 @@ function addToMainAux(fileIndex, mainIndex) {
             af: [newFn1, newFn2]
           }
 
+=======
+
+        if (count > MAX_INT_PER_FILE) {
+          count -= mainIndex[currIndMain - 1].sz;
+          k--;
+        }
+        // special case in which single word index exceeds max int per file
+        if (totalLen - count  >= MAX_INT_PER_FILE) {
+
+          newFn1 = SINGLE_WORD_FLAG + (rngFileCnt++).toString() + "_BSON";
+          newFn2 = SINGLE_WORD_FLAG + (rngFileCnt++).toString() + "_BSON";
+
+          let newRng = {
+            r: [fileWord.w, fileWord.w],
+            fn: newFn1,
+            sz: rngIndex[wordIndRng].a.length,
+            af: [newFn1, newFn2]
+          }
+
+>>>>>>> search-index-testing
           mainIndex[wordIndMain].fn = newFn1;
           mainIndex[wordIndMain].st = 0;
           mainIndex[wordIndMain].sz = newRng.sz;
