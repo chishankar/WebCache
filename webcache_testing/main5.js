@@ -248,12 +248,11 @@ function deleteFile(filename, str) {
             let toStore = new Uint32Array(arr);
             writeUint32ArrFileSync(filePath, toStore);
           }
-        //lookup[lookupID].fileName = '';
+        lookup[lookupID].fileName = '';
         resolve();
     }
   });
 }
-
 
 function deleteFileFromDirectory(filename) {
 
@@ -460,7 +459,7 @@ function getFileIndex(fileName) {
   let fileNum = lookup.findIndex(entry => entry.fileName == fileName);
   let fileIndex = [];
 
- if (fileNum == -1) {
+ //if (fileNum == -1) {
 
     //Assigns file ID and adds to lookup table
     fileNum = lookup.length;
@@ -477,12 +476,12 @@ function getFileIndex(fileName) {
 
     lookup.push(newEntry);
 
-  } else {
+  // } else {
 
-    getLastMod(fileName).then( result => {
-      lookup[fileNum].lastMod = result;
-    });
-  }
+  //   getLastMod(fileName).then( result => {
+  //     lookup[fileNum].lastMod = result;
+  //   });
+  // }
 
   let filePath = path.join(__dirname, '/test_docs/' + fileName);
 
@@ -879,6 +878,7 @@ function addToMainAux(fileIndex) {
       }
       i++;
     }
+
     rngTbl[currRng].r[0] = rngIndex[0].w;
     try {
       storeRngIndex(rngTbl[currRng], rngIndex);
@@ -1172,12 +1172,12 @@ if(INDEX_DIRECTORY) {
       console.log("wordcount: " + wordcount);
       console.log("indexCount: " + mainIndex.length);
 
-      let filePath = path.join(__dirname, "/test_docs/testdoc1.txt");
+      let filePath = path.join(__dirname, "/test_docs/abortion.txt");
       fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data) {
         if (err) {
         throw err;
         } else {
-          update("testdoc1.txt", data);
+          update("abortion.txt", data);
         }
       });
 
