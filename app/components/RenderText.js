@@ -11,6 +11,7 @@ import * as highlightActions from '../actions/sidebar';
 
 const fs = require('fs');
 const ANNOTATIONS_FILE = 'annotations.json';
+const path = require('path');
 
 // Returns fulle path needed for iFrame
 function getResourceBuilder(path){
@@ -43,7 +44,7 @@ function getRenderText(filePath, iframeRef, addHighlights) {
 
   var injectScript = fs.readFileSync(jsResource).toString();
 
-  resourceHtml += "<script>" + injectScript + "<\/script>";
+  resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
 
   // change all paths to become relative
   // check to see if the path is already changed - don't change it twice!!
@@ -100,7 +101,7 @@ export default class RenderText extends Component<Props> {
           resource = filePath.substr(5, filePath.length);
         }
         try {
-          var fd = fs.openSync(resource + '/../' + ANNOTATIONS_FILE, 'r');
+          var fd = fs.openSync(path.join(resource, '..') + '/' + ANNOTATIONS_FILE, 'r');
           var highlights = JSON.parse(fs.readFileSync(fd));
           // add each highlight to the store
           highlights.forEach(highlight => {
@@ -139,15 +140,21 @@ export default class RenderText extends Component<Props> {
 
   // Logic for saving file
   handleSave = (htmlData) => {
-    var fd = fs.openSync(getResourcePath(this.props.activeUrl) + ANNOTATIONS_FILE, 'w');
+    var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
+    var annotationsUrl = path.join(saveUrl, '..') + '/' + ANNOTATIONS_FILE;
+    console.log("SAVING HTML TO: " + saveUrl);
+    console.log("SAVING ANNOTATIONS TO: " + annotationsUrl);
+    var fd = fs.openSync(annotationsUrl, 'w');
     fs.writeFileSync(fd, JSON.stringify(this.props.annotations));
 
-    //TODO: handle the regular save stuff @akbar
+    var end = htmlData.indexOf("<script id=\"webcache-script\">");
+    let updatedHtml = htmlData.substring(0, end - 1); //remove our injected script tag from the document
+    // re write the current version of the html page
+    fs.writeFileSync(saveUrl, updatedHtml);
   }
 
   // Takes in data returned by window.postMessage from the iframe rendered within the component
   handleIFrameTask = (e) => {
-    // console.log('parent received: ' + e.data);
 
     if (e.data == 'clicked button'){
       console.log("TEMPORARY")

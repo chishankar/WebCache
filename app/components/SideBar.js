@@ -71,6 +71,7 @@ class SideBar extends Component<Props>{
 
   // Updates highlighter icon to the currently selected color
   getHighlighterColorIcon = (color) => {
+    // TODO: make this more robust? handle hexcodes
     if (color === 'red'){
       return red
     } else if (color === 'blue'){
