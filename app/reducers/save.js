@@ -8,7 +8,7 @@ function getDateTime (){
   var currentdate = new Date();
   return currentdate.getDate() + "/"
                   + (currentdate.getMonth())  + "/"
-                  + currentdate.getFullYear() + " @ "
+                  + currentdate.getFullYear() + " at "
                   + currentdate.getHours() + ":"
                   + currentdate.getMinutes() + ":"
                   + currentdate.getSeconds();

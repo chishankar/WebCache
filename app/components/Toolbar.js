@@ -23,6 +23,12 @@ function mapDispatchToProps(dispatch) {
   },dispatch)
 }
 
+function mapStateToProps(state) {
+  return {
+    saveDate: state.save.mostRecentUpdate
+  };
+}
+
 const selectionstyles = themes => ({
   root:{
     flexGrow: 1,
@@ -79,6 +85,17 @@ class Tools extends Component<Props>{
     this.setState({ value });
   };
 
+  showLastUpdateDate = () => {
+    if (this.props.saveDate != ""){
+      return true
+    }
+    return false
+  }
+
+  // <Tab icon={<i className="far fa-comment"></i>} data-tip="Comment" />
+
+  // <Tab icon={<i className="far fa-comment-alt" />} data-tip="Annotation"/>
+
   render(){
     return(
       <div>
@@ -100,10 +117,7 @@ class Tools extends Component<Props>{
 
               <Tab icon={<i className="far fa-save"></i>} onClick={this.handleSave} data-tip="Save" />
 
-              <Tab icon={<i className="far fa-comment"></i>} data-tip="Comment" />
-
-              <Tab icon={<i className="far fa-comment-alt" />} data-tip="Annotation"/>
-
+              {this.showLastUpdateDate() && <Tab disabled icon={this.props.saveDate} />}
             </Tabs>
           </Paper>
       </div>
@@ -115,5 +129,5 @@ class Tools extends Component<Props>{
 
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps)(withStyles(selectionstyles)(Tools));
