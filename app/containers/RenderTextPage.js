@@ -2,6 +2,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import RenderText from '../components/RenderText';
 import * as sideBarActions from '../actions/sidebar';
+import * as notificationActions from '../actions/notification';
 
 function mapStateToProps(state) {
   return {
@@ -18,6 +19,7 @@ function mapDispatchToProps(dispatch){
   return bindActionCreators({
     addHighlight: sideBarActions.addHighlight,
     clearHighlights: sideBarActions.clearHighlights,
+    addNotification: notificationActions.addNotification
   },dispatch);
 }
 

@@ -67,6 +67,7 @@ type Props = {
   save: String,
   addHighlight: Function,
   clearHighlights: Function,
+  addNotification: Function,
   annotations: Object,
   hideHighlights: Boolean
 }
@@ -177,6 +178,7 @@ export default class RenderText extends Component<Props> {
     let updatedHtml = htmlData.substring(0, end - 1); //remove our injected script tag from the document
     // re write the current version of the html page
     fs.writeFileSync(saveUrl, updatedHtml);
+    this.props.addNotification(`File saved! ${this.props.save}`)
   }
 
   // Takes in data returned by window.postMessage from the iframe rendered within the component
@@ -194,7 +196,7 @@ export default class RenderText extends Component<Props> {
       if (this.props.activeUrl !== 'app/default_landing_page.html') {
         this.handleSave(e.data.savedData);
       } else {
-        console.log("can't save annotations on the home page!");
+        this.props.addNotification("can't save annotations on the home page!")
       }
 
     } else if (e.data.highlight){
