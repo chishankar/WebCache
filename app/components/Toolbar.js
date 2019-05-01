@@ -84,6 +84,8 @@ class Tools extends Component<Props>{
               <Tab icon={<i className="fas fa-wifi"></i>} data-tip="URL search" onClick={this._showUrlSearch}/>
               {this.state.showUrlSearch && <UrlSearch store={this.store}/>}
 
+              <Tab icon={<i className="far fa-save"></i>} data-tip="Save" />
+
               <Tab icon={<i className="far fa-comment"></i>} data-tip="Comment" />
 
               <Tab icon={<i className="far fa-comment-alt" />} data-tip="Annotation"/>
