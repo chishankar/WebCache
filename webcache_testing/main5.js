@@ -1172,16 +1172,15 @@ if(INDEX_DIRECTORY) {
       console.log("wordcount: " + wordcount);
       console.log("indexCount: " + mainIndex.length);
 
-      let filePath = path.join(__dirname, "/test_docs/abortion.txt");
-      fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data) {
-        if (err) {
-        throw err;
-        } else {
-          update("abortion.txt", data);
-        }
-      });
+      // let filePath = path.join(__dirname, "/test_docs/abortion.txt");
+      // fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data) {
+      //   if (err) {
+      //   throw err;
+      //   } else {
+      //     update("abortion.txt", data);
+      //   }
+      // });
 
-     // user_search("lorem");
 
     });
 
