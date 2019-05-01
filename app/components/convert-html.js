@@ -1,9 +1,6 @@
-import React from 'react';
-
 const fs = require('fs');
 const util = require('util');
 const cheerio = require('cheerio');
-
 const readFile = util.promisify(fs.readFile);
 
 // NOTE: This file has only been very lightly tested.
@@ -43,7 +40,7 @@ const readFile = util.promisify(fs.readFile);
    @return {[string, List<JSON>, List<JSON>, string]} - the modified HTML,
    list of inline annotations, list of sticky annotations, and comment
   */
-export default async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
+ export default async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
     // split the annotations & comments into different functions so they
     // could be done in parallel
     var [jsonish, comment] = await Promise.all([
