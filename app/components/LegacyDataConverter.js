@@ -3,15 +3,17 @@ import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { ifError } from 'assert';
+import ScrapbookToWebcacheFormat from './convert-html.js';
+
 var path = require('path');
 
 const util = require('util');
 const fs = require('fs');
-const cheerio = require('cheerio');
-// Convert fs.readFile into Promise version of same
+const cheerio = require('cheerio')
 
-//
-const { ScrapbookToWebcacheFormat } = require('./convert-html');
+// Convert fs.readFile into Promise version of same
+const readFile = util.promisify(fs.readFile);
+const fsPromises = require('fs').promises;
 
 const styles = theme => ({
   button: {
@@ -76,14 +78,29 @@ function FindFile(dirPath) {
         var stat = fs.lstatSync(filePath);
         if (stat.isDirectory()) {
           FindFile(filePath);
-        } else if (files[i].indexOf('index.html') >= 0) {
+        } else if (files[i].indexOf('index.html') == 0) {
           var datFilePath = path.join(dirPath,'index.dat');
-          ScrapbookToWebcacheFormat(filePath, datFilePath);
+          var fileArr= ScrapbookToWebcacheFormat(filePath, datFilePath);
+
+          //WriteToFile(filePath, fileArr[0].toString);
         }
       }
     }
   });
 }
 
-// ##################################################################33
+async function WriteToFile(filePath, replacement) {
+  try {
+    const filehandle = await fsPromises.open('test.txt', 'w');
+    console.log(replacement);
+    await filehandle.writeFile(replacement);
+    await filehandle.close();
+  } catch (err) {
+    console.error(err);
+  }
+
+  //const filehandle = await fsPromises.open(fileName, 'w');
+  //writeFile(filePath, replacement);
+}
+
 export default withStyles(styles, { withTheme: true })(LegacyDataConverter);

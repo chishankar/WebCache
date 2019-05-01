@@ -16,6 +16,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Footer from './Footer';
 import Tools from './Toolbar';
 import homeStyles from './Home.css';
+import LegacyDataConverter from './LegacyDataConverter'
 import FileDialogue from './FileSelector';
 import SideBarPage from '../containers/SideBarPage';
 import RenderTextPage from '../containers/RenderTextPage';
@@ -122,6 +123,7 @@ class Home extends Component {
       <div>
         <div className={classes.toolbar}><h1 align='center'>WebCache</h1></div>
         <Divider />
+        <LegacyDataConverter />
         <FileDialogue store={this.store}/>
       </div>
     );

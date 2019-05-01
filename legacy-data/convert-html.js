@@ -6,7 +6,7 @@ const cheerio = require('cheerio');
 
 const readFile = util.promisify(fs.readFile);
 
-// NOTE: This file has only been very lightly tested.
+// NOTE: This file has only been very light tested.
 // TODO: MORE TESTING
 // TODO: more robust error handling
 
@@ -23,11 +23,10 @@ const readFile = util.promisify(fs.readFile);
   // print output of async function
   async function printAsync(f) { console.log(await f()); }
 
-  // print output of conversion
+  // print output
   printAsync(() => ScrapbookToWebcacheFormat(htmlFilePath, datFilePath));
 
  */
-
 
 // #############################################################################
 
@@ -40,9 +39,8 @@ const readFile = util.promisify(fs.readFile);
    @param {string} htmlFilePath - the associated HTML file
    @param {string} datFilePath - the associated DAT file
 
-   @return {[string, List<JSON>, List<JSON>, List<JSON>, string]} - the
-   modified HTML, list of highlights, list of inline annotations, list of
-   sticky annotations, and comment
+   @return {[string, List<JSON>, List<JSON>, string]} - the modified HTML,
+   list of inline annotations, list of sticky annotations, and comment
   */
 export default async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
     // split the annotations & comments into different functions so they
@@ -64,9 +62,8 @@ export default async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePat
 
    @param {string} htmlFilePath - the path to the specified HTML file
 
-   @return {[string, List<JSON>, List<JSON>, List<JSON>]} - the modified HTML,
-   list of highlights, list of inline annotations, and list of sticky
-   annotations.
+   @return {[string, List<JSON>, List<JSON>]} - the modified HTML, list of
+   inline annotations, and list of sticky annotations.
   */
 async function ScrapbookToWebcacheHTML(htmlFilePath) {
     // contents of the file, assumed to be an HTML file
@@ -81,27 +78,30 @@ async function ScrapbookToWebcacheHTML(htmlFilePath) {
         stickies = doc('div[class=scrapbook-sticky]');
 
     // get the JSON objects
-    var highlightJSONs = cheerioObjsToHighlightJSON(highlights),
-        inlineJSONs = cheerioObjsToInlineAnnotationJSON(inlines),
+    var inlineJSONs = cheerioObjsToInlineAnnotationJSON(inlines),
         stickyJSONs = cheerioObjsToStickyAnnotationJSON(stickies);
 
     // remove the sticky annotations from the HTML
     stickies.replaceWith('');
 
+    // TODO: change placeholder class names to proper class names
     var i;
+    // change the inline annotations to the correct class & add an ID
+    inlines.attr('class', 'webcache-inline');
     for (i = 0; i < inlines.length; i++) {
-        // set "class" attribute of i-th inline annotation
-        // the convention is to use the class of the tag as an id
-        inlines.eq(i).attr('class', inlineJSONs[i].id);
+        // set "id" attribute of i-th inline annotation
+        inlines.eq(i).attr('id', inlineJSONs[i].id);
     }
 
+    // change the highlights to the correct class & add an ID
+    highlights.attr('class', 'webcache-highlight');
     for (i = 0; i < highlights.length; i++) {
-        // set "class" attribute of i-th highlight
-        highlights.eq(i).attr('class', highlightJSONs[i].id);
+        // set "id" attribute of i-th highlight
+        highlights.eq(i).attr('id', randomID());
     }
 
     // return the modified HTML & the annotations
-    return [doc.html(), highlightJSONs, inlineJSONs, stickyJSONs];
+    return [doc.html(), inlineJSONs, stickyJSONs];
 }
 
 
@@ -120,7 +120,6 @@ async function extractCommentFromDatFile(datFilePath) {
     while(i--) {
         // comment should be the last field
         if (lines[i].substring(0, 7) === 'comment') {
-            // TODO: test multiline comments
             return lines[i].substring(8);
         }
     }
@@ -128,21 +127,6 @@ async function extractCommentFromDatFile(datFilePath) {
 }
 
 // #############################################################################
-
-function cheerioObjsToHighlightJSON(highlights) {
-    var out = new Array(highlights.length);
-    for (var i = 0; i < highlights.length; i++) {
-        var highlight = highlights.eq(i);
-        out[i] = {
-            id: randomID(),
-            text: highlight.text(),
-            // assume that there is only one hashtag in the style attribute
-            // assume the color is right after
-            color: highlight.attr('style').split('#').substring(0, 6)
-        };
-    }
-    return out;
-}
 
 /**
    Converts the ScrapBook inline annotation results to a list of JSON.
@@ -184,7 +168,7 @@ function cheerioObjsToStickyAnnotationJSON(stickies) {
 
         // The attributes of the i-th sticky annotations.
         // Example:
-        // attrs === ('left: 222px; top: 194px; position: absolute;'
+        // attrsI === ('left: 222px; top: 194px; position: absolute;'
         // + ' width: 250px; height: 100px;')
         var attrs = sticky.attr('style').split(';');
 
@@ -212,14 +196,14 @@ function cheerioObjsToStickyAnnotationJSON(stickies) {
 
 
 /**
-   Get a random ID. It's a copy of "generateRandomID()" somewhere else
-   in the code.
+   Get a random ID, up to 10 digits long.
+   TODO: Chirag was talking about using 10-digit IDs. Should they be random
+   strings instead?
 
    @return {string} - the random ID
 */
 function randomID() {
-    return (Math.random().toString(36)
-            .replace(/[^a-z]+/g, '').substr(2,10));
+    return Math.floor(Math.random() * (10 ** 10)).toString();
 }
 
 // ############################################################################/
