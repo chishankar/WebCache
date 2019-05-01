@@ -8,7 +8,7 @@ import ScrapbookToWebcacheFormat from './convert-html.js';
 var path = require('path');
 
 const util = require('util');
-const fs = require('fs-extra');
+const fs = require('fs');
 const cheerio = require('cheerio')
 
 // Convert fs.readFile into Promise version of same
@@ -38,13 +38,13 @@ class LegacyDataConverter extends React.Component {
     if (e.target.files[0] != null) {
       //this.setState({ path: e.target.files[0].path });
       FindFile(e.target.files[0].path);
-      const destFolder = 'data';
-      const sourceFolder = e.target.files[0].path;
-      fs.emptydir(destFolder);
-      fs.copy(sourceFolder, destFolder, (err) => {
-        if (err) return console.error(err)
-        console.log('success! moved files to data directory')
-      });
+      // const destFolder = 'data';
+      // const sourceFolder = e.target.files[0].path;
+      // fs.emptydir(destFolder);
+      // fs.copy(sourceFolder, destFolder, (err) => {
+      //   if (err) return console.error(err)
+      //   console.log('success! moved files to data directory')
+      // });
     }
   };
 

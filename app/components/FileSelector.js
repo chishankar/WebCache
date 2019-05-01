@@ -5,7 +5,7 @@ import * as resourcePath from '../utilities/ResourcePaths';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-const fs = require('fs-extra');
+const fs = require('fs');
 
 const styles = theme => ({
   button: {
@@ -34,13 +34,6 @@ class FileDialogue extends React.Component {
   onChange = (e) => {
     if (e.target.files[0]!=null){
       this.setState({ path: e.target.files[0].path });
-      const destFolder = 'data';
-      const sourceFolder = e.target.files[0].path;
-      fs.emptydir(destFolder);
-      fs.copy(sourceFolder, destFolder, (err) => {
-        if (err) return console.error(err)
-        console.log('success! moved files to data directory')
-      });
     }
   };
 
