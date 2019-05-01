@@ -5,7 +5,7 @@ import * as resourcePath from '../utilities/ResourcePaths';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-const fs = require('fs-extra');
+const fs = require('fs');
 
 const styles = theme => ({
   button: {
@@ -35,7 +35,6 @@ class FileDialogue extends React.Component {
     if (e.target.files[0]!=null){
       this.setState({ path: e.target.files[0].path });
     }
-  };
 
   // Dispatches new file path to url store on file click from file browser
   handleFile = (file) =>{

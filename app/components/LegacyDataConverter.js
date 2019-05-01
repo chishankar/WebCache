@@ -13,11 +13,6 @@ const fs = require('fs-extra');
 // Convert fs.readFile into Promise version of same
 const readFile = util.promisify(fs.readFile);
 const fsPromises = require('fs').promises;
-const cheerio = require('cheerio');
-// Convert fs.readFile into Promise version of same
-
-//
-//const { ScrapbookToWebcacheFormat } = require('./convert-html');
 
 const styles = theme => ({
   button: {
@@ -108,5 +103,4 @@ async function WriteToFile(filePath, replacement) {
   //writeFile(filePath, replacement);
 }
 
-// ##################################################################33
 export default withStyles(styles, { withTheme: true })(LegacyDataConverter);
