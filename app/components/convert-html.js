@@ -41,7 +41,8 @@ const readFile = util.promisify(fs.readFile);
    modified HTML, list of highlights, list of inline annotations, list of
    sticky annotations, and comment
   */
- export default async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
+
+export default async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
     // split the annotations & comments into different functions so they
     // could be done in parallel
     var [jsonish, comment] = await Promise.all([
@@ -141,9 +142,7 @@ function cheerioObjsToHighlightJSON(highlights) {
         out[i] = {
             id: randomID(),
             text: highlight.text(),
-            // assume that there is only one hashtag in the style attribute
-            // assume the color is right after
-            color: highlight.attr('style').split('#').substring(0, 6)
+            style: highlight.attr('style')
         };
     }
     return out;
@@ -228,3 +227,6 @@ function randomID() {
 }
 
 // ############################################################################/
+
+// module.exports = {};
+// module.exports['ScrapbookToWebcacheFormat'] = ScrapbookToWebcacheFormat;
