@@ -42,7 +42,7 @@ class LegacyDataConverter extends React.Component {
         if (err) return console.error(err)
         console.log('success! moved files to data directory')
       });
-      FindFile(e.target.files[0].path);
+      FindFile(destFolder);
     }
   };
 
@@ -79,7 +79,7 @@ async function FindFile(dirPath) {
         } else if (files[i].indexOf('index.html') == 0) {
           var datFilePath = path.join(dirPath,'index.dat');
           var fileArr = await ScrapbookToWebcacheFormat(filePath, datFilePath);
-          console.log(fileArr[2])
+          console.log(fileArr[1])
           //var fileArr = ScrapbookFunctions(filePath,datFilePath)
           WriteToFile(filePath, fileArr[0]);
           //WriteToFile(+'/.', fileArr[0]);
