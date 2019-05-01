@@ -63,9 +63,10 @@ function getRenderText(filePath, iframeRef, addHighlights) {
 
 type Props = {
   color: String,
+  delete: String,
+  save: String,
   addHighlight: Function,
   clearHighlights: Function,
-  delete: String,
   annotations: Object,
   hideHighlights: Boolean
 }
@@ -103,8 +104,20 @@ export default class RenderText extends Component<Props> {
         try {
           var fd = fs.openSync(path.join(resource, '..') + '/' + ANNOTATIONS_FILE, 'r');
           var highlights = JSON.parse(fs.readFileSync(fd));
+          console.log(highlights)
+          console.log(highlights.highlightData)
           // add each highlight to the store
-          highlights.forEach(highlight => {
+          // for (var key in highlights.highlightData){
+          //   let highlight = highlights.highlightData[key]
+          //   console.log(key)
+          //   if (!this.props.annotations.some(element => {
+          //     return element.id == highlight.id;
+          //   })) {
+          //     this.props.addHighlight(highlight);
+          //   }
+          // }
+
+          highlights.highlightData.forEach(highlight => {
             // only add it if it isn't arleady in the store
             if (!this.props.annotations.some(element => {
               return element.id == highlight.id;
@@ -113,7 +126,8 @@ export default class RenderText extends Component<Props> {
             }
           })
         } catch (err) {
-          console.log('annotations.json does not exist!');
+          console.log(err)
+          // console.log('annotations.json does not exist!');
         }
       }
       let data = {color: this.props.color};
@@ -123,6 +137,10 @@ export default class RenderText extends Component<Props> {
       if (this.props.delete !== ""){
         data = {delete: this.props.delete};
         window.postMessage(data, '*');
+      }
+
+      if (this.props.save != prevProps.save){
+        this.handleSaveTask()
       }
 
       // Sends hideHighlights request to the iFrame
@@ -145,7 +163,15 @@ export default class RenderText extends Component<Props> {
     console.log("SAVING HTML TO: " + saveUrl);
     console.log("SAVING ANNOTATIONS TO: " + annotationsUrl);
     var fd = fs.openSync(annotationsUrl, 'w');
-    fs.writeFileSync(fd, JSON.stringify(this.props.annotations));
+
+    console.log(this.props.annotations)
+
+    let annotationJSON = Object.assign({},
+      {"highlightData":this.props.annotations},
+      {"lastUpdated":this.props.save}
+    )
+
+    fs.writeFileSync(fd, JSON.stringify(annotationJSON));
 
     var end = htmlData.indexOf("<script id=\"webcache-script\">");
     let updatedHtml = htmlData.substring(0, end - 1); //remove our injected script tag from the document
@@ -191,7 +217,6 @@ export default class RenderText extends Component<Props> {
     return (
 
       <div>
-        <button onClick={this.handleSaveTask}>Save</button>
         {getRenderText(this.props.activeUrl,this.iframeRef)}
       </div>
 
