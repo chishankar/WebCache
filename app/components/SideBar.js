@@ -104,7 +104,7 @@ class SideBar extends Component<Props>{
       <Divider />
 
      {highlightData.map(highlight =>
-      <HighlightText key={highlight.id} text={highlight.text} color={highlight.color} id={highlight.id} func={this.props.addComment}/>
+      <HighlightText key={highlight.id} comment={highlight.comment} text={highlight.text} color={highlight.color} id={highlight.id} func={this.props.addComment}/>
       )}
 
     </List>
