@@ -125,10 +125,6 @@ function checkIndexForChanges(lookup) {
 }
 
 
-
-
-
-
 function delFilesFromIndex(mainIndex, fileNames, origData) {
   // case for when files are removed outside of the application, whole index must be traversed
   if (origData === undefined || origData.length == 0) {
@@ -155,6 +151,7 @@ function deleteFile(filename, str) {
 
         let lookupID = lookup.findIndex(entry => {return entry.fileName === filename});
         let fileID = lookup[lookupID].ID;
+        lookup[lookupID].fileName = '';
         let cleanText = str.replace(/<\/?[^>]+(>|$)/g, "").replace(/[^\w\s]/gi, '');
         //retrieves all words we have to delete
         let deleteWords = cleanText.toLowerCase().trim().split(/\s+/).filter(function(value,index,self) {return !stopWords.includes(value) && self.indexOf(value) === index;});
@@ -237,12 +234,12 @@ function deleteFile(filename, str) {
                 if (mainIndex[wordIndMain].sz === 0) {
                   mainIndex.splice(wordIndMain,1);
                   //if the upper or lower range is deleted
-                  // if (rngTbl[currRng].r[0] === word) {
-                  //   rngTbl[currRng].r[0] === mainIndex[wordIndMain + 1].w;
-                  // }
-                  // if (rngTbl[currRng].r[1] === word) {
-                  //   rngTbl[currRng].r[1] === mainIndex[wordIndMain - 1].w;
-                  // }
+                  if (rngTbl[currRng].r[0] === word) {
+                    rngTbl[currRng].r[0] = mainIndex[wordIndMain].w;
+                  }
+                  if (rngTbl[currRng].r[1] === word) {
+                    rngTbl[currRng].r[1] = mainIndex[wordIndMain - 1].w;
+                  }
                 }
 
                 //updates range file size
@@ -253,7 +250,6 @@ function deleteFile(filename, str) {
             let toStore = new Uint32Array(arr);
             writeUint32ArrFileSync(filePath, toStore);
           }
-        lookup[lookupID].fileName = '';
         resolve();
     }
   });
@@ -471,13 +467,10 @@ function getLastMod(fileName) {
 
 function getFileIndex(fileName) {
 
-  let fileNum = lookup.findIndex(entry => entry.fileName == fileName);
+  let fileNum = lookup.length;
   let fileIndex = [];
 
- //if (fileNum == -1) {
-
     //Assigns file ID and adds to lookup table
-    fileNum = lookup.length;
 
     var newEntry = {
       fileName: fileName,
@@ -490,13 +483,6 @@ function getFileIndex(fileName) {
     });
 
     lookup.push(newEntry);
-
-  // } else {
-
-  //   getLastMod(fileName).then( result => {
-  //     lookup[fileNum].lastMod = result;
-  //   });
-  // }
 
   let filePath = path.join(__dirname, '/test_docs/' + fileName);
 
@@ -602,10 +588,20 @@ function storeRngIndex(rng, rngIndex) {
     //console.log("storing to file: " + rng.fn);
     var wordInd;
     while (i < mainIndex.length && (wordInd = mainIndex[i++]).w <= rng.r[1]) {
+
+      try {
       locArrNew.set(rngIndex[j++].a, wordInd.st);
+      } catch (error) {
+        console.log("error at set; word is: " + wordInd.w);
+      }
     }
     let filePath = path.join(__dirname, "/word_inds/" + rng.fn);
-    writeUint32ArrFileSync(filePath, locArrNew);
+    try {
+      writeUint32ArrFileSync(filePath, locArrNew);
+    } catch (error) {
+      console.log("error at writeUint32Arr");
+    }
+
   }
 }
 
@@ -650,9 +646,10 @@ function addToMainAux(fileIndex) {
   while(i < fileIndex.length) {
     let fileWord = fileIndex[i];
 
-    // if (fileWord.w == "another" || fileWord.w == "announcer") {
-    //   console.log("here");
-    // }
+    if (fileWord.w == "prolong") {
+      console.log("here");
+    }
+
 
     // find correct range for fileWord
     while (fileWord.w > rngTbl[currRng].r[1]) { currRng++ };
@@ -692,7 +689,7 @@ function addToMainAux(fileIndex) {
     while(i < fileIndex.length && (fileWord = fileIndex[i]).w <= rngTbl[currRng].r[1]) {
       // find index of fileWord word in both rngIndex and mainIndex, or would-be index if fileWord hasn't been indexed.
 
-      // if (fileWord.w == "another" || fileWord.w == "announcer") {
+      // if (fileWord.w == "prolong") {
       //   console.log("here");
       // }
 
@@ -891,6 +888,10 @@ function addToMainAux(fileIndex) {
         }
       }
       i++;
+    }
+
+    if (fileWord.w == "prolong") {
+      console.log("here");
     }
 
     rngTbl[currRng].r[0] = rngIndex[0].w;
@@ -1181,12 +1182,10 @@ if(INDEX_DIRECTORY) {
       console.log("Size checking took up " + sizeCheckTime + " milliseconds.");
       console.log("Size of index: " + sizeof(mainIndex));
       console.log("io calls: " + ioCount);
-      console.log("Test word: " + mainIndex[mainIndex.findIndex(word => word.sz >= 50)].w);
+      //console.log("Test word: " + mainIndex[mainIndex.findIndex(word => word.sz >= 50)].w);
       saveIndexToFile(mainIndex, lookup, rngTbl, 'ind_bin.txt', 'tbl_bin.txt', 'rng_tbl.txt');
       console.log("wordcount: " + wordcount);
       console.log("indexCount: " + mainIndex.length);
-
-
 
     });
 
@@ -1204,14 +1203,15 @@ if(INDEX_DIRECTORY) {
     console.log("Size of index: " + sizeof(mainIndex));
     console.log("lookup table size: " + sizeof(lookup));
 
-    let filePath = path.join(__dirname, "/test_docs/abortion.txt");
+    let filePath = path.join(__dirname, "/test_docs/arabs.txt");
       fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data) {
         if (err) {
         throw err;
         } else {
-          update("abortion.txt", data);
+          update("arabs.txt", data);
         }
-      })
+      });
+
   });
 }
 
