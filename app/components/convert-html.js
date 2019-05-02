@@ -23,7 +23,7 @@ const readFile = util.promisify(fs.readFile);
   // print output of conversion
   printAsync(() => ScrapbookToWebcacheFormat(htmlFilePath, datFilePath));
 
- */
+*/
 
 
 // #############################################################################
@@ -40,8 +40,7 @@ const readFile = util.promisify(fs.readFile);
    @return {[string, List<JSON>, List<JSON>, List<JSON>, string]} - the
    modified HTML, list of highlights, list of inline annotations, list of
    sticky annotations, and comment
-  */
-
+*/
 async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
     // split the annotations & comments into different functions so they
     // could be done in parallel
@@ -65,7 +64,7 @@ async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
    @return {[string, List<JSON>, List<JSON>, List<JSON>]} - the modified HTML,
    list of highlights, list of inline annotations, and list of sticky
    annotations.
-  */
+*/
 async function ScrapbookToWebcacheHTML(htmlFilePath) {
     // contents of the file, assumed to be an HTML file
     var html = await readFile(htmlFilePath, {encoding: 'utf8'});
@@ -73,16 +72,15 @@ async function ScrapbookToWebcacheHTML(htmlFilePath) {
     // the file contents, converted to a Cheerio object
     var doc = cheerio.load(html);
 
-    // get the lists of highlights, inline annotations, & sticky annotations
+    // get relative sticky annotations (ones not marked by pixel coordinates),
+    // by getting all <div> tags with the "scrapbook-sticky-relative" class
     var relStickies = doc('div').filter('.scrapbook-sticky-relative');
+    relativeStickyToInlineAnnotation(doc, relStickies);
 
-    var highlights = doc('span[class=linemarker-marked-line]'),
-        absStickies = doc('div[class=scrapbook-sticky]'),
-        relStickies = doc('div[class=scrapbook-sticky-relative]');
-
-    relativeStickyToInlineAnnotation(relStickies);
-
-    var inlines = doc('span[class=scrapbook-inline]');
+    // get list of highlights, inline annotations, absolute sticky annotations
+    var highlights = doc('span').filter('.linemarker-marked-line'),
+        inlines = doc('span').filter('.scrapbook-inline'),
+        absStickies = doc('div').filter('.scrapbook-sticky');
 
     // get the JSON objects
     var highlightJSONs = cheerioObjsToHighlightJSON(highlights),
@@ -133,22 +131,30 @@ async function extractCommentFromDatFile(datFilePath) {
 
 // #############################################################################
 
-function relativeStickyToInlineAnnotation(doc, relStickies) {
-    var texts = new Array(relStickies.length);
+/**
+   Convert all scrapbook relative sticky annotations to inline annotations,
+   at an invisible, 0-length inline annotation.
 
+   @param {Cheerio document} doc - the whole parsed html
+   @param {Cheerio object results} relStickies - the relative sticky annotations
+*/
+function relativeStickyToInlineAnnotation(doc, relStickies) {
+    // get all the text in the sticky annotations
+    var texts = new Array(relStickies.length);
     for (var i = 0; i < relStickies.length; i++) {
         texts[i] = relStickies.eq(i).text();
     }
 
-    // remove text from html
+    // convert sticky annotations to a 0-length span
     relStickies.replaceWith('<span class="scrapbook-sticky-relative"></span>');
-    relStickies = doc('div').filter('.scrapbook-sticky-relative');
+    relStickies = doc('span').filter('.scrapbook-sticky-relative');
 
     // add text back in inline annotation format
-    for (var i = 0; i < relStickies.length; i++) {
+    for (i = 0; i < relStickies.length; i++) {
         relStickies.eq(i).attr('title', texts[i]);
     }
-    relStickies.attr('class', 'scrapbook-sticky-relative');
+    // give the span the scrapbook-inline class
+    relStickies.attr('class', 'scrapbook-inline');
 }
 
 /**
@@ -205,7 +211,7 @@ function cheerioObjsToHighlightJSON(highlights) {
 
    @return {List<JSON>} - each inline annotation, as a JSON object with fields
    "id", "text".
-  */
+*/
 function cheerioObjsToInlineAnnotationJSON(inlines) {
     var out = new Array(inlines.length);
     for (var i = 0; i < inlines.length; i++) {
@@ -229,7 +235,7 @@ function cheerioObjsToInlineAnnotationJSON(inlines) {
    @return {List<JSON>} - each sticky annotation, as a JSON object with fields
    "id", "text", "style". The "style" field denotes the location/dimensions of
    the sticky annotation.
-  */
+*/
 function cheerioObjsToStickyAnnotationJSON(stickies) {
     var out = new Array(stickies.length);
     for (var i = 0; i < stickies.length; i++) {
@@ -240,7 +246,9 @@ function cheerioObjsToStickyAnnotationJSON(stickies) {
         // Example:
         // attrs === ('left: 222px; top: 194px; position: absolute;'
         // + ' width: 250px; height: 100px;')
-        var attrs = sticky.attr('style').split(';');
+        var attrs = sticky.attr('style');
+        // get rid of last semicolon, & split
+        attrs = attrs.substring(0, attrs.length - 1).split(';');
 
         // convert attribute string into JSON format
         for (var j = 0; j < attrs.length; j++) {
@@ -249,17 +257,18 @@ function cheerioObjsToStickyAnnotationJSON(stickies) {
             // if the key is in the list, it has a unit of pixels
             if (['left', 'top', 'width', 'height'].indexOf(k) >= 0) {
                 // remove the unit of pixels & turn it into an integer
-                v = parseInt(v.substring(v.length - 2));
+                v = parseInt(v.substring(0, v.length - 2));
             }
-            attrs[j] = {k: v};
-        }
+            attrs[j] = {};
+            attrs[j][k] = v;
 
-        // the i-th sticky annotation, as a JSON
-        out[i] =  {
-            id: randomID(),
-            text: sticky.text(),
-            style: attrs
-        };
+            // the i-th sticky annotation, as a JSON
+            out[i] =  {
+                id: randomID(),
+                text: sticky.text(),
+                style: attrs
+            };
+        }
     }
     return out;
 }
