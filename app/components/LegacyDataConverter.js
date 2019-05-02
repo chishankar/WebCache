@@ -12,7 +12,10 @@ const fs = require('fs-extra');
 
 // Convert fs.readFile into Promise version of same
 const readFile = util.promisify(fs.readFile);
-const fsPromises = require('fs').promises;
+const writeFile = util.promisify(fs.writeFile);
+const isFile = util.promisify(fs.stat);
+
+//const fsPromises = require('fs').promises;
 
 const styles = theme => ({
   button: {
@@ -58,8 +61,8 @@ class LegacyDataConverter extends React.Component {
           id="import"
         />
         <label htmlFor="import">
-          <Button variant="contained" component="span" className={classes.button}>
-            Import
+          <Button variant="contained" color="primary" component="span" className={classes.button}>
+            Import Legacy Data
           </Button>
         </label>
       </div>
@@ -69,20 +72,34 @@ class LegacyDataConverter extends React.Component {
 
 async function FindFile(dirPath) {
   fs.readdir(dirPath, async (err, files) => {
+    //console.log(files);
     // console.log(items);
     if (!err) {
       for (var i = 0; i < files.length; i++) {
-        var filePath = path.join(dirPath,files[i]);
-        var stat = fs.lstatSync(filePath);
+
+        var htmlFilePath = path.join(dirPath,files[i]);
+        var stat = fs.lstatSync(htmlFilePath);
         if (stat.isDirectory()) {
-          FindFile(filePath);
+          FindFile(htmlFilePath);
         } else if (files[i].indexOf('index.html') == 0) {
           var datFilePath = path.join(dirPath,'index.dat');
-          var fileArr = await ScrapbookToWebcacheFormat(filePath, datFilePath);
-          console.log(fileArr[1])
+          var hlJsonPath = path.join(dirPath,'highlight.json');
+          var ilJsonPath = path.join(dirPath,'inline.json');
+          var snJsonPath = path.join(dirPath,'sticky.json');
+
+          try{
+          var fileArr = await ScrapbookToWebcacheFormat(htmlFilePath, datFilePath);
+          } catch(err){
+            return;
+          }
+          //console.log(filePath)
+          //console.log(fileArr[3])
           //var fileArr = ScrapbookFunctions(filePath,datFilePath)
-          WriteToFile(filePath, fileArr[0]);
-          //WriteToFile(+'/.', fileArr[0]);
+
+          WriteToFile(htmlFilePath, fileArr[0]);
+          WriteToFile(hlJsonPath, JSON.stringify(fileArr[1]));
+          WriteToFile(ilJsonPath, JSON.stringify(fileArr[2]));
+          WriteToFile(snJsonPath, JSON.stringify(fileArr[3]));
         }
       }
     }
@@ -90,13 +107,16 @@ async function FindFile(dirPath) {
 }
 
 async function WriteToFile(filePath, replacement) {
+  let filehandle;
   try {
-    const filehandle = await fsPromises.open(filePath, 'w');
+    await writeFile(filePath,replacement)
+    //const filehandle = await fsPromises.open(filePath, 'w');
     //console.log(replacement);
-    await filehandle.writeFile(replacement);
-    await filehandle.close();
-  } catch (err) {
-    console.error(err);
+    //await filehandle.writeFile(replacement);
+  } finally {
+    //if (filehandle !== undefined){
+    //  await filehandle.close();
+    //}
   }
 
   //const filehandle = await fsPromises.open(fileName, 'w');

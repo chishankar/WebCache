@@ -44,6 +44,7 @@ const readFile = util.promisify(fs.readFile);
 
 export default async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
     // split the annotations & comments into different functions so they
+
     // could be done in parallel
     var [jsonish, comment] = await Promise.all([
         ScrapbookToWebcacheHTML(htmlFilePath),
@@ -190,7 +191,9 @@ function cheerioObjsToStickyAnnotationJSON(stickies) {
         // Example:
         // attrs === ('left: 222px; top: 194px; position: absolute;'
         // + ' width: 250px; height: 100px;')
-        var attrs = sticky.attr('style').split(';');
+        var attrs = sticky.attr('style');
+        attrs = attrs.substring(0, attrs.length - 1) // get rid of last semicolon
+        attrs = attrs.split(';');
 
         // convert attribute string into JSON format
         for (var j = 0; j < attrs.length; j++) {
@@ -199,9 +202,10 @@ function cheerioObjsToStickyAnnotationJSON(stickies) {
             // if the key is in the list, it has a unit of pixels
             if (['left', 'top', 'width', 'height'].indexOf(k) >= 0) {
                 // remove the unit of pixels & turn it into an integer
-                v = parseInt(v.substring(v.length - 2));
+                v = parseInt(v.substring(0, v.length - 2));
             }
-            attrs[j] = {k: v};
+            attrs[j] = {};
+            attrs[j][k] = v;
         }
 
         // the i-th sticky annotation, as a JSON
