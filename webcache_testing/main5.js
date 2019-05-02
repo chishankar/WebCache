@@ -1006,7 +1006,7 @@ export function search(searchStr) {
     //returns a list of all unique location IDs associated with the current word
     let results = _.findWhere(mainIndex, {w: word});
     //if not found return empty
-    if (results == null) return finalResults;
+    if (results == null) return {results: finalResults};
     //Changes into filename and location format
     var wordLocs;
     if (results.fn.slice(0,1) == SINGLE_WORD_FLAG) {
