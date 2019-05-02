@@ -872,7 +872,7 @@ function addToMainAux(fileIndex) {
           rngTbl[currRng].sz = count;
           let tempRng = rngTbl[currRng].r[1];
           rngTbl[currRng].r[1] = rngIndex[rngIndex.length - 1].w;
-          newFn = (rngFileCnt++).toString() + "_BSON";
+          let newFn = (rngFileCnt++).toString() + "_BSON";
           let newRng = {
             r: [upperRngIndex[0].w, tempRng],
             fn: newFn,
