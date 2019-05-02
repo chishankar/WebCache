@@ -5,6 +5,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import LabelIcon from '@material-ui/icons/Label';
 import * as urlsearchActions from '../actions/urlsearch';
+const path = require('path');
 
 const styles = theme => ({
   root: {
@@ -26,7 +27,8 @@ class SearchResult extends React.Component {
   handleClick = () => {
   console.log("Search result got pressed!");
   let filePath = path.join(__dirname, "../../data/" + this.props.filename);
-  this.store.dispatch(urlsearchActions.changeActiveUrl(filePath));
+  console.log(filePath);
+  this.store.dispatch(urlsearchActions.changeActiveUrl('/data/' + this.props.filename));
   };
 
   render() {
@@ -38,7 +40,7 @@ class SearchResult extends React.Component {
           </ListItemIcon>
           <ListItemText inset primary={'Filename: ' + this.props.filename + '\n'} />
           <ListItemText inset primary={'Matches: ' + this.props.count} />
-        </ListItem>     
+        </ListItem>
   )
 }
 }
