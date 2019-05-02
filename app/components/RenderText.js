@@ -107,7 +107,7 @@ export default class RenderText extends Component<Props> {
         try {
           var fd = fs.openSync(path.join(resource, '..') + '/' + ANNOTATIONS_FILE, 'r');
           var highlights = JSON.parse(fs.readFileSync(fd));
-          this.props.updateLastUpdate(highlights.lastUpdated)
+          // this.props.updateLastUpdate(highlights.lastUpdated)
 
           highlights.highlightData.forEach(highlight => {
             // only add it if it isn't arleady in the store
@@ -132,6 +132,7 @@ export default class RenderText extends Component<Props> {
       }
 
       if (this.props.viewId != prevProps.viewId){
+        console.log("Going to: " + this.props.viewId)
         data = {showHighlight: this.props.viewId};
         window.postMessage(data, '*');
       }

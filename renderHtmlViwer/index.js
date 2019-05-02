@@ -145,6 +145,7 @@ window.parent.addEventListener('message',function(e){
   //   console.log('iFrame received: ' + JSON.stringify(e.data))
   // }
   let data = e.data;
+  console.log(data)
 
   if (data.delete) {
     unwrap(getSpansWithHighlight(data.delete));
@@ -172,8 +173,9 @@ window.parent.addEventListener('message',function(e){
   }
 
   else if (data.showHighlight){
-    scrollToId(data.showHighlight)
 
+    scrollToId(data.showHighlight)
+    console.log("HERE")
   }
 
 });
