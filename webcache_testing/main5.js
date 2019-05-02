@@ -156,7 +156,7 @@ function deleteFile(filename, str) {
 
         let lookupID = lookup.findIndex(entry => {return entry.fileName === filename});
         let fileID = lookup[lookupID].ID;
-        let cleanText = str.replace(/<\/?[^>]+(>|$)/g, "").replace(/[^\w\s]/gi, '');
+        let cleanText = str.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, ' ');
         //retrieves all words we have to delete
         let deleteWords = cleanText.toLowerCase().trim().split(/\s+/).filter(function(value,index,self) {return !stopWords.includes(value) && self.indexOf(value) === index;});
         deleteWords.sort();
@@ -271,7 +271,7 @@ function deleteFileFromDirectory(filename) {
       } else {
         let lookupID = lookup.findIndex(entry => {return entry.fileName === filename});
         let fileID = lookup[lookupID].ID;
-        let cleanText = data.replace(/<\/?[^>]+(>|$)/g, "").replace(/[^\w\s]/gi, '');
+        let cleanText = data.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, ' ');
         //retrieves all words we have to delete
         let deleteWords = cleanText.toLowerCase().trim().split(/\s+/).filter(function(value,index,self) {return !stopWords.includes(value) && self.indexOf(value) === index;});
         deleteWords.sort();
@@ -508,7 +508,7 @@ function getFileIndex(fileName) {
         if (!err) {
           // TODO: REMOVE HTML TAGS
           // Case-sensitive indexing not implented for simplicity.
-          let cleanText = data.replace(/<\/?[^>]+(>|$)/g, "").replace(/[^\w\s]/gi, '');
+          let cleanText = data.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, ' ');
           let wordMapping = wordLocsMapping(cleanText);
           wordMapping.forEach(function(value, key) {
             fileIndex.push({
