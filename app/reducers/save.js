@@ -22,6 +22,11 @@ export default function save(state=initialState, action) {
           mostRecentUpdate: getDateTime()
         });
 
+      case "UPDATESAVE":
+        return Object.assign({},state, {
+          mostRecentUpdate: action.val
+        });
+
        default:
         return state;
     }

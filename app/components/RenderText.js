@@ -65,9 +65,11 @@ type Props = {
   color: String,
   delete: String,
   save: String,
+  viewId: String,
   addHighlight: Function,
   clearHighlights: Function,
   addNotification: Function,
+  updateLastUpdate: Function,
   annotations: Object,
   hideHighlights: Boolean
 }
@@ -105,18 +107,7 @@ export default class RenderText extends Component<Props> {
         try {
           var fd = fs.openSync(path.join(resource, '..') + '/' + ANNOTATIONS_FILE, 'r');
           var highlights = JSON.parse(fs.readFileSync(fd));
-          console.log(highlights)
-          console.log(highlights.highlightData)
-          // add each highlight to the store
-          // for (var key in highlights.highlightData){
-          //   let highlight = highlights.highlightData[key]
-          //   console.log(key)
-          //   if (!this.props.annotations.some(element => {
-          //     return element.id == highlight.id;
-          //   })) {
-          //     this.props.addHighlight(highlight);
-          //   }
-          // }
+          this.props.updateLastUpdate(highlights.lastUpdated)
 
           highlights.highlightData.forEach(highlight => {
             // only add it if it isn't arleady in the store
@@ -137,6 +128,11 @@ export default class RenderText extends Component<Props> {
       // Sends delete request to the iFrame
       if (this.props.delete !== ""){
         data = {delete: this.props.delete};
+        window.postMessage(data, '*');
+      }
+
+      if (this.props.viewId != prevProps.viewId){
+        data = {showHighlight: this.props.viewId};
         window.postMessage(data, '*');
       }
 
@@ -165,8 +161,6 @@ export default class RenderText extends Component<Props> {
     console.log("SAVING ANNOTATIONS TO: " + annotationsUrl);
     var fd = fs.openSync(annotationsUrl, 'w');
 
-    console.log(this.props.annotations)
-
     let annotationJSON = Object.assign({},
       {"highlightData":this.props.annotations},
       {"lastUpdated":this.props.save}
@@ -178,7 +172,8 @@ export default class RenderText extends Component<Props> {
     let updatedHtml = htmlData.substring(0, end - 1); //remove our injected script tag from the document
     // re write the current version of the html page
     fs.writeFileSync(saveUrl, updatedHtml);
-    this.props.addNotification(`File saved! ${this.props.save}`)
+    console.log(updatedHtml)
+    this.props.addNotification(`File saved on ${this.props.save}`)
   }
 
   // Takes in data returned by window.postMessage from the iframe rendered within the component

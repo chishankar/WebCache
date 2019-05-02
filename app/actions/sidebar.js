@@ -21,6 +21,13 @@ export const deleteHighlights = (deleteId) => {
   }
 }
 
+export const viewHighlight = (id) => {
+  return {
+      type: "VIEW",
+      id
+  }
+}
+
 export const hideHighlights = () => {
   return {
       type: "HIDEHIGHLIGHTS"

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import RenderText from '../components/RenderText';
 import * as sideBarActions from '../actions/sidebar';
 import * as notificationActions from '../actions/notification';
+import * as saveActions from '../actions/save';
+
 
 function mapStateToProps(state) {
   return {
@@ -11,7 +13,8 @@ function mapStateToProps(state) {
     delete: state.sidebar.delete,
     annotations: state.sidebar.highlights,
     hideHighlights: state.sidebar.hideHighlights,
-    save: state.save.mostRecentUpdate
+    save: state.save.mostRecentUpdate,
+    viewId: state.sidebar.viewId
   };
 }
 
@@ -19,7 +22,8 @@ function mapDispatchToProps(dispatch){
   return bindActionCreators({
     addHighlight: sideBarActions.addHighlight,
     clearHighlights: sideBarActions.clearHighlights,
-    addNotification: notificationActions.addNotification
+    addNotification: notificationActions.addNotification,
+    updateLastUpdate: saveActions.ChangeSave
   },dispatch);
 }
 

@@ -19,7 +19,7 @@ class NotificationCenter extends Component{
       <div>
 
         {this.props.notifications.map(notification =>
-          <Notification key={React.createRef()} message={notification.message} id={notification.id} />
+          <Notification key={notification.id} message={notification.message} id={notification.id} />
         )}
 
       </div>

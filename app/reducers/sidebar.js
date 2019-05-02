@@ -4,7 +4,8 @@ const initialState = {
     highlights: [],
     url: "",
     delete: "",
-    hideHighlights: false
+    hideHighlights: false,
+    viewId: ""
 }
 
 export default function highlighter(state=initialState, action) {
@@ -43,6 +44,11 @@ export default function highlighter(state=initialState, action) {
     case 'HIDEHIGHLIGHTS':
       return Object.assign({},state,{
         hideHighlights: !state.hideHighlights
+      })
+
+    case "VIEW":
+      return Object.assign({},state, {
+        viewId: action.id
       })
 
     default:
