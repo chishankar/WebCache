@@ -63,13 +63,12 @@ export default class UrlSearch extends Component<Props>{
       this.handleClickLoading();
       getSite.getSite(this.state.validUrl, save_location, () => {
         //add the newly donwloaded files to the main index
-        let urlPath = this.state.validUrl.replace(/https:\/\//g,"") + '-' + Date.now() + '/'
         fs.readdir('./' + save_location + '/', (err, files) => {
           if(err){
             console.log("Error in reading data folder");
           }
-          let update = files.map((x) => {
-            return urlPath + x});
+          let update = files.filter(fn => {return !['img', 'js', 'css', 'fonts'].includes(fn)}).map((x) => {
+            return save_location.slice(5) + "/" + x});
           searchAPI.addFilesToMainIndex(update);
 
         });
