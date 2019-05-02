@@ -12,21 +12,18 @@ var readline = require("readline");
 var emptyRng = []
 
 const stopWords = ["i", "me", "my", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"];
-const INDEX_DIRECTORY = true;
+const INDEX_DIRECTORY = false;
 const SINGLE_WORD_FLAG = 'x';
 const MAX_CLUSTER = 1000000;
 var rngTbl = [];
-<<<<<<< HEAD
-const MAX_INT_PER_FILE = 10000;
-=======
-const MAX_INT_PER_FILE = 1000;
->>>>>>> search-index-testing
+const MAX_INT_PER_FILE = 250000;
 //ONLY WORKS FOR REINDEXING DIRECTORY
 var rngFileCnt = 0;
 var ioCount =0;
 var fileParseTime = 0;
 var sizeCheckTime = 0;
 var fileCount = 0;
+var wordcount = 0;
 
 function wordLocsMapping(str, delimiter=/\s/) {
   var out = new Map();
@@ -66,6 +63,7 @@ function wordLocsMapping(str, delimiter=/\s/) {
 }
 
 // TODO: save array of N-bit integers as array of 8-bit integers
+module.exports = {};
 // #############################################################################
 /**
    Synchronously write an array of 32-bit integers at the specified location.
@@ -76,7 +74,7 @@ function writeUint32ArrFileSync(filePath, uint32arr) {
     fs.writeFileSync(filePath, new Buffer.from(uint32arr.buffer));
     ioCount++;
 }
-
+module.exports['writeUint32ArrFileSync'] = writeUint32ArrFileSync;
 /**
    Read a file at the specified location as an array of 32-bit integers.
    @param {string} filePath - the specified location on disk
@@ -87,6 +85,7 @@ function readUint32ArrFileSync(filePath) {
     return new Uint32Array((new Uint8Array(fs.readFileSync(filePath))).buffer);
     ioCount++;
 }
+module.exports['readUint32ArrFileSync'] = readUint32ArrFileSync;
 // #############################################################################
 
 function avg(mainIndex) {
@@ -125,6 +124,11 @@ function checkIndexForChanges(lookup) {
   }
 }
 
+
+
+
+
+
 function delFilesFromIndex(mainIndex, fileNames, origData) {
   // case for when files are removed outside of the application, whole index must be traversed
   if (origData === undefined || origData.length == 0) {
@@ -139,16 +143,19 @@ function checkExclusiveWord(word) {
   return (mainIndex[wordIndMain].fn.slice(0,1) == SINGLE_WORD_FLAG);
 }
 
-function deleteFile(filename) {
+function update(filename, oldStr) {
+  deleteFile(filename, oldStr).then(result => {
+    addFilesToMainIndex([filename]);
+  });
+}
 
-  let filePath = path.join(__dirname, "/../data/" + filename);
+function deleteFile(filename, str) {
 
   return new Promise(resolve => {
-    fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data) {
-      if (err) {
-      throw err;
-      } else {
-        let cleanText = data.replace(/<\/?[^>]+(>|$)/g, "").replace(/[^\w\s]/gi, '');
+
+        let lookupID = lookup.findIndex(entry => {return entry.fileName === filename});
+        let fileID = lookup[lookupID].ID;
+        let cleanText = str.replace(/<\/?[^>]+(>|$)/g, "").replace(/[^\w\s]/gi, '');
         //retrieves all words we have to delete
         let deleteWords = cleanText.toLowerCase().trim().split(/\s+/).filter(function(value,index,self) {return !stopWords.includes(value) && self.indexOf(value) === index;});
         deleteWords.sort();
@@ -157,8 +164,6 @@ function deleteFile(filename) {
         while (c < deleteWords.length) {
           let word = deleteWords[c];
           let wordIndMain = mainIndex.findIndex(wordInd => {return wordInd.w === word});
-          let lookupID = lookup.findIndex(entry => {return entry.fileName === filename});
-          let fileID = lookup[lookupID].ID;
           //find corresponding range table
           let rngInd = rngTbl.findIndex(ind => {return ind.fn === mainIndex[wordIndMain].fn});
           let offset = 0;
@@ -169,11 +174,8 @@ function deleteFile(filename) {
 
           //if word is exclusive word
           if (checkExclusiveWord(word)) {
-
             let locArr = Object.values(extractRngIndex(rngTbl[currRng]));
-
             let i = 0;
-
             //remove values as usual
             while (i < locArr.length) {
               let count = locArr[i];
@@ -208,12 +210,14 @@ function deleteFile(filename) {
 
               let i = mainIndex[wordIndMain].st;
                 //removes all aspects of word from file
-                while (i < mainIndex[wordIndMain].st + mainIndex[wordIndMain].sz) {
+                let sizeBound = mainIndex[wordIndMain].st + mainIndex[wordIndMain].sz;
+                while (i < sizeBound) {
                   let count = arr[i];
                   if (arr[i + 1] === fileID) {
                     offset = count + 2;
                     arr.splice(i, offset);
                     i += count + 2;
+                    sizeBound -= offset;
                   } else {
                     i += count + 2;
                   }
@@ -226,24 +230,139 @@ function deleteFile(filename) {
                 }
 
                 //update size of word in question.
-                //if word only appears in that file, remove it from index
+
                 mainIndex[wordIndMain].sz -= offset;
 
+                //if word only appears in that file, remove it from index
                 if (mainIndex[wordIndMain].sz === 0) {
                   mainIndex.splice(wordIndMain,1);
+                  //if the upper or lower range is deleted
+                  // if (rngTbl[currRng].r[0] === word) {
+                  //   rngTbl[currRng].r[0] === mainIndex[wordIndMain + 1].w;
+                  // }
+                  // if (rngTbl[currRng].r[1] === word) {
+                  //   rngTbl[currRng].r[1] === mainIndex[wordIndMain - 1].w;
+                  // }
                 }
 
                 //updates range file size
                 rngTbl[currRng].sz -= offset;
 
-                //if we need to updatee the parameters at all
-                if (rngTbl[currRng].r[0] === word) {
-                  rngTbl[currRng].r[0] === mainIndex[wordIndMain + 1].w;
+                c++;
+            }
+            let toStore = new Uint32Array(arr);
+            writeUint32ArrFileSync(filePath, toStore);
+          }
+        lookup[lookupID].fileName = '';
+        resolve();
+    }
+  });
+}
+
+function deleteFileFromDirectory(filename) {
+
+  let filePath = path.join(__dirname, "/test_docs/" + filename);
+
+  return new Promise(resolve => {
+    fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data) {
+      if (err) {
+      throw err;
+      } else {
+        let lookupID = lookup.findIndex(entry => {return entry.fileName === filename});
+        let fileID = lookup[lookupID].ID;
+        let cleanText = data.replace(/<\/?[^>]+(>|$)/g, "").replace(/[^\w\s]/gi, '');
+        //retrieves all words we have to delete
+        let deleteWords = cleanText.toLowerCase().trim().split(/\s+/).filter(function(value,index,self) {return !stopWords.includes(value) && self.indexOf(value) === index;});
+        deleteWords.sort();
+        //deletes each word individually
+        let c = 0;
+        while (c < deleteWords.length) {
+          let word = deleteWords[c];
+          let wordIndMain = mainIndex.findIndex(wordInd => {return wordInd.w === word});
+          //find corresponding range table
+          let rngInd = rngTbl.findIndex(ind => {return ind.fn === mainIndex[wordIndMain].fn});
+          let offset = 0;
+          //file path for BSON file
+          let filePath = path.join(__dirname, "/word_inds/" + mainIndex[wordIndMain].fn);
+          let currRng = 0;
+          while (word > rngTbl[currRng].r[1]) { currRng++ };
+
+          //if word is exclusive word
+          if (checkExclusiveWord(word)) {
+            let locArr = Object.values(extractRngIndex(rngTbl[currRng]));
+            let i = 0;
+            //remove values as usual
+            while (i < locArr.length) {
+              let count = locArr[i];
+              if (locArr[i + 1] === fileID) {
+                locArr.splice(i, count + 2);
+                i = locArr.length;
+              } else {
+                i += count + 2;
+              }
+            }
+
+            //re-store
+            var locArrNew = new Uint32Array(locArr);
+            //if the word only occurs in that file, remove word from index
+            locArr.length == 0 ? mainIndex.splice(wordIndMain,1) : mainIndex[wordIndMain].sz = locArr.length;
+            //update and store
+            rngTbl[currRng].sz = locArr.length;
+            storeRngIndex(rngTbl[currRng], [{w: word , a: locArrNew}]);
+
+            c++;
+
+          //word doesen't overflow file
+          } else {
+            let arr = Object.values(readUint32ArrFileSync(filePath));
+
+           //find all words to delete in that single range so we only have to read/write once
+            while (deleteWords[c] <= rngTbl[rngInd].r[1] && !checkExclusiveWord(deleteWords[c])) {
+              word = deleteWords[c];
+              wordIndMain = mainIndex.findIndex(wordInd => {return wordInd.w === deleteWords[c]});
+
+              if (wordIndMain === -1) {return;}
+
+              let i = mainIndex[wordIndMain].st;
+                //removes all aspects of word from file
+                let sizeBound = mainIndex[wordIndMain].st + mainIndex[wordIndMain].sz;
+                while (i < sizeBound) {
+                  let count = arr[i];
+                  if (arr[i + 1] === fileID) {
+                    offset = count + 2;
+                    arr.splice(i, offset);
+                    i += count + 2;
+                    sizeBound -= offset;
+                  } else {
+                    i += count + 2;
+                  }
                 }
 
-                if (rngTbl[currRng].r[1] === word) {
-                  rngTbl[currRng].r[1] === mainIndex[wordIndMain - 1].w;
+                //change start values of all other words in file
+                let j = wordIndMain + 1;
+                while (j < mainIndex.length && mainIndex[j].w <= rngTbl[rngInd].r[1]) {
+                  mainIndex[j++].st -= offset;
                 }
+
+                //update size of word in question.
+
+                mainIndex[wordIndMain].sz -= offset;
+
+                //if word only appears in that file, remove it from index
+                if (mainIndex[wordIndMain].sz === 0) {
+                  mainIndex.splice(wordIndMain,1);
+                  //if the upper or lower range is deleted
+                  // if (rngTbl[currRng].r[0] === word) {
+                  //   rngTbl[currRng].r[0] === mainIndex[wordIndMain + 1].w;
+                  // }
+                  // if (rngTbl[currRng].r[1] === word) {
+                  //   rngTbl[currRng].r[1] === mainIndex[wordIndMain - 1].w;
+                  // }
+                }
+
+                //updates range file size
+                rngTbl[currRng].sz -= offset;
+
                 c++;
             }
             let toStore = new Uint32Array(arr);
@@ -255,8 +374,7 @@ function deleteFile(filename) {
   });
 }
 
-
-function saveIndexToFile(mainIndex, table, indexFn, tableFn) {
+function saveIndexToFile(indexFn, fileTableFn, rngTableFn) {
 
   let filePath = path.join(__dirname, indexFn);
   return new Promise(resolve => {
@@ -264,30 +382,37 @@ function saveIndexToFile(mainIndex, table, indexFn, tableFn) {
     fs.writeFile(filePath, BSON.serialize(mainIndex), function (err) {
       if (err) throw err;
       console.log('Index saved to file');
-      let filePath = path.join(__dirname, tableFn);
-      fs.writeFile(filePath, BSON.serialize(table), function (err) {
+      let filePath = path.join(__dirname, fileTableFn);
+      fs.writeFile(filePath, BSON.serialize(lookup), function (err) {
         if (err) throw err;
-        resolve();
+        let filePath = path.join(__dirname, rngTableFn);
+        fs.writeFile(filePath, BSON.serialize(rngTbl), function (err) {
+          if (err) throw err;
+          resolve();
+        });
       });
     });
   });
 }
 
-function loadIndexFromFile(indexFn, tableFn) {
+function loadIndexFromFile(indexFn, tableFn, rngTableFn) {
 
   let filePath = path.join(__dirname, indexFn);
-  let index;
-  let table;
   return new Promise(resolve => {
     fs.readFile(filePath, function(err,data){
       if (err) throw err;
-      index = BSON.deserialize(data);
+      mainIndex = BSON.deserialize(data);
       console.log('Index loaded from file');
-      let filePath2 = path.join(__dirname, tableFn);
-      fs.readFile(filePath2, function(err,data){
+      let filePath = path.join(__dirname, tableFn);
+      fs.readFile(filePath, function(err,data){
         if (err) throw err;
-        table = BSON.deserialize(data);
-        resolve([index, table]);
+        lookup = BSON.deserialize(data);
+        let filePath = path.join(__dirname, rngTableFn);
+        fs.readFile(filePath, function(err,data){
+          if (err) throw err;
+          rngTbl = BSON.deserialize(data);
+          resolve([index, fileTable, rngTbl]);
+        });
       });
 
     });
@@ -343,10 +468,13 @@ function getLastMod(fileName) {
 
 function getFileIndex(fileName) {
 
-  //Assigns file ID and adds to lookup table
+  let fileNum = lookup.findIndex(entry => entry.fileName == fileName);
+  let fileIndex = [];
 
-    let fileNum = lookup.length;
-    var fileIndex = [];
+ //if (fileNum == -1) {
+
+    //Assigns file ID and adds to lookup table
+    fileNum = lookup.length;
 
     var newEntry = {
       fileName: fileName,
@@ -360,7 +488,14 @@ function getFileIndex(fileName) {
 
     lookup.push(newEntry);
 
-  let filePath = path.join(__dirname, '/../data/' + fileName);
+  // } else {
+
+  //   getLastMod(fileName).then( result => {
+  //     lookup[fileNum].lastMod = result;
+  //   });
+  // }
+
+  let filePath = path.join(__dirname, '/test_docs/' + fileName);
 
   return new Promise(resolve => {
     fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
@@ -390,7 +525,7 @@ function getFileIndex(fileName) {
 
 let tempIndex = [];
 
-function addToMainIndex(fileIndex, mainIndex, tempIndex) {
+function addToMainIndex(fileIndex) {
 
   //assumes unique words, and no preexisting entries for the file being added
   fileIndex.forEach(fileWord => {
@@ -471,7 +606,7 @@ function storeRngIndex(rng, rngIndex) {
   }
 }
 
-function addToMainAux(fileIndex, mainIndex) {
+function addToMainAux(fileIndex) {
   fileCount++;
 
   fileIndex = _.sortBy(fileIndex, wordInd => {return wordInd.w});
@@ -576,6 +711,7 @@ function addToMainAux(fileIndex, mainIndex) {
       }
       // ...otherwise, insert new array into rng index & main index
       else {
+        wordcount++;
         // if either is empty or word is last in range, just push
         if (wordIndMain < 0) {
           mainIndex.push({w: fileWord.w, fn: rngTbl[currRng].fn, st:rngTbl[currRng].sz , sz: fileWord.a.length});
@@ -618,7 +754,6 @@ function addToMainAux(fileIndex, mainIndex) {
           k++;
         }
         // at the end of loop, i is the index after the last word summed in count.
-<<<<<<< HEAD
 
         if (count > MAX_INT_PER_FILE) {
           count -= mainIndex[currIndMain - 1].sz;
@@ -637,26 +772,6 @@ function addToMainAux(fileIndex, mainIndex) {
             af: [newFn1, newFn2]
           }
 
-=======
-
-        if (count > MAX_INT_PER_FILE) {
-          count -= mainIndex[currIndMain - 1].sz;
-          k--;
-        }
-        // special case in which single word index exceeds max int per file
-        if (totalLen - count  >= MAX_INT_PER_FILE) {
-
-          newFn1 = SINGLE_WORD_FLAG + (rngFileCnt++).toString() + "_BSON";
-          newFn2 = SINGLE_WORD_FLAG + (rngFileCnt++).toString() + "_BSON";
-
-          let newRng = {
-            r: [fileWord.w, fileWord.w],
-            fn: newFn1,
-            sz: rngIndex[wordIndRng].a.length,
-            af: [newFn1, newFn2]
-          }
-
->>>>>>> search-index-testing
           mainIndex[wordIndMain].fn = newFn1;
           mainIndex[wordIndMain].st = 0;
           mainIndex[wordIndMain].sz = newRng.sz;
@@ -770,11 +885,11 @@ function addToMainAux(fileIndex, mainIndex) {
           } catch(error) {
             console.log("ERROR: Storage issue at word " + fileWord.w + " at file " + fileCount + ":\n" + error);
           }
-
         }
       }
       i++;
     }
+
     rngTbl[currRng].r[0] = rngIndex[0].w;
     try {
       storeRngIndex(rngTbl[currRng], rngIndex);
@@ -815,14 +930,14 @@ function addFilesToMainIndex(fileNames) {
     fileNames.forEach(fileName => {
       indexPromises.push(new Promise(resolve => {
         getFileIndex(fileName).then(fileIndex => {
-          addToMainIndex(fileIndex, mainIndex, tempIndex);
+          addToMainIndex(fileIndex);
           var t1 = performance.now();
           let tempSize = sizeof(tempIndex);
           var t2 = performance.now();
           sizeCheckTime += (t2 - t1);
           if (tempSize > MAX_CLUSTER) {
             //console.log(sizeof(tempIndex));
-            addToMainAux(tempIndex, mainIndex);
+            addToMainAux(tempIndex);
             tempIndex = [];
           }
           resolve();
@@ -831,7 +946,8 @@ function addFilesToMainIndex(fileNames) {
     });
     Promise.all(indexPromises).then(() => {
       if (tempIndex.length != 0) {
-        addToMainAux(tempIndex, mainIndex);
+        addToMainAux(tempIndex);
+        tempIndex = [];
       }
       resolveAll();
     });
@@ -841,10 +957,6 @@ function addFilesToMainIndex(fileNames) {
 //Enter the array we have stored in the index,
 //return a list of words with filenames locations
 //that we can use in search method
-
-function update(oldFilename, newFilename) {
-
-}
 
 
 function getWordLocs(codes) {
@@ -872,7 +984,7 @@ function getWordLocs(codes) {
   return wordLocs;
 }
 
-function search(searchStr, index) {
+function search(searchStr) {
   let finalResults = [];
   let fileLists = []; // will hold all files for each search word
   let wordResults = [];
@@ -885,7 +997,7 @@ function search(searchStr, index) {
     let word = searchWords[i];
     let wordFiles = [];
     //returns a list of all unique location IDs associated with the current word
-    let results = _.findWhere(index, {w: word});
+    let results = _.findWhere(mainIndex, {w: word});
     //if not found return empty
     if (results == null) return finalResults;
     //Changes into filename and location format
@@ -1049,17 +1161,17 @@ var mainIndex = [];
 var lastFileStats = [];
 
 if(INDEX_DIRECTORY) {
-  var proc = exec('ls data', (err, stdout, stderr) => {
+  var proc = exec('ls test_docs', (err, stdout, stderr) => {
     if (err) {
       // node couldn't execute the command
-      console.log("error!");
+      reject(Error("ls did not execute correctly"));
     }
 
     dirFiles = stdout.split(/\r?\n/);
     dirFiles.pop();
 
     var t0 = performance.now();
-    addFilesToMainIndex(dirFiles).then(result => {
+    addFilesToMainIndex(dirFiles, mainIndex).then(result => {
       var t1 = performance.now();
       console.log("Indexing completed in " + (t1 - t0) + " milliseconds.");
       console.log("File parsing took up " + fileParseTime + " milliseconds.");
@@ -1067,27 +1179,43 @@ if(INDEX_DIRECTORY) {
       console.log("Size of index: " + sizeof(mainIndex));
       console.log("io calls: " + ioCount);
       console.log("Test word: " + mainIndex[mainIndex.findIndex(word => word.sz >= 50)].w);
-      saveIndexToFile(mainIndex, lookup, 'ind_bin.txt', 'tbl_bin.txt');
+      saveIndexToFile(mainIndex, lookup, rngTbl, 'ind_bin.txt', 'tbl_bin.txt', 'rng_tbl.txt');
+      console.log("wordcount: " + wordcount);
+      console.log("indexCount: " + mainIndex.length);
+
+
+
     });
+
 
   // addFilesToSecondIndex(dirFiles, secondInd);
   });
 } else {
   var t0 = performance.now();
-  loadIndexFromFile('ind_bin.txt', 'tbl_bin.txt').then(result => {
-    mainIndex = result[0];
-    lookup = result[1];
+  loadIndexFromFile('ind_bin.txt', 'tbl_bin.txt', 'rng_tbl.txt').then(result => {
+    mainIndex = Object.values(result[0]);
+    lookup = Object.values(result[1]);
+    rngTbl = Object.values(result[2]);
     var t1 = performance.now();
     console.log("Loaded index from file in  " + (t1 - t0) + " milliseconds.");
     console.log("Size of index: " + sizeof(mainIndex));
     console.log("lookup table size: " + sizeof(lookup));
+
+    let filePath = path.join(__dirname, "/test_docs/abortion.txt");
+      fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data) {
+        if (err) {
+        throw err;
+        } else {
+          update("abortion.txt", data);
+        }
+      })
   });
 }
 
 function user_search(str) {
   console.log("Search Results for " + str + ":");
   var t0 = performance.now();
-  let results = search(str,mainIndex);
+  let results = search(str);
   //let results2 = searchSecond(str, secondInd);
   var t1 = performance.now();
   var resultCnt = 0;
@@ -1111,49 +1239,6 @@ var rl = readline.createInterface({
   terminal: false
  });
 
-//FOLLOWING FUNCTIONS FOR TESTING
-const secondInd = [];
-
-function getFileBody(fileName) {
-
-    let filePath = path.join(__dirname, '/test_docs/' + fileName);
-
-    return new Promise(resolve => {
-      fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
-          if (!err) {
-            let cleanText = data.replace(/<\/?[^>]+(>|$)/g, "");
-            resolve({name: fileName, body: cleanText});
-          } else {
-            console.log(err);
-          }
-      });
-    })
-}
-
-function addFilesToSecondIndex(fileNames, secondInd) {
-
-    return new Promise(resolve => {
-      fileNames.forEach(fileName => {
-        getFileBody(fileName).then(fileIndex => {
-          secondInd.push(fileIndex);
-        });
-      });
-      resolve();
-    });
-}
-
-function searchSecond(searchStr, secondInd) {
-
-    var results = [];
-
-    secondInd.forEach(fileName => {
-        let curr = getIndicesOf(searchStr, fileName.body, false);
-        if (curr.length != 0) {
-            results.push({name: fileName.name, locs: curr});
-        }
-    });
-    return results;
-}
 
 
 rl.on("line", function (line) {
@@ -1165,6 +1250,7 @@ rl.on("line", function (line) {
     // });
    // checkIndexForChanges(lookup);
     user_search(line);
+
 
     //console.log(mainIndex.length);
  // });
