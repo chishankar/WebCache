@@ -9,7 +9,8 @@ const sizeof = require('object-sizeof');
 const { PerformanceObserver, performance } = require('perf_hooks');
 const BSON = require('bson');
 var readline = require("readline");
-var emptyRng = []
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
 
 const stopWords = ["i", "me", "my", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"];
 const INDEX_DIRECTORY = false;
@@ -505,24 +506,26 @@ function getFileIndex(fileName) {
   return new Promise(resolve => {
     fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
       var t1 = performance.now();
-        if (!err) {
-          // TODO: REMOVE HTML TAGS
-          // Case-sensitive indexing not implented for simplicity.
-          let cleanText = data.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, ' ');
-          let wordMapping = wordLocsMapping(cleanText);
-          wordMapping.forEach(function(value, key) {
-            fileIndex.push({
-              w: key,
-              a: [value.length, fileNum].concat(value)
-            });
+      if (!err) {
+        // TODO: REMOVE HTML TAGS
+        // Case-sensitive indexing not implented for simplicity.
+        const dom = new JSDOM(data);
+        dom.window.document.querySelectorAll("script, style").forEach(node => node.parentNode.removeChild(node));
+        let cleanText = dom.window.document.documentElement.outerHTML.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, ' ');
+        let wordMapping = wordLocsMapping(cleanText);
+        wordMapping.forEach(function(value, key) {
+          fileIndex.push({
+            w: key,
+            a: [value.length, fileNum].concat(value)
           });
-          //returns the list
-          resolve(fileIndex);
-        } else {
-          console.log(err);
-        }
-        var t2 = performance.now();
-        fileParseTime += (t2 - t1);
+        });
+        //returns the list
+        resolve(fileIndex);
+      } else {
+        console.log(err);
+      }
+      var t2 = performance.now();
+      fileParseTime += (t2 - t1);
 
     });
   })
