@@ -42,7 +42,7 @@ const readFile = util.promisify(fs.readFile);
    sticky annotations, and comment
   */
 
-export default async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
+async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
     // split the annotations & comments into different functions so they
     // could be done in parallel
     var [jsonish, comment] = await Promise.all([
@@ -74,17 +74,23 @@ async function ScrapbookToWebcacheHTML(htmlFilePath) {
     var doc = cheerio.load(html);
 
     // get the lists of highlights, inline annotations, & sticky annotations
+    var relStickies = doc('div').filter('.scrapbook-sticky-relative');
+
     var highlights = doc('span[class=linemarker-marked-line]'),
-        inlines = doc('span[class=scrapbook-inline]'),
-        stickies = doc('div[class=scrapbook-sticky]');
+        absStickies = doc('div[class=scrapbook-sticky]'),
+        relStickies = doc('div[class=scrapbook-sticky-relative]');
+
+    relativeStickyToInlineAnnotation(relStickies);
+
+    var inlines = doc('span[class=scrapbook-inline]');
 
     // get the JSON objects
     var highlightJSONs = cheerioObjsToHighlightJSON(highlights),
         inlineJSONs = cheerioObjsToInlineAnnotationJSON(inlines),
-        stickyJSONs = cheerioObjsToStickyAnnotationJSON(stickies);
+        stickyJSONs = cheerioObjsToStickyAnnotationJSON(absStickies);
 
     // remove the sticky annotations from the HTML
-    stickies.replaceWith('');
+    absStickies.replaceWith('');
 
     var i;
     for (i = 0; i < inlines.length; i++) {
@@ -127,6 +133,24 @@ async function extractCommentFromDatFile(datFilePath) {
 
 // #############################################################################
 
+function relativeStickyToInlineAnnotation(doc, relStickies) {
+    var texts = new Array(relStickies.length);
+
+    for (var i = 0; i < relStickies.length; i++) {
+        texts[i] = relStickies.eq(i).text();
+    }
+
+    // remove text from html
+    relStickies.replaceWith('<span class="scrapbook-sticky-relative"></span>');
+    relStickies = doc('div').filter('.scrapbook-sticky-relative');
+
+    // add text back in inline annotation format
+    for (var i = 0; i < relStickies.length; i++) {
+        relStickies.eq(i).attr('title', texts[i]);
+    }
+    relStickies.attr('class', 'scrapbook-sticky-relative');
+}
+
 /**
    Converts the ScrapBook highlight results to a list of JSON.
 
@@ -134,15 +158,41 @@ async function extractCommentFromDatFile(datFilePath) {
 
    @return {List<JSON>} - each highlight, as a JSON object with fields "id",
    "text", "color"
-  */
+*/
+
+// the four default highlight styles in ScrapBook
+const highlightStyles = [
+    'background-color: #FFFF99; color: #000000; border: thin dashed #FFCC00;',
+    'border-bottom: medium solid #33FF33;',
+    'background-color: #CCFFFF; color: #000000; border: thin solid #0099FF;',
+    'background-color: #FFFF00; color: #000000;'
+];
+
 function cheerioObjsToHighlightJSON(highlights) {
     var out = new Array(highlights.length);
     for (var i = 0; i < highlights.length; i++) {
-        var highlight = highlights.eq(i);
+        var highlight = highlights.eq(i),
+            style = highlight.attr('style');
+
+        // force the highlight styles into a single color
+        var forceColor;
+        if (style === highlightStyles[0]) {
+            forceColor = '#FFCC00';
+        } else if(style === highlightStyles[1]) {
+            forceColor = '#33FF33';
+        } else if (style === highlightStyles[2]) {
+            forceColor = '#CCFFFF';
+        } else if (style === highlightStyles[3]) {
+            forceColor = '#FFFF00';
+        } else {
+            // if it's not a highlight I recognize, then make it grey
+            forceColor = '#999999';
+        }
+
         out[i] = {
             id: randomID(),
             text: highlight.text(),
-            style: highlight.attr('style')
+            color: forceColor
         };
     }
     return out;
@@ -228,5 +278,5 @@ function randomID() {
 
 // ############################################################################/
 
-// module.exports = {};
-// module.exports['ScrapbookToWebcacheFormat'] = ScrapbookToWebcacheFormat;
+module.exports = {};
+module.exports['ScrapbookToWebcacheFormat'] = ScrapbookToWebcacheFormat;
