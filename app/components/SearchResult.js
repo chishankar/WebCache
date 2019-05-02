@@ -25,7 +25,8 @@ class SearchResult extends React.Component {
 
   handleClick = () => {
   console.log("Search result got pressed!");
-  this.store.dispatch(urlsearchActions.changeActiveUrl("app/default_landing_page.html"));
+  let filePath = path.join(__dirname, "../../data/" + this.props.filename);
+  this.store.dispatch(urlsearchActions.changeActiveUrl(filePath));
   };
 
   render() {
