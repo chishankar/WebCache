@@ -34,8 +34,9 @@ export default class FileSearch extends Component<Props>{
     if (event.key === 'Enter'){
       var elem = event.srcElement || event.target;
       console.log("Search term: " + elem.value);
-      //var searchResults = searchAPI.search(elem.value); //searches for the specified word among all archived pages
-      var searchResults = JSON.stringify({results : [{filename: "app/where/who/what/index.html", count: 5}, {filename: "Boring", count: 9}]});
+      var searchResults = searchAPI.search(elem.value); //searches for the specified word among all archived pages
+      console.log(searchResults);
+      //var searchResults = JSON.stringify({results : [{filename: "app/where/who/what/index.html", count: 5}, {filename: "Boring", count: 9}]});
       this.store.dispatch(fileSearchActions.changeSearchData(searchResults));
     }
   }
