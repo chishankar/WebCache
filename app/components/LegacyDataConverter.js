@@ -72,7 +72,7 @@ class LegacyDataConverter extends React.Component {
 
 async function FindFile(dirPath) {
   fs.readdir(dirPath, async (err, files) => {
-    //console.log(files);
+    console.log(files);
     // console.log(items);
     if (!err) {
       for (var i = 0; i < files.length; i++) {
