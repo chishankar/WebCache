@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import routes from '../constants/routes';
@@ -7,88 +6,249 @@ import styles from './Text.css';
 import HighlightText from './HighlightText';
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
+import * as resourcePath from '../utilities/ResourcePaths';
+import * as highlightActions from '../actions/sidebar';
+const searchAPI = require('../../webcache_testing/main5.js');
 
 const fs = require('fs');
+const ANNOTATIONS_FILE = 'annotations.json';
+const path = require('path');
 
-function gettext(){
-  return   <div><h1>Hi there!</h1><p>When I first brought my cat home from the humane society she was a mangy, pitiful animal. It cost a lot to adopt her: forty dollars. And then I had to buy litter, a litterbox, food, and dishes for her to eat out of. Two days after she came home with me she got taken to the pound by the animal warden. There's a leash law for cats in Fort Collins. If they're not in your yard they have to be on a leash. Anyway, my cat is my best friend.I'm glad I got her. She sleeps under the covers with me when it's cold. Sometimes she meows a lot in the middle of the night and wakes me up, though When I first brought my cat home from the Humane Society she was a mangy, pitiful animal. She was so thin that you could count her vertebrae just by looking at her. Apparently she was declawed by her previous owners, then abandoned or lost. Since she couldn't hunt, she nearly starved. Not only that, but she had an abscess on one hip. The vets at the Humane Society had drained it, but it was still scabby and without fur. She had a terrible cold, to@2o. She was sneezing and sniffling and her meow was just a hoarse squeak. And she'd lost half her tail somewhere. Instead of tapering gracefully, it had a bony knob at the end</p></div>;
+// Returns fulle path needed for iFrame
+function getResourceBuilder(path){
+  return new resourcePath.ResourcePaths(path).getFullPath();
 }
 
-function getRenderText(filePath) {
-  // var someHtml = fs.readFileSync(filePath).toString();
-  // TODO: Rewrite so that it does not convert HTML to JSX this way
-  //       There should be a HTML to React library floating out there.
-  // TODO: also render the css files associated with it
-  //       <div contenteditable="true" ref='myTextarea' onMouseUp={this.handleHighlight}>{getRenderText(filePath)}</div>
+// Returns the base resource
+function getResourcePath(path){
+  return new resourcePath.ResourcePaths(path).getResourceDir();
+}
 
-  // <div className="Container" dangerouslySetInnerHTML={{__html: someHtml}}>
-  // </div>
-  // return (
-  //   <webview className={styles.setWidth} id = "foo" src={fullPath}>
-  //   </webview>
-  // );
+// Return the base Resource directory
+function getResourceBase(path){
+  return new resourcePath.ResourcePaths(path).getResourceBase();
+}
 
-  var updatedDirname = __dirname;
+// Renders dynamic iframe
+function getRenderText(filePath, iframeRef, addHighlights) {
+  let resource = getResourceBuilder(filePath);
+  let resourceDir = getResourcePath(filePath);
+  let jsResource = getResourceBuilder('renderHtmlViwer/index.js');
+  let local = false;
 
-  if (filePath.startsWith('data')){
-    updatedDirname = __dirname.toString().replace("app","")
+  if(filePath.startsWith("LOCAL")) {
+    local = true;
+    resource = filePath.substr(5, filePath.length);
   }
 
-  let fullPath = "file://" + updatedDirname +filePath
-  console.log("updated: "+fullPath);
+  var resourceHtml = fs.readFileSync(resource).toString();
+
+  var injectScript = fs.readFileSync(jsResource).toString();
+
+  resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
+
+  // change all paths to become relative
+  // check to see if the path is already changed - don't change it twice!!
+  if (filePath != "app/default_landing_page.html" && !local) {
+    resourceHtml = resourceHtml.replace(/href="([\.\/\w+]+)"/g, "href=\"" + resourceDir + "$1" + "\"");
+    resourceHtml = resourceHtml.replace(/src="([\.\/\w+]+)"/g, "src=\"" + resourceDir + "$1" + "\"");
+  }
+
+
   return (
-    <iframe className={styles.setWidth}  ref="serviceFrameSend" src={fullPath}></iframe>
+
+    <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml }></iframe>
+
   );
 }
 
 type Props = {
-  color: string
+  color: String,
+  delete: String,
+  save: String,
+  viewId: String,
+  addHighlight: Function,
+  clearHighlights: Function,
+  addNotification: Function,
+  updateLastUpdate: Function,
+  annotations: Object,
+  hideHighlights: Boolean
 }
 
 export default class RenderText extends Component<Props> {
   props: Props;
 
-  handleHighlight = (event) =>{
-    console.log(this.props.color)
+  constructor(props){
+    super(props);
+    this.iframeRef = React.createRef();
+  }
 
-    if (this.props.color != "DEFAULT"){
-      var _selection = window.getSelection();
-      let _range = _selection.getRangeAt(0);
-      var span = document.createElement(span);
+  // Once the component mounts, add an event listener to listen for messages and pass all the messages to the handleIFrameTask
+  componentDidMount(){
+    window.addEventListener('message',this.handleIFrameTask)
+  }
 
-      span.style.backgroundColor = this.props.color;
-      span.style.display = 'inline';
-//this code is wrong
-      if (_selection) {
-          var range = _range.cloneRange();
-          range.surroundContents(span);
-          _selection.removeAllRanges();
-          _selection.addRange(range);
+  // Upon URL change, change the URL
+  componentDidUpdate(prevProps){
+
+      // handles what to do on an activeUrl update
+      if (this.props.activeUrl != prevProps.activeUrl) {
+
+        // clear highlights when a new page is loaded
+        this.props.clearHighlights();
+
+        // get current url
+        var filePath = this.props.activeUrl;
+
+        // load the annotations from the json file
+        let resource = getResourceBuilder(filePath);
+        let resourceDir = getResourcePath(filePath);
+        let jsResource = getResourceBuilder('renderHtmlViwer/index.js');
+        let local = false;
+
+        if(filePath.startsWith("LOCAL")) {
+          local = true;
+          resource = filePath.substr(5, filePath.length);
+        }
+        let fileName = resource.substring(resource.lastIndexOf('/') + 1, resource.lastIndexOf('.'));
+        try {
+          var fd = fs.openSync(path.join(resource, '..') + '/' + 'annotations-' + fileName + '.json', 'r');
+          var highlights = JSON.parse(fs.readFileSync(fd));
+          // this.props.updateLastUpdate(highlights.lastUpdated)
+          this.props.clearHighlights();
+          highlights.highlightData.forEach(highlight => {
+            // only add it if it isn't arleady in the store
+            console.log("processing saved highlight: " + JSON.stringify(highlight));
+            if (!this.props.annotations.some(element => {
+              console.log(this.props.annotations);
+              return element.id == highlight.id;
+            })) {
+              this.props.addHighlight(highlight);
+            }
+          })
+        } catch (err) {
+          // this.handleSaveTask()
+          this.props.addNotification("No previous annotations");
+          // console.log(err);
+        }
+
+        }
+
+      // This updates color in index.js
+      let data = {color: this.props.color};
+      window.postMessage(data,'*');
+
+      // Sends delete request to the iFrame upone delete id change
+      if (this.props.delete !== this.props.delete){
+        data = {delete: this.props.delete};
+        window.postMessage(data, '*');
+      }
+
+      // This sends the id that the user wants to see
+      if (this.props.viewId !== prevProps.viewId){
+        data = {showHighlight: this.props.viewId};
+        window.postMessage(data, '*');
+      }
+
+      // This sends a message to the iFrame upon save request
+      if (this.props.save != prevProps.save){
+        this.handleSaveTask()
+      }
+
+      // Sends hideHighlights request to the iFrame
+      if (this.props.hideHighlights){
+        data = 'hide'
+        window.postMessage(data,"*");
+      }
+
+      // Sends show highlight request to the iframe
+      if (!this.props.hideHighlights){
+        data = 'show'
+        window.postMessage(data,"*");
+      }
+
+
+  }
+
+  // Logic for saving file
+  handleSave = (htmlData) => {
+    var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
+    let fileName = saveUrl.substring(saveUrl.lastIndexOf('/') + 1, saveUrl.lastIndexOf('.'));
+
+    var annotationsUrl = path.join(saveUrl, '..') + '/' + 'annotations-' + fileName + '.json';
+    console.log("SAVING HTML TO: " + saveUrl);
+    console.log("after the path.join: " + path.join(saveUrl, '..'));
+    console.log("SAVING ANNOTATIONS TO: " + annotationsUrl);
+    var fd = fs.openSync(annotationsUrl, 'w');
+
+    let annotationJSON = Object.assign({},
+      {"highlightData":this.props.annotations},
+      {"lastUpdated":this.props.save}
+    )
+
+    //update the old index of the annotations json page
+    fs.readFile(annotationsUrl, (err, buf) => {
+      if (err) {
+        fs.writeFileSync(fd, JSON.stringify(annotationJSON));
+        searchAPI.addFilesToMainIndex([annotationsUrl]);
+      }
+      fs.writeFileSync(fd, JSON.stringify(annotationJSON));
+      searchAPI.update(annotationsUrl, buf.toString());
+    });
+
+    var end = htmlData.indexOf("<script id=\"webcache-script\">");
+    let updatedHtml = htmlData.substring(0, end - 1); //remove our injected script tag from the document
+    // re write the current version of the html page and update the old index
+    fs.readFile(saveUrl, (err, buf) => {
+      fs.writeFileSync(saveUrl, updatedHtml);
+      searchAPI.update(annotationJSON, buf.toString());
+      this.props.addNotification(`File saved! ${this.props.save}`)
+      fs.writeFileSync(fd, JSON.stringify(annotationJSON));
+    });
+
+  }
+
+  // Takes in data returned by window.postMessage from the iframe rendered within the component
+  handleIFrameTask = (e) => {
+
+    if (e.data == 'clicked button'){
+      console.log("TEMPORARY")
+
+    } else if (e.data == 'highlighted text'){
+
+      let data = {color: this.props.color};
+      window.postMessage(data,'*');
+
+    } else if (e.data.savedData){
+      if (this.props.activeUrl !== 'app/default_landing_page.html') {
+        this.handleSave(e.data.savedData);
+      } else {
+        this.props.addNotification("can't save annotations on the home page!")
+      }
+
+    } else if (e.data.highlight){
+      if(e.data.highlight.text !== "" && e.data.highlight.color){
+        // add highlight to store
+        this.props.addHighlight(e.data.highlight);
       }
     }
-  };
-
-  componentDidUpdate(prevProps) {
-    console.log("detected updated");
-    if(!(this.props.activeUrl === prevProps.activeUrl)) // Check if it's a new user, you can also use some unique property, like the ID  (this.props.user.id !== prevProps.user.id)
-    {
-      this.render();
-    }
   }
-  //       {!displayInput && <div contenteditable="true" ref='myTextarea' className="divStuff" onMouseUp={this.handleHighlight}>{gettext()}</div>}
-//       {displayInput && getRenderText(this.props.activeUrl)}
+
+  // Function to handle saving data
+  handleSaveTask = () => {
+
+    window.postMessage("save", '*');
+
+  }
 
   render() {
-    console.log(this.props.activeUrl);
-    const testPath = './test/';
-    const legacyPath = 'legacy-data/ScrapBook/data/20190327234416/';
-    var filePath = `${testPath + legacyPath}index.html`;
-    let displayInput = this.props.activeUrl.startsWith('data');
 
     return (
+
       <div>
-        {getRenderText(this.props.activeUrl)}
+        {getRenderText(this.props.activeUrl,this.iframeRef)}
       </div>
+
     );
   }
 }

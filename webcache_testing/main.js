@@ -379,6 +379,7 @@ app.on('ready', function(){
     dirFiles = stdout.split(/\r?\n/);
     dirFiles.pop();
     addFilesToMainIndex(dirFiles, mainIndex);
+    addFilesToSecondIndex(dirFiles, secondInd);
   });
 
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
@@ -398,9 +399,15 @@ const mainMenuTemplate = [
           console.log("Search Results for " + searchStr + ":");
           var t0 = performance.now();
           let results = search(searchStr,mainIndex);
+          let results2 = searchSecond(searchStr, secondInd);
           var t1 = performance.now();
           results.forEach(obj => {
             console.log(obj.fileName + " at " + obj.locations);
+          });
+
+          console.log("Test results\n");
+          results2.forEach(obj => {
+            console.log(obj.name + " at " + obj.locs);
           });
 
           console.log("Size of index: " + sizeof(mainIndex));
@@ -418,3 +425,51 @@ const mainMenuTemplate = [
     ]
   }
 ];
+
+
+//FOLLOWING FUNCTIONS FOR TESTING
+
+const secondInd = [];
+
+function getFileBody(fileName) {
+
+    filePath = path.join(__dirname, '/test_docs/' + fileName);
+
+    return new Promise(resolve => {
+      fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
+          if (!err) {
+            let cleanText = data.replace(/<\/?[^>]+(>|$)/g, "");
+            resolve({name: fileName, body: cleanText});
+          } else {
+            console.log(err);
+          }
+      });
+    })
+}
+
+function addFilesToSecondIndex(fileNames, secondInd) {
+
+    return new Promise(resolve => {
+      fileNames.forEach(fileName => {
+        getFileBody(fileName).then(fileIndex => {
+          secondInd.push(fileIndex);
+        });
+      });
+      resolve();
+    });
+}
+
+function searchSecond(searchStr, secondInd) {
+
+    var results = [];
+
+    secondInd.forEach(fileName => {
+        let curr = getIndicesOf(searchStr, fileName.body, false);
+        if (curr != []) {
+            results.push({name: fileName.name, locs: curr});
+        }
+    });
+    return results;
+}
+
+

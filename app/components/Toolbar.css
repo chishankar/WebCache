@@ -108,3 +108,9 @@
     border: 1px solid #ccc;
   }
 }
+
+.root{
+  flex-grow: 1;
+  max-width: 500;
+  background-color: inherit !important;
+}

@@ -1,152 +1,228 @@
-// @flow
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import routes from '../constants/routes';
-import Paper from '@material-ui/core/Paper';
-import RenderTextPage from '../containers/RenderTextPage';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
-import MenuIcon from '@material-ui/icons/Menu';
-import Typography from '@material-ui/core/Typography';
+import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import Toolbar from './Toolbar';
-import homeStyles from './Home.css';
-import Footer from './Footer';
+import { createMuiTheme } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import NotificationCenter from './NotificationCenter';
 
-const drawerWidth = 150;
+import Footer from './Footer';
+import Tools from './Toolbar';
+import homeStyles from './Home.css';
+import LegacyDataConverter from './LegacyDataConverter'
+import FileDialogue from './FileSelector';
+import SideBarPage from '../containers/SideBarPage';
+import SearchSideBarPage from '../containers/SearchSideBarPage';
+import RenderTextPage from '../containers/RenderTextPage';
+
+// const theme = createMuiTheme({
+//   palette: {
+//     primary: '#303030',
+//     secondary: '#707070',
+//     error: '#8b0000',
+//   }
+// });
+
+const drawerWidth = 250;
 
 const styles = theme => ({
   root: {
     display: 'flex',
-  },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
+    padding: '0 !important'
   },
   appBar: {
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    color: 'black',
+    backgroundColor: '#485665',
+    zIndex: theme.zIndex.drawer + 1,
+  },
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-    },
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   menuButton: {
+    marginLeft: 12,
     marginRight: 20,
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
   },
-  toolbar: theme.mixins.toolbar,
+  hide: {
+    display: 'none',
+  },
+  drawer: {
+
+    width: drawerWidth,
+    flexShrink: 0,
+  },
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: '#383535'
+    color: 'black',
+    backgroundColor: '485665 !important',
+    padding: '0 !important',
+    border: 'inherit'
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 3,
+    padding: 0,
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
   },
-  txt: {
-    color: 'white !important'
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  },
+  toolbar: theme.mixins.toolbar,
+  list:{
+    padding: '0px !important'
   }
 });
 
-
-
 type Props = {};
 class Home extends Component {
-  state = {
-    mobileOpen: false,
-  };
+  // props: Props
 
+  state = {
+    open: false,
+  }
   constructor(props){
     super(props);
     this.store = this.props.store;
   }
 
-  handleDrawerToggle = () => {
-    this.setState(state => ({ mobileOpen: !state.mobileOpen }));
+  state = {
+    open: false,
+    showSearchSideBar: false
   };
 
-  render() {
+  // These two functions handle opening and closes the file tree menu component
+  handleDrawerOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleDrawerClose = () => {
+    this.setState({ open: false });
+  };
+
+  componentDidUpdate(prevProps){
+    if (!(this.props.sidebarState === prevProps.sidebarState)) {
+      this.setState({
+          showSearchSideBar: this.props.sidebarState
+       });
+     }
+  }
+
+  render(){
     const { classes, theme } = this.props;
+    const { open } = this.state;
 
     const drawer = (
       <div>
-        <div className={classes.toolbar}><h1 align="center">WebCache</h1></div>
+        <div className={classes.toolbar}><h1 align='center'>WebCache</h1></div>
         <Divider />
-        <List className={classes.txt}>
-          {['File', 'Save', 'Edit', 'Settings'].map((text, index) => (
-            <ListItem button className={classes.txt} key={text}>
-              <ListItemIcon className={classes.txt}>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText className={classes.txt} primary={text} />
-            </ListItem>
-          ))}
-        </List>
+        <LegacyDataConverter />
+        <FileDialogue store={this.store}/>
+
       </div>
     );
 
     return (
-      <div className={classes.root}>
-        <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar} classes={{colorPrimary: homeStyles.appBar}}>
-
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.handleDrawerToggle}
-              className={classes.menuButton}
-            >
-              <MenuIcon />
+        <div className={classes.root}>
+          <CssBaseline />
+          <AppBar
+            position='fixed'
+            className={classNames(classes.appBar, {
+              [classes.appBarShift]: open,
+            },{colorPrimary: homeStyles.appBar})}
+          >
+            <Toolbar disableGutters={!open}>
+              <IconButton
+                aria-label='Open drawer'
+                onClick={this.handleDrawerOpen}
+                className={classNames(classes.menuButton, open && classes.hide)}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant='h6' color='inherit' noWrap>
+                <Tools store={this.store} />
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            className={classes.drawer}
+            variant='persistent'
+            anchor='left'
+            open={open}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            <div className={classes.drawerHeader}>
+            <IconButton onClick={this.handleDrawerClose}>
+              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
             </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>
-              <Toolbar store={this.store}/>
-            </Typography>
-        </AppBar>
-        <nav className={classes.drawer}>
-          <Hidden smUp implementation="css" >
-            <Drawer
-              container={this.props.container}
-              variant="temporary"
-              anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-              open={this.state.mobileOpen}
-              onClose={this.handleDrawerToggle}
-              classes={{
-                paper: classes.drawerPaper
-              }}
-            >
-              {drawer}
-            </Drawer>
-          </Hidden>
-          <Hidden xsDown implementation="css">
-            <Drawer
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              variant="permanent"
-              open
-            >
-              {drawer}
-            </Drawer>
-          </Hidden>
-        </nav>
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-              <RenderTextPage />
-        </main>
-      </div>
-    );
-  }
-}
+          </div>
+          <Divider />
+            {drawer}
+          </Drawer>
+          <main
+            className={classNames(classes.content, {
+              [classes.contentShift]: open,
+            })}
+          >
+            <div className={classes.drawerHeader} />
+                <RenderTextPage store={this.store}/>
+          </main>
+          <Drawer
+            className={classes.drawer}
+            variant='permanent'
+            anchor='right'
+            classes={{
+              paper: classes.drawerPaper,
+            }}>
 
-export default withStyles(styles, { withTheme: true })(Home);
+            <div className={classNames(classes.toolbar, classes.toolbarRight)}/>
+            {!this.state.showSearchSideBar &&
+            <List className={classes.list}>
+                <SideBarPage store={this.store}/>
+            </List>}
+            {this.state.showSearchSideBar &&
+            <List className={classes.list}>
+               <SearchSideBarPage store={this.store}/>
+            </List>}
+
+          </Drawer>
+          <NotificationCenter />
+        </div>
+      );
+    };
+  }
+
+
+  export default withStyles(styles, { withTheme: true })(Home);
