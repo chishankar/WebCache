@@ -3,16 +3,16 @@ import 'font-awesome/css/font-awesome.min.css';
 import popup from './Popup.css';
 import * as highlighterActions from '../actions/highlighter';
 
-// type Props ={};
 
 export default class Highlight extends Component<Props> {
-  // props: Props;
 
   constructor(props){
     super(props);
     this.store = this.props.store;
   }
 
+  // Each of the below functions dispatches an actions for the designated color
+  // These are invoked when a user clicks on an icon
   _red = () => {
     this.store.dispatch(highlighterActions.changeRed());
   }

@@ -10,10 +10,11 @@
  *
  * @flow
  */
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu, MenuItem } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
+import { loadIndexFromFile } from '../webcache_testing/main5';
 
 export default class AppUpdater {
   constructor() {
@@ -52,14 +53,14 @@ const installExtensions = async () => {
  */
 
 app.on('window-all-closed', () => {
-  // Respect the OSX convention of having the application in memory even
-  // after all windows have been closed
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
 app.on('ready', async () => {
+  console.log("hello")
+  loadIndexFromFile('index_BSON', 'lookup_BSON', 'ranges_BSON');
   if (
     process.env.NODE_ENV === 'development' ||
     process.env.DEBUG_PROD === 'true'
@@ -69,14 +70,12 @@ app.on('ready', async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728
+    width: 1351,
+    height: 855
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
-  // @TODO: Use 'ready-to-show' event
-  //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
   mainWindow.webContents.on('did-finish-load', () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
@@ -95,6 +94,15 @@ app.on('ready', async () => {
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
+
+  const contextMenu = new Menu();
+  contextMenu.append(new MenuItem({ label: 'Click Me', click: () => { console.log('item 1 clicked') } }))
+  contextMenu.append(new MenuItem({ type: 'separator' }))
+  contextMenu.append(new MenuItem({ label: 'MenuItem2', type: 'checkbox', checked: true }))
+
+  mainWindow.webContents.on('context-menu',function(e, params){
+    contextMenu.popup(mainWindow,params.x,params.y)
+  })
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line

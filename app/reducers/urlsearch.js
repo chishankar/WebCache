@@ -2,7 +2,7 @@
 import type { Action } from './types';
 
 const initialState = {
-  activeUrl: "/default_landing_page.html"
+  activeUrl: "app/default_landing_page.html"
 }
 
 export default function urlsearch(state=initialState, action) {
