@@ -38,7 +38,7 @@ class SearchResult extends React.Component {
   // <ListItemText inset primary={'Filename: ' + this.props.filename + '\n'} />
   // <ListItemText inset primary={'Matches: ' + this.props.count} />
   render() {
-    var regexWebsite = this.props.filename.match(/(\w+\.\w+\.\w+)/);
+    var regexWebsite = this.props.filename.match(/((\w+\.)?\w+\.\w+)/);
     var regexDate = this.props.filename.match(/\-(\d+)\//);
     var regexFile = this.props.filename.match(/\/(.*)/);
     var website = regexWebsite[1];

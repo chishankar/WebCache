@@ -90,11 +90,16 @@ export default class RenderText extends Component<Props> {
 
   // Upon URL change, change the URL
   componentDidUpdate(prevProps){
+
+      // handles what to do on an activeUrl update
       if (this.props.activeUrl != prevProps.activeUrl) {
+
         // clear highlights when a new page is loaded
         this.props.clearHighlights();
 
+        // get current url
         var filePath = this.props.activeUrl;
+
         // load the annotations from the json file
         let resource = getResourceBuilder(filePath);
         let resourceDir = getResourcePath(filePath);
@@ -110,35 +115,42 @@ export default class RenderText extends Component<Props> {
           var fd = fs.openSync(path.join(resource, '..') + '/' + 'annotations-' + fileName + '.json', 'r');
           var highlights = JSON.parse(fs.readFileSync(fd));
           // this.props.updateLastUpdate(highlights.lastUpdated)
-
+          this.props.clearHighlights();
           highlights.highlightData.forEach(highlight => {
             // only add it if it isn't arleady in the store
+            console.log("processing saved highlight: " + JSON.stringify(highlight));
             if (!this.props.annotations.some(element => {
+              console.log(this.props.annotations);
               return element.id == highlight.id;
             })) {
               this.props.addHighlight(highlight);
             }
           })
         } catch (err) {
-          console.log(err)
-          // console.log('annotations.json does not exist!');
+          // this.handleSaveTask()
+          this.props.addNotification("No previous annotations");
+          // console.log(err);
         }
-      }
+
+        }
+
+      // This updates color in index.js
       let data = {color: this.props.color};
       window.postMessage(data,'*');
 
-      // Sends delete request to the iFrame
-      if (this.props.delete !== ""){
+      // Sends delete request to the iFrame upone delete id change
+      if (this.props.delete !== this.props.delete){
         data = {delete: this.props.delete};
         window.postMessage(data, '*');
       }
 
-      if (this.props.viewId != prevProps.viewId){
-        console.log("Going to: " + this.props.viewId)
+      // This sends the id that the user wants to see
+      if (this.props.viewId !== prevProps.viewId){
         data = {showHighlight: this.props.viewId};
         window.postMessage(data, '*');
       }
 
+      // This sends a message to the iFrame upon save request
       if (this.props.save != prevProps.save){
         this.handleSaveTask()
       }
@@ -154,6 +166,8 @@ export default class RenderText extends Component<Props> {
         data = 'show'
         window.postMessage(data,"*");
       }
+
+
   }
 
   // Logic for saving file
@@ -174,6 +188,10 @@ export default class RenderText extends Component<Props> {
 
     //update the old index of the annotations json page
     fs.readFile(annotationsUrl, (err, buf) => {
+      if (err) {
+        fs.writeFileSync(fd, JSON.stringify(annotationJSON));
+        searchAPI.addFilesToMainIndex([annotationsUrl]);
+      }
       fs.writeFileSync(fd, JSON.stringify(annotationJSON));
       searchAPI.update(annotationsUrl, buf.toString());
     });
