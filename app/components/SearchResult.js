@@ -4,6 +4,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import LabelIcon from '@material-ui/icons/Label';
+import Typography from '@material-ui/core/Typography';
 import * as urlsearchActions from '../actions/urlsearch';
 const path = require('path');
 
@@ -15,6 +16,9 @@ const styles = theme => ({
   },
   nested: {
     paddingLeft: theme.spacing.unit * 4,
+  },
+  inline: {
+    display: 'inline',
   },
 });
 
@@ -30,13 +34,21 @@ class SearchResult extends React.Component {
   console.log(filePath);
   this.store.dispatch(urlsearchActions.changeActiveUrl('/data/' + this.props.filename));
   };
-
+  // <ListItemText inset primary={'Filename: ' + this.props.filename + '\n'} />
+  // <ListItemText inset primary={'Matches: ' + this.props.count} />
   render() {
 
     return (
         <ListItem button onClick={this.handleClick}>
-          <ListItemText inset primary={'Filename: ' + this.props.filename + '\n'} />
-          <ListItemText inset primary={'Matches: ' + this.props.count} />
+          <ListItemText
+            primary={'Filename: ' + this.props.filename + '\n'}
+            secondary={
+              <React.Fragment>
+                {'Matches: ' + this.props.count}
+              </React.Fragment>
+            }
+        />
+
         </ListItem>
   )
 }
