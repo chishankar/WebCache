@@ -137,16 +137,22 @@ function checkExclusiveWord(word) {
   return (mainIndex[wordIndMain].fn.slice(0,1) == SINGLE_WORD_FLAG);
 }
 
-function deleteFile(filename) {
 
-  let filePath = path.join(__dirname, "/../data/" + filename);
+function update(filename, oldStr) {
+  deleteFile(filename, oldStr).then(result => {
+    addFilesToMainIndex([filename]);
+  });
+}
+
+
+function deleteFile(filename, str) {
 
   return new Promise(resolve => {
-    fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data) {
-      if (err) {
-      throw err;
-      } else {
-        let cleanText = data.replace(/<\/?[^>]+(>|$)/g, "").replace(/[^\w\s]/gi, '');
+
+        let lookupID = lookup.findIndex(entry => {return entry.fileName === filename});
+        let fileID = lookup[lookupID].ID;
+        lookup[lookupID].fileName = '';
+        let cleanText = str.replace(/<\/?[^>]+(>|$)/g, "").replace(/[^\w\s]/gi, '');
         //retrieves all words we have to delete
         let deleteWords = cleanText.toLowerCase().trim().split(/\s+/).filter(function(value,index,self) {return !stopWords.includes(value) && self.indexOf(value) === index;});
         deleteWords.sort();
@@ -155,8 +161,6 @@ function deleteFile(filename) {
         while (c < deleteWords.length) {
           let word = deleteWords[c];
           let wordIndMain = mainIndex.findIndex(wordInd => {return wordInd.w === word});
-          let lookupID = lookup.findIndex(entry => {return entry.fileName === filename});
-          let fileID = lookup[lookupID].ID;
           //find corresponding range table
           let rngInd = rngTbl.findIndex(ind => {return ind.fn === mainIndex[wordIndMain].fn});
           let offset = 0;
@@ -167,11 +171,8 @@ function deleteFile(filename) {
 
           //if word is exclusive word
           if (checkExclusiveWord(word)) {
-
             let locArr = Object.values(extractRngIndex(rngTbl[currRng]));
-
             let i = 0;
-
             //remove values as usual
             while (i < locArr.length) {
               let count = locArr[i];
@@ -206,12 +207,14 @@ function deleteFile(filename) {
 
               let i = mainIndex[wordIndMain].st;
                 //removes all aspects of word from file
-                while (i < mainIndex[wordIndMain].st + mainIndex[wordIndMain].sz) {
+                let sizeBound = mainIndex[wordIndMain].st + mainIndex[wordIndMain].sz;
+                while (i < sizeBound) {
                   let count = arr[i];
                   if (arr[i + 1] === fileID) {
                     offset = count + 2;
                     arr.splice(i, offset);
                     i += count + 2;
+                    sizeBound -= offset;
                   } else {
                     i += count + 2;
                   }
@@ -224,35 +227,33 @@ function deleteFile(filename) {
                 }
 
                 //update size of word in question.
-                //if word only appears in that file, remove it from index
+
                 mainIndex[wordIndMain].sz -= offset;
 
+                //if word only appears in that file, remove it from index
                 if (mainIndex[wordIndMain].sz === 0) {
                   mainIndex.splice(wordIndMain,1);
+                  //if the upper or lower range is deleted
+                  if (rngTbl[currRng].r[0] === word) {
+                    rngTbl[currRng].r[0] = mainIndex[wordIndMain].w;
+                  }
+                  if (rngTbl[currRng].r[1] === word) {
+                    rngTbl[currRng].r[1] = mainIndex[wordIndMain - 1].w;
+                  }
                 }
 
                 //updates range file size
                 rngTbl[currRng].sz -= offset;
 
-                //if we need to updatee the parameters at all
-                if (rngTbl[currRng].r[0] === word) {
-                  rngTbl[currRng].r[0] === mainIndex[wordIndMain + 1].w;
-                }
-
-                if (rngTbl[currRng].r[1] === word) {
-                  rngTbl[currRng].r[1] === mainIndex[wordIndMain - 1].w;
-                }
                 c++;
             }
             let toStore = new Uint32Array(arr);
             writeUint32ArrFileSync(filePath, toStore);
           }
-        }}
         resolve();
-    });
+    }
   });
 }
-
 
 function saveIndexToFile(mainIndex, table, indexFn, tableFn) {
 
