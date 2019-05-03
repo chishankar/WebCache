@@ -1,5 +1,10 @@
 import React, {Component} from 'react';
 import styles from './Toolbar.css';
+
+import * as SaveActions from '../actions/save';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
 import 'font-awesome/css/font-awesome.min.css';
 
 import Highlight from './Highlight';
@@ -15,6 +20,17 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Grid from '@material-ui/core/Grid';
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    save: SaveActions.SaveDoc,
+  },dispatch)
+}
+
+function mapStateToProps(state) {
+  return {
+    saveDate: state.save.mostRecentUpdate
+  };
+}
 
 const selectionstyles = themes => ({
   root:{
@@ -42,7 +58,7 @@ class Tools extends Component<Props>{
     this.state = {
       showHighlighter: false,
       showUrlSearch: false,
-      showFileSearch: false, 
+      showFileSearch: false,
       value: 0
     };
     this.store = this.props.store;
@@ -76,10 +92,25 @@ class Tools extends Component<Props>{
     });
   }
 
+  handleSave = (event) => {
+    this.props.save()
+  }
+
   // Handles the change of the indicator bar to indicate current selection
   handleChange = (event, value) => {
     this.setState({ value });
   };
+
+  showLastUpdateDate = () => {
+    if (this.props.saveDate != ""){
+      return true
+    }
+    return false
+  }
+
+  // <Tab icon={<i className="far fa-comment"></i>} data-tip="Comment" />
+
+  // <Tab icon={<i className="far fa-comment-alt" />} data-tip="Annotation"/>
 
   render(){
     return(
@@ -100,13 +131,12 @@ class Tools extends Component<Props>{
               <Tab icon={<i className="fas fa-wifi"></i>} data-tip="URL search" onClick={this._showUrlSearch}/>
               {this.state.showUrlSearch && <UrlSearch store={this.store}/>}
 
-              <Tab icon={<i className="far fa-comment"></i>} data-tip="Comment" />
-
-              <Tab icon={<i className="far fa-comment-alt" />} data-tip="Annotation"/>
+              <Tab icon={<i className="far fa-save"></i>} onClick={this.handleSave} data-tip="Save" />
 
               <Tab icon={<i className="fa fa-search" />} data-tip="File Search" onClick={this._showFileSearch}/>
               {this.state.showFileSearch && <FileSearch store={this.store}/>}
 
+              {this.showLastUpdateDate() && <Tab disabled icon={this.props.saveDate} />}
             </Tabs>
           </Paper>
       </div>
@@ -117,4 +147,6 @@ class Tools extends Component<Props>{
 }
 
 
-export default withStyles(selectionstyles)(Tools);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps)(withStyles(selectionstyles)(Tools));

@@ -7,6 +7,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Fade from '@material-ui/core/Fade';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
+const searchAPI = require('../../webcache_testing/main5.js');
+
+const fs = require('fs');
 
 const UIstyles = theme => ({
   root: {
@@ -59,6 +62,16 @@ export default class UrlSearch extends Component<Props>{
       var save_location = "data/" + this.state.validUrl.replace(/https:\/\//g,"") + '-' + Date.now();
       this.handleClickLoading();
       getSite.getSite(this.state.validUrl, save_location, () => {
+        //add the newly donwloaded files to the main index
+        fs.readdir('./' + save_location + '/', (err, files) => {
+          if(err){
+            console.log("Error in reading data folder");
+          }
+          let update = files.filter(fn => {return !['img', 'js', 'css', 'fonts'].includes(fn)}).map((x) => {
+            return save_location.slice(5) + "/" + x});
+          searchAPI.addFilesToMainIndex(update);
+
+        });
         this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
         this.handleClickLoading();
       });

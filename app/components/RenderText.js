@@ -8,9 +8,11 @@ import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import * as resourcePath from '../utilities/ResourcePaths';
 import * as highlightActions from '../actions/sidebar';
+const searchAPI = require('../../webcache_testing/main5.js');
 
 const fs = require('fs');
 const ANNOTATIONS_FILE = 'annotations.json';
+const path = require('path');
 
 // Returns fulle path needed for iFrame
 function getResourceBuilder(path){
@@ -43,7 +45,7 @@ function getRenderText(filePath, iframeRef, addHighlights) {
 
   var injectScript = fs.readFileSync(jsResource).toString();
 
-  resourceHtml += "<script>" + injectScript + "<\/script>";
+  resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
 
   // change all paths to become relative
   // check to see if the path is already changed - don't change it twice!!
@@ -62,9 +64,11 @@ function getRenderText(filePath, iframeRef, addHighlights) {
 
 type Props = {
   color: String,
+  delete: String,
+  save: String,
   addHighlight: Function,
   clearHighlights: Function,
-  delete: String,
+  addNotification: Function,
   annotations: Object,
   hideHighlights: Boolean
 }
@@ -100,10 +104,22 @@ export default class RenderText extends Component<Props> {
           resource = filePath.substr(5, filePath.length);
         }
         try {
-          var fd = fs.openSync(resource + '/../' + ANNOTATIONS_FILE, 'r');
+          var fd = fs.openSync(path.join(resource, '..') + '/' + ANNOTATIONS_FILE, 'r');
           var highlights = JSON.parse(fs.readFileSync(fd));
+          console.log(highlights)
+          console.log(highlights.highlightData)
           // add each highlight to the store
-          highlights.forEach(highlight => {
+          // for (var key in highlights.highlightData){
+          //   let highlight = highlights.highlightData[key]
+          //   console.log(key)
+          //   if (!this.props.annotations.some(element => {
+          //     return element.id == highlight.id;
+          //   })) {
+          //     this.props.addHighlight(highlight);
+          //   }
+          // }
+
+          highlights.highlightData.forEach(highlight => {
             // only add it if it isn't arleady in the store
             if (!this.props.annotations.some(element => {
               return element.id == highlight.id;
@@ -112,7 +128,8 @@ export default class RenderText extends Component<Props> {
             }
           })
         } catch (err) {
-          console.log('annotations.json does not exist!');
+          console.log(err)
+          // console.log('annotations.json does not exist!');
         }
       }
       let data = {color: this.props.color};
@@ -122,6 +139,10 @@ export default class RenderText extends Component<Props> {
       if (this.props.delete !== ""){
         data = {delete: this.props.delete};
         window.postMessage(data, '*');
+      }
+
+      if (this.props.save != prevProps.save){
+        this.handleSaveTask()
       }
 
       // Sends hideHighlights request to the iFrame
@@ -139,15 +160,39 @@ export default class RenderText extends Component<Props> {
 
   // Logic for saving file
   handleSave = (htmlData) => {
-    var fd = fs.openSync(getResourcePath(this.props.activeUrl) + ANNOTATIONS_FILE, 'w');
-    fs.writeFileSync(fd, JSON.stringify(this.props.annotations));
+    var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
+    var annotationsUrl = path.join(saveUrl, '..') + '/' + ANNOTATIONS_FILE;
+    console.log("SAVING HTML TO: " + saveUrl);
+    console.log("SAVING ANNOTATIONS TO: " + annotationsUrl);
+    var fd = fs.openSync(annotationsUrl, 'w');
 
-    //TODO: handle the regular save stuff @akbar
+    console.log(this.props.annotations)
+
+    let annotationJSON = Object.assign({},
+      {"highlightData":this.props.annotations},
+      {"lastUpdated":this.props.save}
+    )
+
+    //update the old index of the annotations json page
+    fs.readFile(annotationsUrl, (err, buf) => {
+      fs.writeFileSync(fd, JSON.stringify(annotationJSON));
+      searchAPI.update(annotationsUrl, buf.toString());
+    });
+
+    var end = htmlData.indexOf("<script id=\"webcache-script\">");
+    let updatedHtml = htmlData.substring(0, end - 1); //remove our injected script tag from the document
+    // re write the current version of the html page and update the old index
+    fs.readFile(saveUrl, (err, buf) => {
+      fs.writeFileSync(saveUrl, updatedHtml);
+      searchAPI.update(annotationJSON, buf.toString());
+      this.props.addNotification(`File saved! ${this.props.save}`)
+      fs.writeFileSync(fd, JSON.stringify(annotationJSON));
+    });
+
   }
 
   // Takes in data returned by window.postMessage from the iframe rendered within the component
   handleIFrameTask = (e) => {
-    // console.log('parent received: ' + e.data);
 
     if (e.data == 'clicked button'){
       console.log("TEMPORARY")
@@ -161,7 +206,7 @@ export default class RenderText extends Component<Props> {
       if (this.props.activeUrl !== 'app/default_landing_page.html') {
         this.handleSave(e.data.savedData);
       } else {
-        console.log("can't save annotations on the home page!");
+        this.props.addNotification("can't save annotations on the home page!")
       }
 
     } else if (e.data.highlight){
@@ -184,7 +229,6 @@ export default class RenderText extends Component<Props> {
     return (
 
       <div>
-        <button onClick={this.handleSaveTask}>Save</button>
         {getRenderText(this.props.activeUrl,this.iframeRef)}
       </div>
 
