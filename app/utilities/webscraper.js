@@ -1,6 +1,25 @@
 const scrape = require('website-scraper');
 var urlUtil = require('url');
 var _ = require('lodash');
+const searchAPI = require('../../webcache_testing/main5.js');
+const path = require('path');
+
+class MyPlugin {
+
+  constructor(save_location){
+    this.loc = save_location
+  }
+
+  apply(registerAction) {
+      registerAction('onResourceSaved', ({resource}) => {
+        if (resource.type === "html"){
+          let fullPath = path.join('../',this.loc,resource.filename)
+          searchAPI.addFilesToMainIndex([fullPath]);
+        }
+      });
+  }
+}
+
 
 exports.getSite = function (inputUrl, save_location, callback){
     var options = {
@@ -10,6 +29,7 @@ exports.getSite = function (inputUrl, save_location, callback){
         directory: save_location,
         recursive: true,
         maxDepth: 1,
+        plugins: [ new MyPlugin(save_location) ],
         urlFilter: function(url){
             return _.startsWith(url, inputUrl);
         },

@@ -394,9 +394,19 @@ function getFileIndex(fileName) {
       if (!err) {
         // TODO: REMOVE HTML TAGS
         // Case-sensitive indexing not implented for simplicity.
-        const dom = new JSDOM(data);
-        dom.window.document.querySelectorAll("script, style").forEach(node => node.parentNode.removeChild(node));
-        let cleanText = dom.window.document.documentElement.outerHTML.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, ' ');
+        var cleanText;
+        if (fileName.slice(-5) === '.json') {
+          json = JSON.parse(data);
+          cleanText = '';
+          json.highlightData.forEach(highlight => {
+            cleanText = cleanText + " " + highlight.comment;
+          });
+        }
+        else {
+          const dom = new JSDOM(data);
+          dom.window.document.querySelectorAll("script, style").forEach(node => node.parentNode.removeChild(node));
+          cleanText = dom.window.document.documentElement.outerHTML.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, " ");
+        }
         let wordMapping = wordLocsMapping(cleanText);
         wordMapping.forEach(function(value, key) {
           fileIndex.push({

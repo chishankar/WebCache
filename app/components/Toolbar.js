@@ -20,6 +20,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Grid from '@material-ui/core/Grid';
 
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     save: SaveActions.SaveDoc,
@@ -52,6 +53,8 @@ const selectionstyles = themes => ({
   }
 })
 
+const searchAPI = require('../../webcache_testing/main5.js');
+
 class Tools extends Component<Props>{
   constructor(props){
     super(props);
@@ -62,6 +65,10 @@ class Tools extends Component<Props>{
       value: 0
     };
     this.store = this.props.store;
+  }
+
+  componentWillMount(){
+    searchAPI.search("");
   }
 
   // Handles the logic for showing the highlighter color options
