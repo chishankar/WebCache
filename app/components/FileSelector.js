@@ -5,6 +5,8 @@ import * as resourcePath from '../utilities/ResourcePaths';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+
 const fs = require('fs');
 
 const styles = theme => ({
@@ -52,6 +54,7 @@ class FileDialogue extends React.Component {
             Choose Directory
           </Button>
         </label>
+        <Divider />
         <h3>Files</h3>
         <h4>{console.log(this.state.path)}</h4>
         <FileTree directory={this.state.path}
