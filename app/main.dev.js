@@ -59,7 +59,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', async () => {
-  console.log("hello")
+  // console.log("hello")
   loadIndexFromFile('index_BSON', 'lookup_BSON', 'ranges_BSON');
   if (
     process.env.NODE_ENV === 'development' ||

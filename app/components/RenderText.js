@@ -119,9 +119,9 @@ export default class RenderText extends Component<Props> {
           this.props.clearHighlights();
           highlights.highlightData.forEach(highlight => {
             // only add it if it isn't arleady in the store
-            console.log("processing saved highlight: " + JSON.stringify(highlight));
+            // console.log("processing saved highlight: " + JSON.stringify(highlight));
             if (!this.props.annotations.some(element => {
-              console.log(this.props.annotations);
+              // console.log(this.props.annotations);
               return element.id == highlight.id;
             })) {
               this.props.addHighlight(highlight);
@@ -177,9 +177,9 @@ export default class RenderText extends Component<Props> {
     let fileName = saveUrl.substring(saveUrl.lastIndexOf('/') + 1, saveUrl.lastIndexOf('.'));
 
     var annotationsUrl = path.join(saveUrl, '..') + '/' + 'annotations-' + fileName + '.json';
-    console.log("SAVING HTML TO: " + saveUrl);
-    console.log("after the path.join: " + path.join(saveUrl, '..'));
-    console.log("SAVING ANNOTATIONS TO: " + annotationsUrl);
+    // console.log("SAVING HTML TO: " + saveUrl);
+    // console.log("after the path.join: " + path.join(saveUrl, '..'));
+    // console.log("SAVING ANNOTATIONS TO: " + annotationsUrl);
     var fd = fs.openSync(annotationsUrl, 'w');
 
     let annotationJSON = Object.assign({},

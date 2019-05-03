@@ -132,7 +132,7 @@ function scrollToId(id){
   // });
   try{
     document.querySelector(`.${id}`).scrollIntoView({behavior: 'smooth'});
-    console.log("scrolling to: " + id)
+    // console.log("scrolling to: " + id)
   } catch (err){
     console.log("can't find "  + id)
   }
