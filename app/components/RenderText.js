@@ -105,8 +105,9 @@ export default class RenderText extends Component<Props> {
           local = true;
           resource = filePath.substr(5, filePath.length);
         }
+        let fileName = resource.substring(resource.lastIndexOf('/') + 1, resource.lastIndexOf('.'));
         try {
-          var fd = fs.openSync(path.join(resource, '..') + '/' + ANNOTATIONS_FILE, 'r');
+          var fd = fs.openSync(path.join(resource, '..') + '/' + 'annotations-' + fileName + '.json', 'r');
           var highlights = JSON.parse(fs.readFileSync(fd));
           // this.props.updateLastUpdate(highlights.lastUpdated)
 
@@ -158,8 +159,9 @@ export default class RenderText extends Component<Props> {
   // Logic for saving file
   handleSave = (htmlData) => {
     var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
-    var annotationsUrl = path.join(saveUrl, '..') + '/' + ANNOTATIONS_FILE;
-    console.log("ORIGINAL: " + this.props.activeUrl);
+    let fileName = saveUrl.substring(saveUrl.lastIndexOf('/') + 1, saveUrl.lastIndexOf('.'));
+
+    var annotationsUrl = path.join(saveUrl, '..') + '/' + 'annotations-' + fileName + '.json';
     console.log("SAVING HTML TO: " + saveUrl);
     console.log("after the path.join: " + path.join(saveUrl, '..'));
     console.log("SAVING ANNOTATIONS TO: " + annotationsUrl);
