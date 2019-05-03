@@ -19,6 +19,7 @@ import Tools from './Toolbar';
 import homeStyles from './Home.css';
 import FileDialogue from './FileSelector';
 import SideBarPage from '../containers/SideBarPage';
+import SearchSideBarPage from '../containers/SearchSideBarPage';
 import RenderTextPage from '../containers/RenderTextPage';
 
 const drawerWidth = 250;
@@ -106,6 +107,11 @@ class Home extends Component {
     this.store = this.props.store;
   }
 
+  state = {
+    open: false,
+    showSearchSideBar: false
+  };
+
   // These two functions handle opening and closes the file tree menu component
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -114,6 +120,14 @@ class Home extends Component {
   handleDrawerClose = () => {
     this.setState({ open: false });
   };
+
+  componentDidUpdate(prevProps){
+    if (!(this.props.sidebarState === prevProps.sidebarState)) {
+      this.setState({
+          showSearchSideBar: this.props.sidebarState
+       });
+     }
+  }
 
   render(){
     const { classes, theme } = this.props;
@@ -183,14 +197,21 @@ class Home extends Component {
             }}>
 
             <div className={classNames(classes.toolbar, classes.toolbarRight)}/>
+            {!this.state.showSearchSideBar &&
             <List className={classes.list}>
-              <SideBarPage store={this.store}/>
-            </List>
+                <SideBarPage store={this.store}/>
+            </List>}
+            {this.state.showSearchSideBar &&
+            <List className={classes.list}>
+               <SearchSideBarPage store={this.store}/>
+            </List>}
+
           </Drawer>
           <NotificationCenter />
         </div>
       );
     };
-}
+  }
+
 
   export default withStyles(styles, { withTheme: true })(Home);

@@ -8,6 +8,7 @@ import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import * as resourcePath from '../utilities/ResourcePaths';
 import * as highlightActions from '../actions/sidebar';
+const searchAPI = require('../../webcache_testing/main5.js');
 
 const fs = require('fs');
 const ANNOTATIONS_FILE = 'annotations.json';
@@ -158,7 +159,9 @@ export default class RenderText extends Component<Props> {
   handleSave = (htmlData) => {
     var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
     var annotationsUrl = path.join(saveUrl, '..') + '/' + ANNOTATIONS_FILE;
+    console.log("ORIGINAL: " + this.props.activeUrl);
     console.log("SAVING HTML TO: " + saveUrl);
+    console.log("after the path.join: " + path.join(saveUrl, '..'));
     console.log("SAVING ANNOTATIONS TO: " + annotationsUrl);
     var fd = fs.openSync(annotationsUrl, 'w');
 
@@ -167,14 +170,22 @@ export default class RenderText extends Component<Props> {
       {"lastUpdated":this.props.save}
     )
 
-    fs.writeFileSync(fd, JSON.stringify(annotationJSON));
+    //update the old index of the annotations json page
+    fs.readFile(annotationsUrl, (err, buf) => {
+      fs.writeFileSync(fd, JSON.stringify(annotationJSON));
+      searchAPI.update(annotationsUrl, buf.toString());
+    });
 
     var end = htmlData.indexOf("<script id=\"webcache-script\">");
     let updatedHtml = htmlData.substring(0, end - 1); //remove our injected script tag from the document
-    // re write the current version of the html page
-    fs.writeFileSync(saveUrl, updatedHtml);
-    console.log(updatedHtml)
-    this.props.addNotification(`File saved on ${this.props.save}`)
+    // re write the current version of the html page and update the old index
+    fs.readFile(saveUrl, (err, buf) => {
+      fs.writeFileSync(saveUrl, updatedHtml);
+      searchAPI.update(annotationJSON, buf.toString());
+      this.props.addNotification(`File saved! ${this.props.save}`)
+      fs.writeFileSync(fd, JSON.stringify(annotationJSON));
+    });
+
   }
 
   // Takes in data returned by window.postMessage from the iframe rendered within the component

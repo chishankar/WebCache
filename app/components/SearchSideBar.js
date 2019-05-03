@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-
 import { withStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 
-import HighlightText from './HighlightText';
+import SearchResult from './SearchResult';
+
+
 import { Divider } from '@material-ui/core';
 
 
@@ -19,39 +21,39 @@ const styles = theme => ({
   },
 });
 
-type Props = {
-  searchResults: Array
-}
-
 class SearchSideBar extends Component<Props>{
   props: Props
 
   constructor(props){
     super(props)
-    this.state = {
-      open: true
-    }
   }
 
   render(){
-
-    const searchData = this.props.searchData;
-
+    const searchData = JSON.parse(this.props.searchData);
+    const { classes } = this.props;
+    let searchTitle;
+    if(searchData.results > 0){
+      searchTitle = <ListSubheader component='div'>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Search Results
+      </ListSubheader>
+    } else {
+      searchTitle = <ListSubheader component='div'>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No Results
+      </ListSubheader>
+    }
     return(
       <List
       component='nav'
-      subheader={<ListSubheader component='div'><i className='fas fa-highlighter'/>Search Results</ListSubheader>}
-      className={styles.root}>
-
+      subheader= {<ListSubheader component='div'>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Search Results
+      </ListSubheader>}
+      className={classes.root}>
       <Divider />
-
-     {highlightData.map(highlight =>
-      <HighlightText key={highlight.id} text={highlight.text} color={highlight.color} id={highlight.id} func={this.props.addComment}/>
+      {searchData.results.map(result =>
+      <SearchResult key={result.filename} store={this.props.store} filename={result.filename} count={result.count}/>
       )}
-
     </List>
     )
-
   }
 }
 

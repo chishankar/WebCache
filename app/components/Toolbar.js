@@ -10,6 +10,9 @@ import 'font-awesome/css/font-awesome.min.css';
 import Highlight from './Highlight';
 import ReactTooltip from 'react-tooltip';
 import UrlSearch from './UrlSearch';
+import FileSearch from './FileSearch';
+
+import * as sideBarStateActions from '../actions/sidebarstate';
 
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
@@ -55,6 +58,7 @@ class Tools extends Component<Props>{
     this.state = {
       showHighlighter: false,
       showUrlSearch: false,
+      showFileSearch: false,
       value: 0
     };
     this.store = this.props.store;
@@ -64,15 +68,27 @@ class Tools extends Component<Props>{
   _showHighlighter = () =>{
     this.setState({
       showHighlighter: !this.state.showHighlighter,
-        showUrlSearch: false
+        showUrlSearch: false,
+        showFileSearch: false
     });
+    this.store.dispatch(sideBarStateActions.changeSideBarState(false));
   }
 
   // Handles the logic for showing the the URL search input
   _showUrlSearch = () => {
     this.setState({
       showUrlSearch: !this.state.showUrlSearch,
-      showHighlighter: false
+      showHighlighter: false,
+      showFileSearch: false
+    });
+  }
+
+  _showFileSearch = () => {
+    this.store.dispatch(sideBarStateActions.changeSideBarState(true));
+    this.setState({
+      showFileSearch: !this.state.showFileSearch,
+      showHighlighter: false,
+      showUrlSearch: false
     });
   }
 
@@ -116,6 +132,9 @@ class Tools extends Component<Props>{
               {this.state.showUrlSearch && <UrlSearch store={this.store}/>}
 
               <Tab icon={<i className="far fa-save"></i>} onClick={this.handleSave} data-tip="Save" />
+
+              <Tab icon={<i className="fa fa-search" />} data-tip="File Search" onClick={this._showFileSearch}/>
+              {this.state.showFileSearch && <FileSearch store={this.store}/>}
 
               {this.showLastUpdateDate() && <Tab disabled icon={this.props.saveDate} />}
             </Tabs>

@@ -114,8 +114,11 @@ class HighlightText extends Component{
   // Handles the first drop down to show the comments and full text drop down
   handleClick = () => {
     this.setState(state => ({ open: !state.open }));
-    this.props.showId(this.id)
   };
+
+  handleShowId = () => {
+    this.props.showId(this.id)
+  }
 
   // This is invoked when a user clicks on the delete button. It dispatches a delete action
   // to the store
@@ -149,7 +152,7 @@ class HighlightText extends Component{
             <i className="fas fa-highlighter" style={this.getHighlighterColorIcon(this.color)}/>
           </ListItemIcon>
 
-          <ListItemText primary={this.preview} />
+          <ListItemText primary={this.preview} onClick={this.handleShowId}/>
           {this.state.open ?
             <ExpandLess style={black}/> :
             <ExpandMore style={black}/>}
