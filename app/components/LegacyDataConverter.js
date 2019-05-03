@@ -83,7 +83,7 @@ async function FindFile(dirPath) {
           FindFile(htmlFilePath);
         } else if (files[i].indexOf('index.html') == 0) {
           var datFilePath = path.join(dirPath,'index.dat');
-          var annotJsonPath = path.join(dirPath,'annotations.json');
+          var annotJsonPath = path.join(dirPath,'annotations-index.json');
           var snJsonPath = path.join(dirPath,'sticky.json');
 
           var fileArr = await ScrapbookToWebcacheFormat(htmlFilePath, datFilePath);
