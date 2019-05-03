@@ -69,6 +69,9 @@ async function ScrapbookToWebcacheHTML(htmlFilePath) {
     // contents of the file, assumed to be an HTML file
     var html = await readFile(htmlFilePath, {encoding: 'utf8'});
 
+    var result = {lastUpdated:""};
+    result.highlightData = new Array(0);
+
     // the file contents, converted to a Cheerio object
     var doc = cheerio.load(html);
 
@@ -102,8 +105,13 @@ async function ScrapbookToWebcacheHTML(htmlFilePath) {
         highlights.eq(i).attr('class', highlightJSONs[i].id);
     }
 
+    var annotationJson= highlightJSONs.concat(inlineJSONs);
+    //console.log(annotationJson);
+    result.highlightData = annotationJson;
+
+    //console.log(result);
     // return the modified HTML & the annotations
-    return [doc.html(), highlightJSONs, inlineJSONs, stickyJSONs];
+    return [doc.html(), result, stickyJSONs];
 }
 
 
@@ -175,7 +183,8 @@ const highlightStyles = [
 ];
 
 function cheerioObjsToHighlightJSON(highlights) {
-    var out = new Array(highlights.length);
+    var result = new Array(highlights.length);
+    var comment = "";
     for (var i = 0; i < highlights.length; i++) {
         var highlight = highlights.eq(i),
             style = highlight.attr('style');
@@ -195,13 +204,14 @@ function cheerioObjsToHighlightJSON(highlights) {
             forceColor = '#999999';
         }
 
-        out[i] = {
+        result[i] = {
             id: randomID(),
             text: highlight.text(),
-            color: forceColor
+            color: forceColor,
+            comment: comment,
         };
     }
-    return out;
+    return result;
 }
 
 /**
@@ -213,17 +223,23 @@ function cheerioObjsToHighlightJSON(highlights) {
    "id", "text".
 */
 function cheerioObjsToInlineAnnotationJSON(inlines) {
-    var out = new Array(inlines.length);
+  var comment = "";
+  var defaultColor = 'DEFAULT';
+  var result = new Array(inlines.length);
+
     for (var i = 0; i < inlines.length; i++) {
         // get the i-th inline annotation, as a Cheerio object
         var inline = inlines.eq(i);
+        comment = inline.attr('title');
         // the i-th inline annotation, as a JSON
-        out[i] = {
+        result[i] = {
             id: randomID(),
-            text: inline.attr('title')
+            text: inlines.text(),
+            color: defaultColor,
+            comment: comment,
         };
     }
-    return out;
+    return result;
 }
 
 

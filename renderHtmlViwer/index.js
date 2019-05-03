@@ -126,12 +126,26 @@ function showHighlights(){
   })
 }
 
+function scrollToId(id){
+  // document.getElementsByClassName(id).scrollIntoView({
+  //   behavior: 'smooth'
+  // });
+  try{
+    document.querySelector(`.${id}`).scrollIntoView({behavior: 'smooth'});
+    console.log("scrolling to: " + id)
+  } catch (err){
+    console.log("can't find "  + id)
+  }
+
+}
+
 // Event listener for events coming from the parent
 window.parent.addEventListener('message',function(e){
   // if (!e.data.type){
   //   console.log('iFrame received: ' + JSON.stringify(e.data))
   // }
   let data = e.data;
+  console.log(data)
 
   if (data.delete) {
     unwrap(getSpansWithHighlight(data.delete));
@@ -156,6 +170,12 @@ window.parent.addEventListener('message',function(e){
   else if (data === "hide"){
     // console.log("here")
     hideHighlights()
+  }
+
+  else if (data.showHighlight){
+
+    scrollToId(data.showHighlight)
+    console.log("HERE")
   }
 
 });
