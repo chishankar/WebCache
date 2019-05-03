@@ -31,13 +31,22 @@ class SearchSideBar extends Component<Props>{
   render(){
     const searchData = JSON.parse(this.props.searchData);
     const { classes } = this.props;
+    let searchTitle;
+    if(searchData.results > 0){
+      searchTitle = <ListSubheader component='div'>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Search Results
+      </ListSubheader>
+    } else {
+      searchTitle = <ListSubheader component='div'>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No Results
+      </ListSubheader>
+    }
     return(
       <List
       component='nav'
-      subheader={
-        <ListSubheader component='div'>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Search Results
-        </ListSubheader>}
+      subheader= {<ListSubheader component='div'>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Search Results
+      </ListSubheader>}
       className={classes.root}>
       <Divider />
       {searchData.results.map(result =>

@@ -50,7 +50,7 @@ export default class FileSearch extends Component<Props>{
             id="outlined-full-width"
             label="File Search"
             style={{ margin: 8 }}
-            placeholder="Search archivers"
+            placeholder="Search archives"
             margin="normal"
             variant="outlined"
             InputLabelProps={{
