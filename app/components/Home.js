@@ -124,7 +124,7 @@ class Home extends Component {
     this.setState({ open: false });
   };
 
-  render(){
+  render() {
     const { classes, theme } = this.props;
     const { open } = this.state;
 

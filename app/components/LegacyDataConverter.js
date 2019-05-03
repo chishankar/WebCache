@@ -103,21 +103,7 @@ async function FindFile(dirPath) {
 }
 
 async function WriteToFile(filePath, replacement) {
-  let filehandle;
-  try {
-    //console.log(replacement);
-    await writeFile(filePath,replacement)
-    //const filehandle = await fsPromises.open(filePath, 'w');
-    //console.log(replacement);
-    //await filehandle.writeFile(replacement);
-  } finally {
-    //if (filehandle !== undefined){
-    //  await filehandle.close();
-    //}
-  }
-
-  //const filehandle = await fsPromises.open(fileName, 'w');
-  //writeFile(filePath, replacement);
+  await writeFile(filePath, replacement);
 }
 
 export default withStyles(styles, { withTheme: true })(LegacyDataConverter);
