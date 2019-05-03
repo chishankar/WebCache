@@ -83,8 +83,7 @@ async function FindFile(dirPath) {
           FindFile(htmlFilePath);
         } else if (files[i].indexOf('index.html') == 0) {
           var datFilePath = path.join(dirPath,'index.dat');
-          var hlJsonPath = path.join(dirPath,'highlight.json');
-          var ilJsonPath = path.join(dirPath,'inline.json');
+          var annotJsonPath = path.join(dirPath,'annotations.json');
           var snJsonPath = path.join(dirPath,'sticky.json');
 
           var fileArr = await ScrapbookToWebcacheFormat(htmlFilePath, datFilePath);
@@ -93,9 +92,8 @@ async function FindFile(dirPath) {
           //console.log(fileArr[3]);
 
           WriteToFile(htmlFilePath, fileArr[0]);
-          WriteToFile(hlJsonPath, JSON.stringify(fileArr[1]));
-          WriteToFile(ilJsonPath, JSON.stringify(fileArr[2]));
-          WriteToFile(snJsonPath, JSON.stringify(fileArr[3]));
+          WriteToFile(annotJsonPath, JSON.stringify(fileArr[1]));
+          WriteToFile(snJsonPath, JSON.stringify(fileArr[2]));
         }
       }
     }
