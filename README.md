@@ -10,16 +10,16 @@ Webcache is standalone application that allows users to cache webpages as they a
 
 
 
-#### Save webpage
+### Save webpage
 Click the cache button in the toolbar, second from the left, and enter a URL in the text box. WebCache will retrieve the webpage’s HTML, Javascript, and CSS. The page will then be displayed fully-rendered in the application. Once a page is cached, it’s saved and indexed by the application and can be opened at any point in the future.
-#### Highlight text
+### Highlight text
 Click the highlight icon on the top left the toolbar and select a color. Select text to highlight it in that color. Highlighted segments of text will appear in the right sidebar and can be selected to travel to that section of the page. Click “save” to save highlights to the page. The current page can be closed and reopened and highlights will persist. Highlights can be toggled on and off by an option in the right sidebar. 
-#### Add comments to highlight
+### Add comments to highlight
 Once text is highlighted, the user can select the highlight instance in the right toolbar and attach a comment. Comments can be deleted, and clicking on a comment will take you to the text where it's anchored.
 
-#### Search text and annotations
+### Search text and annotations
 Click on the search icon on the right of the top toolbar and enter text to search through all cached documents for the keyword(s). Matches will appear on the right toolbar and can be clicked on to open the respective pages.
-#### Import legacy data 
+### Import legacy data 
 Past user of Scrapbook for Firefox, or similar? Enjoy compatibility with your old cached pages. Click “import legacy data” to transfer your caches, including annotations. All features will be available on the imported pages.
 
 ## Stack
