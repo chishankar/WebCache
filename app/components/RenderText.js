@@ -162,7 +162,9 @@ export default class RenderText extends Component<Props> {
   handleSave = (htmlData) => {
     var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
     var annotationsUrl = path.join(saveUrl, '..') + '/' + ANNOTATIONS_FILE;
+    console.log("ORIGINAL: " + this.props.activeUrl);
     console.log("SAVING HTML TO: " + saveUrl);
+    console.log("after the path.join: " + path.join(saveUrl, '..'));
     console.log("SAVING ANNOTATIONS TO: " + annotationsUrl);
     var fd = fs.openSync(annotationsUrl, 'w');
 
