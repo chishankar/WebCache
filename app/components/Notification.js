@@ -54,14 +54,14 @@ class Notification extends Component {
       }}
       open={this.state.open}
       autoHideDuration={6000}
-      onClose={this.handleClose}
+      onClose={this.notificationClose}
       ContentProps={{
         'aria-describedby': 'message-id',
       }}
-      onClick={this.notificationClose}
       message={<span id="message-id">{this.message}</span>}
       action={[
         <IconButton
+          onClick={this.notificationClose}
           key="close"
           aria-label="Close"
           color="inherit"

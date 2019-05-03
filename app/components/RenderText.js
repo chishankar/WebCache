@@ -30,7 +30,7 @@ function getResourceBase(path){
 }
 
 // Renders dynamic iframe
-function getRenderText(filePath, iframeRef, addHighlights) {
+function getRenderText(filePath, iframeRef, onloadFun) {
   let resource = getResourceBuilder(filePath);
   let resourceDir = getResourcePath(filePath);
   let jsResource = getResourceBuilder('renderHtmlViwer/index.js');
@@ -57,7 +57,8 @@ function getRenderText(filePath, iframeRef, addHighlights) {
 
   return (
 
-    <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml }></iframe>
+    // <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml } onLoad={ onloadFun } ></iframe>
+    <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml } ></iframe>
 
   );
 }
@@ -236,7 +237,6 @@ export default class RenderText extends Component<Props> {
 
   // Function to handle saving data
   handleSaveTask = () => {
-
     window.postMessage("save", '*');
 
   }
@@ -246,7 +246,7 @@ export default class RenderText extends Component<Props> {
     return (
 
       <div>
-        {getRenderText(this.props.activeUrl,this.iframeRef)}
+        {getRenderText(this.props.activeUrl,this.iframeRef,this.handleSaveTask)}
       </div>
 
     );

@@ -4,6 +4,15 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { ifError } from 'assert';
 import ScrapbookToWebcacheFormat from './convert-html.js';
+import * as notificationActions from '../actions/notification';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({
+    addNotification: notificationActions.addNotification
+  },dispatch)
+}
 
 var path = require('path');
 
@@ -44,7 +53,8 @@ class LegacyDataConverter extends React.Component {
       fs.copy(sourceFolder, destFolder, (err) => {
         if (err) return console.error(err);
         FindFile(destFolder);
-        console.log('success! moved files to data directory');
+        this.props.addNotification('success! moved files to data directory')
+        // console.log('success! moved files to data directory');
       });
     }
   };
@@ -72,7 +82,7 @@ class LegacyDataConverter extends React.Component {
 
 async function FindFile(dirPath) {
   fs.readdir(dirPath, async (err, files) => {
-    console.log(files);
+    // console.log(files);
     // console.log(items);
     if (!err) {
       for (var i = 0; i < files.length; i++) {
@@ -104,4 +114,7 @@ async function WriteToFile(filePath, replacement) {
   await writeFile(filePath, replacement);
 }
 
-export default withStyles(styles, { withTheme: true })(LegacyDataConverter);
+export default connect(
+  null,
+  mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(LegacyDataConverter));
