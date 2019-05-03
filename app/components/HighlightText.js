@@ -86,7 +86,7 @@ class HighlightText extends Component{
     this.addComment = this.props.addComment;
     this.state = {
       open: false,
-      comment: "",
+      comment: this.props.comment,
       fullText: false,
     }
   }

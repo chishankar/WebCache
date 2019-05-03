@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import NotificationCenter from './NotificationCenter';
 
 import Footer from './Footer';
 import Tools from './Toolbar';
@@ -97,13 +98,17 @@ const styles = theme => ({
 type Props = {};
 class Home extends Component {
   // props: Props
+
+  state = {
+    open: false,
+  }
   constructor(props){
     super(props);
     this.store = this.props.store;
   }
 
   state = {
-    open: false, 
+    open: false,
     showSearchSideBar: false
   };
 
@@ -116,7 +121,7 @@ class Home extends Component {
     this.setState({ open: false });
   };
 
-  componentDidUpdate(prevProps){  
+  componentDidUpdate(prevProps){
     if (!(this.props.sidebarState === prevProps.sidebarState)) {
       this.setState({
           showSearchSideBar: this.props.sidebarState
@@ -202,6 +207,7 @@ class Home extends Component {
             </List>}
 
           </Drawer>
+          <NotificationCenter />
         </div>
       );
     };
