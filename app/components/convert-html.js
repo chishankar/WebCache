@@ -42,7 +42,7 @@ const readFile = util.promisify(fs.readFile);
    sticky annotations, and comment
   */
 
-async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
+ export default async function ScrapbookToWebcacheFormat(htmlFilePath, datFilePath) {
     // split the annotations & comments into different functions so they
 
     // could be done in parallel
@@ -81,7 +81,9 @@ async function ScrapbookToWebcacheHTML(htmlFilePath) {
         absStickies = doc('div[class=scrapbook-sticky]'),
         relStickies = doc('div[class=scrapbook-sticky-relative]');
 
-    relativeStickyToInlineAnnotation(relStickies);
+
+    //console.log(relStickies);
+    relativeStickyToInlineAnnotation(doc,relStickies);
 
     var inlines = doc('span[class=scrapbook-inline]');
 
@@ -135,6 +137,7 @@ async function extractCommentFromDatFile(datFilePath) {
 // #############################################################################
 
 function relativeStickyToInlineAnnotation(doc, relStickies) {
+  console.log(relStickies);
     var texts = new Array(relStickies.length);
 
     for (var i = 0; i < relStickies.length; i++) {
@@ -281,6 +284,3 @@ function randomID() {
 }
 
 // ############################################################################/
-
-module.exports = {};
-module.exports['ScrapbookToWebcacheFormat'] = ScrapbookToWebcacheFormat;

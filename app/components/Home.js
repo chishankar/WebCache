@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -21,6 +22,14 @@ import FileDialogue from './FileSelector';
 import SideBarPage from '../containers/SideBarPage';
 import RenderTextPage from '../containers/RenderTextPage';
 
+// const theme = createMuiTheme({
+//   palette: {
+//     primary: '#303030',
+//     secondary: '#707070',
+//     error: '#8b0000',
+//   }
+// });
+
 const drawerWidth = 250;
 
 const styles = theme => ({
@@ -33,7 +42,8 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    backgroundColor: 'white',
+    color: 'white',
+    backgroundColor: '#303030',
     zIndex: theme.zIndex.drawer + 1,
   },
   appBarShift: {
@@ -52,12 +62,14 @@ const styles = theme => ({
     display: 'none',
   },
   drawer: {
+
     width: drawerWidth,
     flexShrink: 0,
   },
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: '#232c39 !important',
+    color: 'white',
+    backgroundColor: '#303030 !important',
     padding: '0 !important',
     border: 'inherit'
   },
@@ -70,7 +82,7 @@ const styles = theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 3,
+    padding: 0,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -85,9 +97,6 @@ const styles = theme => ({
     marginLeft: 0,
   },
   toolbar: theme.mixins.toolbar,
-  toolbarRight: {
-    backgroundColor: 'white'
-  },
   list:{
     padding: '0px !important'
   }
@@ -125,6 +134,7 @@ class Home extends Component {
         <Divider />
         <LegacyDataConverter />
         <FileDialogue store={this.store}/>
+
       </div>
     );
 

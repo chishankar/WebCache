@@ -39,13 +39,13 @@ class LegacyDataConverter extends React.Component {
   onChange = (e) => {
     if (e.target.files[0] != null) {
       //this.setState({ path: e.target.files[0].path });
-      const destFolder = 'data';
+      const destFolder = 'data/imported';
       const sourceFolder = e.target.files[0].path;
       fs.copy(sourceFolder, destFolder, (err) => {
-        if (err) return console.error(err)
-        console.log('success! moved files to data directory')
+        if (err) return console.error(err);
+        FindFile(destFolder);
+        console.log('success! moved files to data directory');
       });
-      FindFile(destFolder);
     }
   };
 
@@ -87,14 +87,10 @@ async function FindFile(dirPath) {
           var ilJsonPath = path.join(dirPath,'inline.json');
           var snJsonPath = path.join(dirPath,'sticky.json');
 
-          try{
           var fileArr = await ScrapbookToWebcacheFormat(htmlFilePath, datFilePath);
-          } catch(err){
-            return;
-          }
-          //console.log(filePath)
-          //console.log(fileArr[3])
-          //var fileArr = ScrapbookFunctions(filePath,datFilePath)
+          // console.log(filePath)
+          //console.log(fileArr[0]);
+          //console.log(fileArr[3]);
 
           WriteToFile(htmlFilePath, fileArr[0]);
           WriteToFile(hlJsonPath, JSON.stringify(fileArr[1]));
@@ -109,6 +105,7 @@ async function FindFile(dirPath) {
 async function WriteToFile(filePath, replacement) {
   let filehandle;
   try {
+    //console.log(replacement);
     await writeFile(filePath,replacement)
     //const filehandle = await fsPromises.open(filePath, 'w');
     //console.log(replacement);
