@@ -59,7 +59,6 @@ class FileDialogue extends React.Component {
         <h4>{console.log(this.state.path)}</h4>
         <FileTree directory={this.state.path}
         onFileClick={this.handleFile} fileTreeStyle="light"/>
-
       </div>
     );
   }

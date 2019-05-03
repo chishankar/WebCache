@@ -44,8 +44,8 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    color: 'white',
-    backgroundColor: '#303030',
+    color: 'black',
+    backgroundColor: '#e9e9e6',
     zIndex: theme.zIndex.drawer + 1,
   },
   appBarShift: {
@@ -70,8 +70,8 @@ const styles = theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    color: 'white',
-    backgroundColor: '#303030 !important',
+    color: 'black',
+    backgroundColor: '#e9e9e6 !important',
     padding: '0 !important',
     border: 'inherit'
   },
@@ -102,7 +102,6 @@ const styles = theme => ({
   list:{
     padding: '0px !important'
   }
-
 });
 
 type Props = {};
