@@ -35,9 +35,6 @@ class SearchResult extends React.Component {
 
     return (
         <ListItem button onClick={this.handleClick}>
-          <ListItemIcon>
-            <LabelIcon />
-          </ListItemIcon>
           <ListItemText inset primary={'Filename: ' + this.props.filename + '\n'} />
           <ListItemText inset primary={'Matches: ' + this.props.count} />
         </ListItem>

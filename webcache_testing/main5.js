@@ -25,7 +25,6 @@ var fileParseTime = 0;
 var sizeCheckTime = 0;
 var fileCount = 0;
 var wordcount = 0;
-var indexOnFile = false;
 var mainIndex = [];
 
 
@@ -99,8 +98,7 @@ function avg(mainIndex) {
 }
 
 //Lookup table between file name and file number
-var lookup = [];
-lookup.push({fileName: "", a: []});
+var lookup = [{fileName: "", a: []}];
 
 function checkIndexForChanges(lookup) {
 
@@ -376,20 +374,20 @@ function deleteFileFromDirectory(filename) {
   });
 }
 
-function saveIndexToFile(indexFn, fileTableFn, rngTableFn) {
+export function saveIndexToFile(indexFn, fileTableFn, rngTableFn) {
 
-  let filePath = path.join(__dirname, indexFn);
+  let filePath = path.join(__dirname, '../data/word_inds/' + indexFn);
   return new Promise(resolve => {
 
     fs.writeFile(filePath, BSON.serialize(mainIndex), function (err) {
       if (err) throw err;
-      console.log('Index saved to file');
-      let filePath = path.join(__dirname, fileTableFn);
+      let filePath = path.join(__dirname, '../data/word_inds/' + fileTableFn);
       fs.writeFile(filePath, BSON.serialize(lookup), function (err) {
         if (err) throw err;
-        let filePath = path.join(__dirname, rngTableFn);
+        let filePath = path.join(__dirname, '../data/word_inds/' + rngTableFn);
         fs.writeFile(filePath, BSON.serialize(rngTbl), function (err) {
           if (err) throw err;
+          console.log('Index saved to file');
           resolve();
         });
       });
@@ -397,27 +395,29 @@ function saveIndexToFile(indexFn, fileTableFn, rngTableFn) {
   });
 }
 
-function loadIndexFromFile(indexFn, tableFn, rngTableFn) {
+export function loadIndexFromFile(indexFn, tableFn, rngTableFn) {
 
-  if (!indexOnFile) {
-    return;
-  }
-
-  let filePath = path.join(__dirname, indexFn);
+  let filePath = path.join(__dirname, '../data/word_inds/' + indexFn);
   return new Promise(resolve => {
-    fs.readFile(filePath, function(err,data){
-      if (err) throw err;
-      mainIndex = BSON.deserialize(data);
+    fs.readFile(filePath, function(err,data1){
+      if (err) {mainIndex = []; return;}
+
+      mainIndex = Object.values(BSON.deserialize(data1));
       console.log('Index loaded from file');
-      let filePath = path.join(__dirname, tableFn);
-      fs.readFile(filePath, function(err,data){
-        if (err) throw err;
-        lookup = BSON.deserialize(data);
-        let filePath = path.join(__dirname, rngTableFn);
-        fs.readFile(filePath, function(err,data){
-          if (err) throw err;
-          rngTbl = BSON.deserialize(data);
-          resolve([index, fileTable, rngTbl]);
+      let filePath = path.join(__dirname, '../data/word_inds/' + tableFn);
+      fs.readFile(filePath, function(err,data2){
+        if (err) {lookup = [{fileName: "", a: []}]; return;}
+        lookup = Object.values(BSON.deserialize(data2));
+        filePath = path.join(__dirname, '../data/word_inds/' + rngTableFn);
+
+        fs.readFile(filePath, function(err,data3){
+          if (err) {rngTbl = []; return;}
+          rngTbl = Object.values(BSON.deserialize(data3));
+          console.log("Index loaded from file.")
+          console.log("Index size: " + mainIndex.length);
+          console.log("Lookup size: " + lookup.length);
+          console.log("rngTbl size: " + rngTbl.length);
+          resolve();
         });
       });
 
@@ -952,11 +952,13 @@ export function addFilesToMainIndex(fileNames) {
         });
       }));
     });
-    Promise.all(indexPromises).then(() => {
+    Promise.all(indexPromises).then(() => { //!!!!
       if (tempIndex.length != 0) {
         addToMainAux(tempIndex);
         tempIndex = [];
       }
+      saveIndexToFile("index_BSON", "lookup_BSON", "ranges_BSON");
+      console.log("Index saved to file.");
       resolveAll();
     });
   });
@@ -992,6 +994,28 @@ function getWordLocs(codes) {
 }
 
 export function search(searchStr) {
+  if (mainIndex.length === 0) {
+    return new Promise (function (resolve, reject) {
+      loadIndexFromFile("index_BSON", "lookup_BSON", "ranges_BSON").then((thing) => {
+        console.log("Index loaded from file." + performance.now());
+        let results = searchIndex(searchStr);
+        console.log(results);
+        resolve(results);
+      });
+    });
+    // loadIndexFromFile("index_BSON", "lookup_BSON", "ranges_BSON").then(result => {
+    //   console.log("Index loaded from file." + performance.now());
+    //   return searchIndex(searchStr);
+    // });
+  } else {
+    return new Promise (function (resolve, reject) {
+      resolve(searchIndex(searchStr));
+    });
+  }
+}
+
+function searchIndex(searchStr) {
+
   let finalResults = [];
   let fileLists = []; // will hold all files for each search word
   let wordResults = [];
