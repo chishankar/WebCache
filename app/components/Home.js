@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import NotificationCenter from './NotificationCenter';
 
 import Footer from './Footer';
 import Tools from './Toolbar';
@@ -108,7 +109,7 @@ class Home extends Component {
   // props: Props
 
   state = {
-    open: false
+    open: false,
   }
   constructor(props){
     super(props);
@@ -198,6 +199,7 @@ class Home extends Component {
               <SideBarPage store={this.store}/>
             </List>
           </Drawer>
+          <NotificationCenter />
         </div>
       );
     };

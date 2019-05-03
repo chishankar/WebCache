@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import * as sideBarActions from '../actions/sidebar';
+
 import { withStyles } from '@material-ui/core/styles';
 
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -70,7 +71,9 @@ function preview(str){
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     addComment: sideBarActions.addComment,
-    delete: sideBarActions.deleteHighlights
+    delete: sideBarActions.deleteHighlights,
+    showId: sideBarActions.viewHighlight
+
   },dispatch)
 }
 
@@ -86,7 +89,7 @@ class HighlightText extends Component{
     this.addComment = this.props.addComment;
     this.state = {
       open: false,
-      comment: "",
+      comment: this.props.comment,
       fullText: false,
     }
   }
@@ -111,6 +114,7 @@ class HighlightText extends Component{
   // Handles the first drop down to show the comments and full text drop down
   handleClick = () => {
     this.setState(state => ({ open: !state.open }));
+    this.props.showId(this.id)
   };
 
   // This is invoked when a user clicks on the delete button. It dispatches a delete action
