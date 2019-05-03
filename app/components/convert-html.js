@@ -111,10 +111,10 @@ async function ScrapbookToWebcacheHTML(htmlFilePath) {
     }
 
     var annotationJson= highlightJSONs.concat(inlineJSONs);
-    console.log(annotationJson);
+    //console.log(annotationJson);
     result.highlightData = annotationJson;
 
-    console.log(result);
+    //console.log(result);
     // return the modified HTML & the annotations
     return [doc.html(), result, stickyJSONs];
 }
@@ -145,7 +145,7 @@ async function extractCommentFromDatFile(datFilePath) {
 // #############################################################################
 
 function relativeStickyToInlineAnnotation(doc, relStickies) {
-  console.log(relStickies);
+  //console.log(relStickies);
     var texts = new Array(relStickies.length);
 
     for (var i = 0; i < relStickies.length; i++) {
@@ -228,10 +228,11 @@ function cheerioObjsToInlineAnnotationJSON(inlines) {
     for (var i = 0; i < inlines.length; i++) {
         // get the i-th inline annotation, as a Cheerio object
         var inline = inlines.eq(i);
+        comment = inline.attr('title');
         // the i-th inline annotation, as a JSON
         result[i] = {
             id: randomID(),
-            text: inline.attr('title'),
+            text: inlines.text(),
             color: defaultColor,
             comment: comment,
         };
