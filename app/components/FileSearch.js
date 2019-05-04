@@ -40,7 +40,7 @@ export default class FileSearch extends Component<Props>{
    * @param  {Event} event Contains user input for what they are searching for
    * @fires  changeSearchData
    */
-  handleEnter = (event) => {
+  handleEnter = (event: Event) => {
     if (event.key === 'Enter'){
       var elem = event.srcElement || event.target;
       console.log("Search term: " + elem.value);
