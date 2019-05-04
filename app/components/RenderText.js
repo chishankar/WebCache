@@ -172,6 +172,7 @@ export default class RenderText extends Component<Props> {
 
   // Logic for saving file
   handleSave = (htmlData) => {
+    console.log("in save once!");
     var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
     let fileName = saveUrl.substring(saveUrl.lastIndexOf('/') + 1, saveUrl.lastIndexOf('.'));
 
@@ -190,13 +191,23 @@ export default class RenderText extends Component<Props> {
 
     //update the old index of the annotations json page
     try {
-      fs.readFileSync(annotationsFilePath, (err, buf) => {
+      fs.readFile(annotationsFilePath, (err, buf) => {
         if (err || buf.length === 0) {
-          console.log("error reading annotations JSON or JSON is empty")
-        }
-        else {
           fs.writeFile(annotationsFilePath, JSON.stringify(annotationJSON), (err) => {
             if (!err) {
+              console.log("adding new json to index");
+              searchAPI.addFilesToMainIndex([annotationsFn]);
+            } else {
+              console.log("error writing new annotations file");
+            }
+          });
+        }
+        else {
+          console.log("trying to write JSON index");
+
+          fs.writeFile(annotationsFilePath, JSON.stringify(annotationJSON), (err) => {
+            if (!err) {
+              console.log(buf.toString());
               console.log('Updating json index')
               searchAPI.update(annotationsFn, buf.toString());
             } else {
@@ -205,16 +216,8 @@ export default class RenderText extends Component<Props> {
           });
         }
       });
-    }catch(err) {
-      // if annotations file doesn't exist, write file and add to index
-      fs.writeFile(annotationsFilePath, JSON.stringify(annotationJSON), (err) => {
-        if (!err) {
-          console.log("adding new json to index");
-          searchAPI.addFilesToMainIndex([annotationsFn]);
-        } else {
-          console.log("error writing new annotations file");
-        }
-      });
+    } catch(err) {
+      console.log(err);
     }
 
     var end = htmlData.indexOf("<script id=\"webcache-script\">");
@@ -260,11 +263,9 @@ export default class RenderText extends Component<Props> {
   render() {
 
     return (
-
       <div>
         {getRenderText(this.props.activeUrl,this.iframeRef)}
       </div>
-
     );
   }
 }
