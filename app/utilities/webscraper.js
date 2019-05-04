@@ -31,10 +31,6 @@ exports.getSite = function (inputUrl, save_location, callback){
         directory: save_location,
         recursive: true,
         maxDepth: 1,
-        // plugins: [ new MyPlugin(save_location) ],
-        urlFilter: function(url){
-            return _.startsWith(url, inputUrl);
-        },
         outputPathGenerator: function(resource, directory){
             var urlObject = urlUtil.parse(resource.url);
             // Todo: add logic to check if it is an HTML page which does not end in '.html'
@@ -77,8 +73,13 @@ exports.getSite = function (inputUrl, save_location, callback){
     }
   scrape(options).then((result) => {
     // Outputs HTML
+<<<<<<< HEAD
     // console.log('result of scraping finishing: ' + result);
     // console.log("Content succesfully downloaded");
+=======
+    console.log('result of scraping finishing: ' + result);
+    console.log("Content succesfully downloaded to " + save_location);
+>>>>>>> resource-paths
     callback(true);
     return "passed"
 }).catch((err) => {

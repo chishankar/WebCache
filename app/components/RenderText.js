@@ -8,54 +8,66 @@ import 'react-notifications/lib/notifications.css';
 import * as resourcePath from '../utilities/ResourcePaths';
 import * as highlightActions from '../actions/sidebar';
 const searchAPI = require('../../webcache_testing/main5.js');
+import app from 'electron';
+
+const remoteApp = app.remote.app;
 
 const fs = require('fs');
 const ANNOTATIONS_FILE = 'annotations.json';
 const path = require('path');
 
 // Returns fulle path needed for iFrame
-function getResourceBuilder(path){
-  return new resourcePath.ResourcePaths(path).getFullPath();
+function getResourceBuilder(resourcePath){
+  if(resourcePath.startsWith('LOCAL')) {
+    return resourcePath.substring(5);
+  }
+  return path.join(remoteApp.getAppPath(), '../../../../../../../' + resourcePath + '/index.html');
 }
 
 // Returns the base resource
-function getResourcePath(path){
-  return new resourcePath.ResourcePaths(path).getResourceDir();
+function getResourceDirectory(resourcePath){
+  if(resourcePath.startsWith('LOCAL')) {
+    return path.join(resourcePath.substring(5), '..') + '/';
+  }
+  return path.join(remoteApp.getAppPath(), '../../../../../../../' + resourcePath + '/');
 }
 
-// Return the base Resource directory
-function getResourceBase(path){
-  return new resourcePath.ResourcePaths(path).getResourceBase();
-}
 
 // Renders dynamic iframe
-function getRenderText(filePath, iframeRef, onloadFun) {
-  let resource = getResourceBuilder(filePath);
-  let resourceDir = getResourcePath(filePath);
-  let jsResource = getResourceBuilder('renderHtmlViwer/index.js');
-  let local = false;
-
-  if(filePath.startsWith("LOCAL")) {
-    local = true;
-    resource = filePath.substr(5, filePath.length);
+function getRenderText(filePath, iframeRef, addHighlights) {
+  if (filePath == 'app/default_landing_page.html') {
+      let jsResource = path.join(remoteApp.getAppPath(), '../../../../../../../renderHtmlViwer/index.js');
+      let resourceHtml = fs.readFileSync(filePath).toString();
+      var injectScript = fs.readFileSync(jsResource).toString();
+      resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
+      return (
+        <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml }></iframe>
+      );
   }
+
+  let resource = getResourceBuilder(filePath);
+  let resourceDir = getResourceDirectory(filePath);
+
+  let jsResource = path.join(remoteApp.getAppPath(), '../../../../../../../renderHtmlViwer/index.js');
 
   try{
     var resourceHtml = fs.readFileSync(resource).toString();
 
     var injectScript = fs.readFileSync(jsResource).toString();
 
-    resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
+    let fileName = resource.substring(resource.lastIndexOf('/') + 1, resource.lastIndexOf('.'));
+    let annotations_file = path.join(resource, '..') + '/' + 'annotations-' + fileName + '.json';
+
+    // console.log("RESOURCE DIR: " + resourceDir);
 
     // change all paths to become relative
     // check to see if the path is already changed - don't change it twice!!
-    if (filePath != "app/default_landing_page.html" && !local) {
-      resourceHtml = resourceHtml.replace(/href="([\.\/\w+]+)"/g, "href=\"" + resourceDir + "$1" + "\"");
-      resourceHtml = resourceHtml.replace(/src="([\.\/\w+]+)"/g, "src=\"" + resourceDir + "$1" + "\"");
+    if (filePath != "app/default_landing_page.html" && !fs.existsSync(annotations_file)) {
+      resourceHtml = resourceHtml.replace(/href="([^#].+?)"/g, "href=\"" + path.resolve(resourceDir, "$1") + "\"");
+      resourceHtml = resourceHtml.replace(/src="([^#].+?)"/g, "src=\"" + path.resolve(resourceDir, "$1") + "\"");
     }
 
-
-    return (
+  resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
 
       // <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml } onLoad={ onloadFun } ></iframe>
       <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml } ></iframe>
@@ -89,30 +101,36 @@ export default class RenderText extends Component<Props> {
   }
 
   getRenderText = (filePath, iframeRef, onloadFun) => {
-    let resource = getResourceBuilder(filePath);
-    let resourceDir = getResourcePath(filePath);
-    let jsResource = getResourceBuilder('renderHtmlViwer/index.js');
-    let local = false;
-
-    if(filePath.startsWith("LOCAL")) {
-      local = true;
-      resource = filePath.substr(5, filePath.length);
+    if (filePath == 'app/default_landing_page.html') {
+        let jsResource = path.join(remoteApp.getAppPath(), '../../../../../../../renderHtmlViwer/index.js');
+        let resourceHtml = fs.readFileSync(filePath).toString();
+        var injectScript = fs.readFileSync(jsResource).toString();
+        resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
+        return (
+          <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml }></iframe>
+        );
     }
+    let resource = getResourceBuilder(filePath);
+    let resourceDir = getResourceDirectory(filePath);
+
+    let jsResource = path.join(remoteApp.getAppPath(), '../../../../../../../renderHtmlViwer/index.js');
 
     try{
       var resourceHtml = fs.readFileSync(resource).toString();
 
       var injectScript = fs.readFileSync(jsResource).toString();
 
-      resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
+      let fileName = resource.substring(resource.lastIndexOf('/') + 1, resource.lastIndexOf('.'));
+      let annotations_file = path.join(resource, '..') + '/' + 'annotations-' + fileName + '.json';
 
       // change all paths to become relative
-      // check to see if the path is already changed - don't change it twice!!
-      if (filePath != "app/default_landing_page.html" && !local) {
-        resourceHtml = resourceHtml.replace(/href="([\.\/\w+]+)"/g, "href=\"" + resourceDir + "$1" + "\"");
-        resourceHtml = resourceHtml.replace(/src="([\.\/\w+]+)"/g, "src=\"" + resourceDir + "$1" + "\"");
+      // check to see if the page has been saved before -> don't change it twice!!
+      if (filePath != "app/default_landing_page.html" && !fs.existsSync(annotations_file)) {
+        resourceHtml = resourceHtml.replace(/href="([^#].+?)"/g, "href=\"" + path.resolve(resourceDir, "$1") + "\"");
+        resourceHtml = resourceHtml.replace(/src="([^#].+?)"/g, "src=\"" + path.resolve(resourceDir, "$1") + "\"");
       }
 
+      resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
 
       return (
 
@@ -146,14 +164,10 @@ export default class RenderText extends Component<Props> {
 
         // load the annotations from the json file
         let resource = getResourceBuilder(filePath);
-        let resourceDir = getResourcePath(filePath);
-        let jsResource = getResourceBuilder('renderHtmlViwer/index.js');
+        let resourceDir = getResourceDirectory(filePath);
+        let jsResource = path.join(remoteApp.getAppPath(), '../../../../../../../renderHtmlViwer/index.js');
         let local = false;
 
-        if(filePath.startsWith("LOCAL")) {
-          local = true;
-          resource = filePath.substr(5, filePath.length);
-        }
         let fileName = resource.substring(resource.lastIndexOf('/') + 1, resource.lastIndexOf('.'));
         try {
           var fd = fs.openSync(path.join(resource, '..') + '/' + 'annotations-' + fileName + '.json', 'r');
@@ -220,9 +234,8 @@ export default class RenderText extends Component<Props> {
     let fileName = saveUrl.substring(saveUrl.lastIndexOf('/') + 1, saveUrl.lastIndexOf('.'));
 
     var annotationsUrl = path.join(saveUrl, '..') + '/' + 'annotations-' + fileName + '.json';
-    // console.log("SAVING HTML TO: " + saveUrl);
-    // console.log("after the path.join: " + path.join(saveUrl, '..'));
-    // console.log("SAVING ANNOTATIONS TO: " + annotationsUrl);
+    console.log("SAVING HTML TO: " + saveUrl);
+    console.log("SAVING ANNOTATIONS TO: " + annotationsUrl);
     var fd = fs.openSync(annotationsUrl, 'w');
 
     let annotationJSON = Object.assign({},

@@ -53,8 +53,8 @@ class Notification extends Component {
         horizontal: 'right',
       }}
       open={this.state.open}
-      autoHideDuration={6000}
       onClose={this.notificationClose}
+      autoHideDuration={6000}
       ContentProps={{
         'aria-describedby': 'message-id',
       }}
@@ -66,6 +66,7 @@ class Notification extends Component {
           aria-label="Close"
           color="inherit"
           className={styles.close}
+          onClick={this.notificationClose}
         >
           <CloseIcon  />
         </IconButton>,
