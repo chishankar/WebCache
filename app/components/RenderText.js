@@ -68,7 +68,7 @@ function getRenderText(filePath, iframeRef, addHighlights) {
     }
 
   resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
-
+    return (
       // <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml } onLoad={ onloadFun } ></iframe>
       <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml } ></iframe>
 
