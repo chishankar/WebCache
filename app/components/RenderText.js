@@ -58,12 +58,13 @@ function getRenderText(filePath, iframeRef, addHighlights) {
   let fileName = resource.substring(resource.lastIndexOf('/') + 1, resource.lastIndexOf('.'));
   let annotations_file = path.join(resource, '..') + '/' + 'annotations-' + fileName + '.json';
 
+  // console.log("RESOURCE DIR: " + resourceDir);
+
   // change all paths to become relative
   // check to see if the path is already changed - don't change it twice!!
-  if (filePath != "app/default_landing_page.html" || !fs.existsSync(annotations_file)) {
-    console.log(annotations_file + ' does not exist -> going to replace!');
-    resourceHtml = resourceHtml.replace(/href="(\.\/.+?)"/g, "href=\"" + path.resolve(resourceDir, "$1") + "\"");
-    resourceHtml = resourceHtml.replace(/src="(\.\/.+?)"/g, "src=\"" + path.resolve(resourceDir, "$1") + "\"");
+  if (filePath != "app/default_landing_page.html" && !fs.existsSync(annotations_file)) {
+    resourceHtml = resourceHtml.replace(/href="([^#].+?)"/g, "href=\"" + path.resolve(resourceDir, "$1") + "\"");
+    resourceHtml = resourceHtml.replace(/src="([^#].+?)"/g, "src=\"" + path.resolve(resourceDir, "$1") + "\"");
   }
 
   resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
