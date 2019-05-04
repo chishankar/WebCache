@@ -56,7 +56,7 @@ exports.getSite = function (inputUrl, save_location, callback){
   scrape(options).then((result) => {
     // Outputs HTML
     console.log('result of scraping finishing: ' + result);
-    console.log("Content succesfully downloaded");
+    console.log("Content succesfully downloaded to " + save_location);
     callback(true);
 }).catch((err) => {
     console.log(err);
