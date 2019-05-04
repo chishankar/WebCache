@@ -2,15 +2,6 @@ const scrape = require('website-scraper');
 var urlUtil = require('url');
 var _ = require('lodash');
 
-class MyPlugin {
-    constructor(callback) {
-        this.callback = callback;
-    }
-    apply(registerAction) {
-        registerAction('afterFinish', async () => {console.log('after finish!!'); this.callback();});
-    }
-}
-
 exports.getSite = function (inputUrl, save_location, callback){
     var options = {
         urls: [
@@ -19,7 +10,6 @@ exports.getSite = function (inputUrl, save_location, callback){
         directory: save_location,
         recursive: true,
         maxDepth: 1,
-        plugins: [new MyPlugin(callback)],
         outputPathGenerator: function(resource, directory){
             var urlObject = urlUtil.parse(resource.url);
             // Todo: add logic to check if it is an HTML page which does not end in '.html'
