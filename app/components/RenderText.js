@@ -197,7 +197,7 @@ export default class RenderText extends Component<Props> {
       window.postMessage(data,'*');
 
       // Sends delete request to the iFrame upone delete id change
-      if (this.props.delete !== this.props.delete){
+      if (this.props.delete !== prevProps.delete){
         data = {delete: this.props.delete};
         window.postMessage(data, '*');
       }
