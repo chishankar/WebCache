@@ -1,8 +1,8 @@
 {
-  "name": "electron-react-boilerplate",
-  "productName": "ElectronReact",
+  "name": "WebCache Desktop Application",
+  "productName": "WebCache",
   "version": "0.17.1",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
+  "description": "An Electron based desktop application that makes annotating and commenting on websites very easy",
   "scripts": {
     "docs:build": "documentation build app/** -f html -o docs",
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
