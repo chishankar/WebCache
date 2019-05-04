@@ -175,37 +175,53 @@ export default class RenderText extends Component<Props> {
     var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
     let fileName = saveUrl.substring(saveUrl.lastIndexOf('/') + 1, saveUrl.lastIndexOf('.'));
 
-    var annotationsUrl = path.join(saveUrl, '..') + '/' + 'annotations-' + fileName + '.json';
+    var annotationsFn = this.props.activeUrl.substring(5) + '/annotations-' + fileName + '.json';
+    var annotationsFilePath = path.join(__dirname,'..','data', annotationsFn);
     console.log("SAVING HTML TO: " + saveUrl);
     console.log("after the path.join: " + path.join(saveUrl, '..'));
-    console.log("SAVING ANNOTATIONS TO: " + annotationsUrl);
-    var fd = fs.openSync(annotationsUrl, 'w');
+    console.log("SAVING ANNOTATIONS TO: " + annotationsFilePath);
 
     let annotationJSON = Object.assign({},
       {"highlightData":this.props.annotations},
       {"lastUpdated":this.props.save}
     )
 
+    console.log("HERRERERERERE");
+
     //update the old index of the annotations json page
-    fs.readFile(annotationsUrl, (err, buf) => {
-      if (err) {
-        fs.writeFileSync(fd, JSON.stringify(annotationJSON));
-        searchAPI.addFilesToMainIndex([annotationsUrl]);
-      }
-      fs.writeFileSync(fd, JSON.stringify(annotationJSON));
-      searchAPI.update(annotationsUrl, buf.toString());
-    });
+    try {
+      fs.readFileSync(annotationsFilePath, (err, buf) => {
+        if (err || buf.length === 0) {
+          console.log("error reading annotations JSON or JSON is empty")
+        }
+        else {
+          fs.writeFile(annotationsFilePath, JSON.stringify(annotationJSON), (err) => {
+            if (!err) {
+              console.log('Updating json index')
+              searchAPI.update(annotationsFn, buf.toString());
+            } else {
+              console.log("error writing updated annotations file");
+            }
+          });
+        }
+      });
+    }catch(err) {
+      // if annotations file doesn't exist, write file and add to index
+      fs.writeFile(annotationsFilePath, JSON.stringify(annotationJSON), (err) => {
+        if (!err) {
+          console.log("adding new json to index");
+          searchAPI.addFilesToMainIndex([annotationsFn]);
+        } else {
+          console.log("error writing new annotations file");
+        }
+      });
+    }
 
     var end = htmlData.indexOf("<script id=\"webcache-script\">");
     let updatedHtml = htmlData.substring(0, end - 1); //remove our injected script tag from the document
-    // re write the current version of the html page and update the old index
-    fs.readFile(saveUrl, (err, buf) => {
-      fs.writeFileSync(saveUrl, updatedHtml);
-      searchAPI.update(annotationJSON, buf.toString());
-      this.props.addNotification(`File saved! ${this.props.save}`)
-      fs.writeFileSync(fd, JSON.stringify(annotationJSON));
-    });
 
+    fs.writeFileSync(saveUrl, updatedHtml);
+    this.props.addNotification(`File saved! ${this.props.save}`)
   }
 
   // Takes in data returned by window.postMessage from the iframe rendered within the component

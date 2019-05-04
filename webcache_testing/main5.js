@@ -143,11 +143,17 @@ function checkExclusiveWord(word) {
   return (mainIndex[wordIndMain].fn.slice(0,1) == SINGLE_WORD_FLAG);
 }
 
-function update(filename, oldStr) {
-  deleteFile(filename, oldStr).then(result => {
+export function update(filename, oldStr) {
+  if (lookup.findIndex(entry => {return entry.fileName === filename}) < 0) {
     addFilesToMainIndex([filename]);
-  });
+  }
+  else {
+    deleteFile(filename, oldStr).then(result => {
+      addFilesToMainIndex([filename]);
+    });
+  }
 }
+
 
 function deleteFile(filename, str) {
 
@@ -358,7 +364,7 @@ function getLastMod(fileName) {
 }
 
 function getFileIndex(fileName) {
-
+  console.log("Parsing file for indexing...");
   let fileNum = lookup.findIndex(entry => entry.fileName == fileName);
   let fileIndex = [];
 
@@ -389,14 +395,26 @@ function getFileIndex(fileName) {
   let filePath = path.join(__dirname, '../data/' + fileName);
 
   return new Promise(resolve => {
-    fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
+    fs.readFileSync(filePath, {encoding: 'utf-8'}, function(err,data){
+      console.log("YO WE MADE IT");
       var t1 = performance.now();
       if (!err) {
         // TODO: REMOVE HTML TAGS
         // Case-sensitive indexing not implented for simplicity.
-        const dom = new JSDOM(data);
-        dom.window.document.querySelectorAll("script, style").forEach(node => node.parentNode.removeChild(node));
-        let cleanText = dom.window.document.documentElement.outerHTML.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, ' ');
+        var cleanText;
+        if (fileName.slice(-5) === ".json") {
+          console.log("Indexing annotations JSON");
+          json = JSON.parse(data);
+          cleanText = "";
+          json.highlightData.forEach(highlight => {
+            cleanText = cleanText + " \n " + highlight.comment;
+          });
+        }
+        else {
+          const dom = new JSDOM(data);
+          dom.window.document.querySelectorAll("script, style").forEach(node => node.parentNode.removeChild(node));
+          cleanText = dom.window.document.documentElement.outerHTML.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, " ");
+        }
         let wordMapping = wordLocsMapping(cleanText);
         wordMapping.forEach(function(value, key) {
           fileIndex.push({
