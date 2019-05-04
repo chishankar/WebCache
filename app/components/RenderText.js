@@ -75,6 +75,10 @@ type Props = {
   hideHighlights: Boolean
 }
 
+/**
+ * @class
+ * @return {Component} Renders the RenderText component which is responsible for connecting user application events to the iFrame
+ */
 export default class RenderText extends Component<Props> {
   props: Props;
 
@@ -83,12 +87,17 @@ export default class RenderText extends Component<Props> {
     this.iframeRef = React.createRef();
   }
 
-  // Once the component mounts, add an event listener to listen for messages and pass all the messages to the handleIFrameTask
+  /**
+   * Once the component mounts, add an event listener to listen for messages and pass all the messages to the handleIFrameTask
+   */
   componentDidMount(){
     window.addEventListener('message',this.handleIFrameTask)
   }
 
-  // Upon URL change, change the URL
+  /**
+   * Handles changes on all the different store changes for different application states
+   * @param {Object} prevProps
+   */
   componentDidUpdate(prevProps){
 
       // handles what to do on an activeUrl update
@@ -170,7 +179,10 @@ export default class RenderText extends Component<Props> {
 
   }
 
-  // Logic for saving file
+  /**
+   * Handles logic for saving the data back to the file that it was read from
+   * @param {String} htmlData
+   */
   handleSave = (htmlData) => {
     console.log("in save once!");
     var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
@@ -227,7 +239,11 @@ export default class RenderText extends Component<Props> {
     this.props.addNotification(`File saved! ${this.props.save}`)
   }
 
-  // Takes in data returned by window.postMessage from the iframe rendered within the component
+  /**
+   * Handles all iframe tasks requests
+   *
+   * @param {Object} e
+   */
   handleIFrameTask = (e) => {
 
     if (e.data == 'clicked button'){
@@ -253,7 +269,9 @@ export default class RenderText extends Component<Props> {
     }
   }
 
-  // Function to handle saving data
+  /**
+   * Sends save request to the iFrame
+   */
   handleSaveTask = () => {
 
     window.postMessage("save", '*');

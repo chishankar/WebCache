@@ -6,14 +6,18 @@ import VisibilityOnIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 
-// Binding sideBarActions to this component
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     hideHighlights: sideBarActions.hideHighlights
   },dispatch)
 }
 
-
+/**
+ * Hides the highlights the button on the page
+ *
+ * @class
+ * @return {Component} HideButton Component
+ */
 class HideButton extends Component{
 
   constructor(props){
@@ -23,7 +27,12 @@ class HideButton extends Component{
     }
   }
 
-  // On icon click, it changes the icon and dispatches a hideHighlights action
+
+  //
+  /**
+   *  On icon click, it changes the icon and dispatches a hideHighlights action
+   *  @fires hideHighlights
+   */
   onHideIconClick = () => {
     this.setState({
       hideHighlights: !this.state.hideHighlights
