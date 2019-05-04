@@ -395,20 +395,20 @@ function getFileIndex(fileName) {
   let filePath = path.join(__dirname, '../data/' + fileName);
 
   return new Promise(resolve => {
-    fs.readFileSync(filePath, {encoding: 'utf-8'}, function(err,data){
-      console.log("YO WE MADE IT");
+    fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
+     // console.log("YO WE MADE IT");
       var t1 = performance.now();
       if (!err) {
         // TODO: REMOVE HTML TAGS
         // Case-sensitive indexing not implented for simplicity.
-        var cleanText;
+        var cleanText = '';
         if (fileName.slice(-5) === ".json") {
-          console.log("Indexing annotations JSON");
-          json = JSON.parse(data);
-          cleanText = "";
+          //console.log("Indexing annotations JSON");
+          let json = JSON.parse(data);
           json.highlightData.forEach(highlight => {
             cleanText = cleanText + " \n " + highlight.comment;
           });
+          cleanText = cleanText.replace(/<\/?[^>]+(>|$)/g, "").replace(/[^\w\s]/gi, '');
         }
         else {
           const dom = new JSDOM(data);
@@ -431,7 +431,7 @@ function getFileIndex(fileName) {
       fileParseTime += (t2 - t1);
 
     });
-  })
+  });
 }
 
 let tempIndex = [];
