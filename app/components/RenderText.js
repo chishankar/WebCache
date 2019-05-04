@@ -5,7 +5,6 @@ import webview from 'electron';
 import styles from './Text.css';
 import HighlightText from './HighlightText';
 import 'react-notifications/lib/notifications.css';
-import {NotificationContainer, NotificationManager} from 'react-notifications';
 import * as resourcePath from '../utilities/ResourcePaths';
 import * as highlightActions from '../actions/sidebar';
 const searchAPI = require('../../webcache_testing/main5.js');
@@ -41,26 +40,31 @@ function getRenderText(filePath, iframeRef, onloadFun) {
     resource = filePath.substr(5, filePath.length);
   }
 
-  var resourceHtml = fs.readFileSync(resource).toString();
+  try{
+    var resourceHtml = fs.readFileSync(resource).toString();
 
-  var injectScript = fs.readFileSync(jsResource).toString();
+    var injectScript = fs.readFileSync(jsResource).toString();
 
-  resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
+    resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
 
-  // change all paths to become relative
-  // check to see if the path is already changed - don't change it twice!!
-  if (filePath != "app/default_landing_page.html" && !local) {
-    resourceHtml = resourceHtml.replace(/href="([\.\/\w+]+)"/g, "href=\"" + resourceDir + "$1" + "\"");
-    resourceHtml = resourceHtml.replace(/src="([\.\/\w+]+)"/g, "src=\"" + resourceDir + "$1" + "\"");
+    // change all paths to become relative
+    // check to see if the path is already changed - don't change it twice!!
+    if (filePath != "app/default_landing_page.html" && !local) {
+      resourceHtml = resourceHtml.replace(/href="([\.\/\w+]+)"/g, "href=\"" + resourceDir + "$1" + "\"");
+      resourceHtml = resourceHtml.replace(/src="([\.\/\w+]+)"/g, "src=\"" + resourceDir + "$1" + "\"");
+    }
+
+
+    return (
+
+      // <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml } onLoad={ onloadFun } ></iframe>
+      <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml } ></iframe>
+
+    );
+  } catch (exception){
+    this.props.addNotification("Url does not exist!")
   }
 
-
-  return (
-
-    // <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml } onLoad={ onloadFun } ></iframe>
-    <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml } ></iframe>
-
-  );
 }
 
 type Props = {
@@ -83,6 +87,45 @@ export default class RenderText extends Component<Props> {
     super(props);
     this.iframeRef = React.createRef();
   }
+
+  getRenderText = (filePath, iframeRef, onloadFun) => {
+    let resource = getResourceBuilder(filePath);
+    let resourceDir = getResourcePath(filePath);
+    let jsResource = getResourceBuilder('renderHtmlViwer/index.js');
+    let local = false;
+
+    if(filePath.startsWith("LOCAL")) {
+      local = true;
+      resource = filePath.substr(5, filePath.length);
+    }
+
+    try{
+      var resourceHtml = fs.readFileSync(resource).toString();
+
+      var injectScript = fs.readFileSync(jsResource).toString();
+
+      resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
+
+      // change all paths to become relative
+      // check to see if the path is already changed - don't change it twice!!
+      if (filePath != "app/default_landing_page.html" && !local) {
+        resourceHtml = resourceHtml.replace(/href="([\.\/\w+]+)"/g, "href=\"" + resourceDir + "$1" + "\"");
+        resourceHtml = resourceHtml.replace(/src="([\.\/\w+]+)"/g, "src=\"" + resourceDir + "$1" + "\"");
+      }
+
+
+      return (
+
+        // <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml } onLoad={ onloadFun } ></iframe>
+        <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml } ></iframe>
+
+      );
+    } catch (exception){
+      this.props.addNotification("Url does not exist!")
+    }
+
+  }
+
 
   // Once the component mounts, add an event listener to listen for messages and pass all the messages to the handleIFrameTask
   componentDidMount(){
@@ -246,7 +289,7 @@ export default class RenderText extends Component<Props> {
     return (
 
       <div>
-        {getRenderText(this.props.activeUrl,this.iframeRef,this.handleSaveTask)}
+        {this.getRenderText(this.props.activeUrl,this.iframeRef,this.handleSaveTask)}
       </div>
 
     );

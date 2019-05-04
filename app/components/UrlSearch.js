@@ -3,6 +3,8 @@ import styles from './UrlSearch.css';
 import 'font-awesome/css/font-awesome.min.css';
 import getSite from '../utilities/webscraper';
 import * as urlsearchActions from '../actions/urlsearch';
+import * as notficationActions from '../actions/notification';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fade from '@material-ui/core/Fade';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -60,22 +62,34 @@ export default class UrlSearch extends Component<Props>{
   handleEnter = (event) => {
     if (event.key === 'Enter' && this.state.showValidate){
       var save_location = "data/" + this.state.validUrl.replace(/https:\/\//g,"") + '-' + Date.now();
-      this.handleClickLoading();
-      getSite.getSite(this.state.validUrl, save_location, () => {
+      let error = getSite.getSite(this.state.validUrl, save_location, () => {
         //add the newly donwloaded files to the main index
-        fs.readdir('./' + save_location + '/', (err, files) => {
-          if(err){
-            console.log("Error in reading data folder");
-          }
-          let update = files.filter(fn => {return !['img', 'js', 'css', 'fonts'].includes(fn)}).map((x) => {
-            return save_location.slice(5) + "/" + x});
-          searchAPI.addFilesToMainIndex(update);
+        try{
+          fs.readdir('./' + save_location + '/', (err, files) => {
+            if(err){
+              this.store.dispatch(notficationActions.addNotification('Not a valid url'));
+              return;
+            }else{
+              this.handleClickLoading();
+              let update = files.filter(fn => {return !['img', 'js', 'css', 'fonts'].includes(fn)}).map((x) => {
+                return save_location.slice(5) + "/" + x
+              });
+              searchAPI.addFilesToMainIndex(update);
 
-        });
-        this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
+              this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
+              this.handleClickLoading();
+            }
+          });
+          return;
+        } catch (exception){
+          this.store.dispatch(notficationActions.addNotification('Not a valid url'));
+          return;
+        }
         this.handleClickLoading();
+
       });
     }
+
   }
 
   // Sets state of url search component with valid url

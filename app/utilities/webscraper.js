@@ -4,6 +4,8 @@ var _ = require('lodash');
 const searchAPI = require('../../webcache_testing/main5.js');
 const path = require('path');
 
+
+
 class MyPlugin {
 
   constructor(save_location){
@@ -78,8 +80,11 @@ exports.getSite = function (inputUrl, save_location, callback){
     // console.log('result of scraping finishing: ' + result);
     // console.log("Content succesfully downloaded");
     callback(true);
+    return "passed"
 }).catch((err) => {
     // console.log(err);
+    console.log("THERE WAS AN ERROR")
     callback(false);
+    return "failed"
 });
 }
