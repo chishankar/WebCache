@@ -72,6 +72,7 @@ export default class UrlSearch extends Component<Props>{
           searchAPI.addFilesToMainIndex(update);
 
         });
+        console.log("about to change the active url....");
         this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
         this.handleClickLoading();
       });

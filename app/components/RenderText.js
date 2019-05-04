@@ -33,13 +33,11 @@ function getResourceDirectory(resourcePath){
   return path.join(remoteApp.getAppPath(), '../../../../../../../app/' + resourcePath);
 }
 
-function correctPaths(resourceHtml) {
-
-}
 
 // Renders dynamic iframe
 function getRenderText(filePath, iframeRef, addHighlights) {
   // console.log('Your App Path: ' + remoteApp.getAppPath());
+  console.log("__dirname = " + __dirname);
   if (filePath == 'app/default_landing_page.html') {
       let resourceHtml = fs.readFileSync(filePath).toString();
       return (
@@ -54,12 +52,6 @@ function getRenderText(filePath, iframeRef, addHighlights) {
   console.log("RESOURCE = " + resource);
   console.log("CONTAINING DIRECTORY = " + resourceDir);
   let jsResource = path.join(remoteApp.getAppPath(), '../../../../../../../renderHtmlViwer/index.js');
-  let local = false;
-
-  if(filePath.startsWith("LOCAL")) {
-    local = true;
-    resource = filePath.substr(5, filePath.length);
-  }
 
   var resourceHtml = fs.readFileSync(resource).toString();
 
