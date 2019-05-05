@@ -1,9 +1,9 @@
 const fs = require('fs');
 const util = require('util');
 const cheerio = require('cheerio');
+var path = require('path');
 const readFile = util.promisify(fs.readFile);
 
-// NOTE: This file has only been very lightly tested.
 // TODO: MORE TESTING
 // TODO: more robust error handling
 
@@ -71,6 +71,8 @@ async function ScrapbookToWebcacheHTML(htmlFilePath) {
     // contents of the file, assumed to be an HTML file
     var html = await readFile(htmlFilePath, {encoding: 'utf8'});
 
+    html = replacePathsDirectory(htmlFilePath,html);
+
     var result = {lastUpdated:""};
     result.highlightData = new Array(0);
 
@@ -102,12 +104,18 @@ async function ScrapbookToWebcacheHTML(htmlFilePath) {
     for (i = 0; i < inlines.length; i++) {
         // set "class" attribute of i-th inline annotation
         // the convention is to use the class of the tag as an id
-        inlines.eq(i).attr('class', inlineJSONs[i].id);
+        inlines.eq(i).attr('class', inlineJSONs[i].id + " webcache-highlight-mark");
+        inlines.eq(i).removeAttr('style');
+        inlines.eq(i).css("background-color","grey");
+        inlines.eq(i).css("display","inline");
     }
 
     for (i = 0; i < highlights.length; i++) {
         // set "class" attribute of i-th highlight
-        highlights.eq(i).attr('class', highlightJSONs[i].id);
+        highlights.eq(i).attr('class', highlightJSONs[i].id + " webcache-highlight-mark");
+        highlights.eq(i).removeAttr('style');
+        highlights.eq(i).css("background-color",highlightJSONs[i].color);
+        highlights.eq(i).css("display","inline");
     }
 
     var annotationJson= highlightJSONs.concat(inlineJSONs);
@@ -190,13 +198,13 @@ function cheerioObjsToHighlightJSON(highlights) {
         // force the highlight styles into a single color
         var forceColor;
         if (style === highlightStyles[0]) {
-            forceColor = '#FFCC00';
+            forceColor = 'yellow';
         } else if(style === highlightStyles[1]) {
-            forceColor = '#33FF33';
+            forceColor = 'green';
         } else if (style === highlightStyles[2]) {
-            forceColor = '#CCFFFF';
+            forceColor = 'blue';
         } else if (style === highlightStyles[3]) {
-            forceColor = '#FFFF00';
+            forceColor = 'yellow';
         } else {
             // if it's not a highlight I recognize, then make it grey
             forceColor = '#999999';
@@ -299,4 +307,16 @@ function randomID() {
             .replace(/[^a-z]+/g, '').substr(2,10));
 }
 
+// Returns the directory resource
+function replacePathsDirectory(htmlPath,html){
+  var htmlPathDir = getResourceDirectory(htmlPath);
+  html = html.replace(/href="([^#].+?)"/g, "href=\"" + path.resolve(htmlPathDir, "$1") + "\"");
+  html = html.replace(/src="([^#].+?)"/g, "src=\"" + path.resolve(htmlPathDir, "$1") + "\"");
+  return html;
+}
+
+// Returns the base resource
+function getResourceDirectory(resourcePath){
+    return path.join(resourcePath, '..') + '/';
+}
 // ############################################################################/

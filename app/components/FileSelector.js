@@ -42,7 +42,7 @@ class FileDialogue extends React.Component {
    *
    * @param  {Event} e
    */
-  onChange = (e) => {
+  onChange = (e: Event) => {
     if (e.target.files[0]!=null){
       this.setState({ path: e.target.files[0].path });
     }
@@ -54,7 +54,7 @@ class FileDialogue extends React.Component {
    * @param  {String} file
    *
    */
-  handleFile = (file) =>{
+  handleFile = (file: String) =>{
     this.store.dispatch(urlsearchActions.changeActiveUrl('LOCAL' + file.filePath));
   };
 
@@ -70,7 +70,7 @@ class FileDialogue extends React.Component {
         </label>
         <Divider />
         <h3>Files</h3>
-        <h4>{console.log(this.state.path)}</h4>
+
         <FileTree directory={this.state.path}
         onFileClick={this.handleFile} fileTreeStyle="light"/>
       </div>
