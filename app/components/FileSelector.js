@@ -56,7 +56,7 @@ class FileDialogue extends React.Component {
         </label>
         <Divider />
         <h3>Files</h3>
-        <h4>{console.log(this.state.path)}</h4>
+
         <FileTree directory={this.state.path}
         onFileClick={this.handleFile} fileTreeStyle="light"/>
       </div>

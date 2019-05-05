@@ -2,11 +2,14 @@ import React, { Component }from 'react';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import * as addNotification from '../actions/notification';
+import 'react-notifications/lib/notifications.css';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 import { ifError } from 'assert';
 import ScrapbookToWebcacheFormat from './convert-html.js';
 
-var path = require('path');
 
+var path = require('path');
 const util = require('util');
 const fs = require('fs-extra');
 
@@ -26,13 +29,48 @@ const styles = theme => ({
   },
 });
 
-class LegacyDataConverter extends React.Component {
+async function FindFile(dirPath) {
+  fs.readdir(dirPath, async (err, files) => {
+    if (!err) {
+      for (var i = 0; i < files.length; i++) {
+
+        var htmlFilePath = path.join(dirPath,files[i]);
+        var stat = fs.lstatSync(htmlFilePath);
+        if (stat.isDirectory()) {
+          FindFile(htmlFilePath);
+        } else if (files[i].indexOf('index.html') == 0) {
+          var datFilePath = path.join(dirPath,'index.dat');
+          var annotJsonPath = path.join(dirPath,'annotations-index.json');
+          var snJsonPath = path.join(dirPath,'sticky.json');
+          try{
+            var fileArr = await ScrapbookToWebcacheFormat(htmlFilePath, datFilePath);
+            // console.log(filePath)
+            //console.log(fileArr[0]);
+            //console.log(fileArr[3]);
+
+            WriteToFile(htmlFilePath, fileArr[0]);
+            WriteToFile(annotJsonPath, JSON.stringify(fileArr[1]));
+            WriteToFile(snJsonPath, JSON.stringify(fileArr[2]));
+
+            this.props.addNotification('Scrapebook data imported')
+          } catch(e) {
+            //this.props.addNotification('${e}')
+          }
+        }
+      }
+    }
+  });
+}
+
+async function WriteToFile(filePath, replacement) {
+  await writeFile(filePath, replacement);
+}
+
+class LegacyDataConverter extends Component<Props> {
+
   constructor(props) {
     super(props);
-    this.state = {
-      path: ''
-    };
-    this.store = this.props.store;
+    console.log(props)
   }
 
   // Handles path changes and updates state
@@ -44,8 +82,11 @@ class LegacyDataConverter extends React.Component {
       fs.copy(sourceFolder, destFolder, (err) => {
         if (err) return console.error(err);
         FindFile(destFolder);
+        this.props.addNotification('success! moved files to data directory');
+
         console.log('success! moved files to data directory');
       });
+
     }
   };
 
@@ -70,38 +111,5 @@ class LegacyDataConverter extends React.Component {
   }
 }
 
-async function FindFile(dirPath) {
-  fs.readdir(dirPath, async (err, files) => {
-    console.log(files);
-    // console.log(items);
-    if (!err) {
-      for (var i = 0; i < files.length; i++) {
-
-        var htmlFilePath = path.join(dirPath,files[i]);
-        var stat = fs.lstatSync(htmlFilePath);
-        if (stat.isDirectory()) {
-          FindFile(htmlFilePath);
-        } else if (files[i].indexOf('index.html') == 0) {
-          var datFilePath = path.join(dirPath,'index.dat');
-          var annotJsonPath = path.join(dirPath,'annotations-index.json');
-          var snJsonPath = path.join(dirPath,'sticky.json');
-
-          var fileArr = await ScrapbookToWebcacheFormat(htmlFilePath, datFilePath);
-          // console.log(filePath)
-          //console.log(fileArr[0]);
-          //console.log(fileArr[3]);
-
-          WriteToFile(htmlFilePath, fileArr[0]);
-          WriteToFile(annotJsonPath, JSON.stringify(fileArr[1]));
-          WriteToFile(snJsonPath, JSON.stringify(fileArr[2]));
-        }
-      }
-    }
-  });
-}
-
-async function WriteToFile(filePath, replacement) {
-  await writeFile(filePath, replacement);
-}
 
 export default withStyles(styles, { withTheme: true })(LegacyDataConverter);

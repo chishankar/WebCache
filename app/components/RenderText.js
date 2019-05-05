@@ -76,7 +76,6 @@ type Props = {
 }
 
 export default class RenderText extends Component<Props> {
-  props: Props;
 
   constructor(props){
     super(props);
@@ -224,6 +223,7 @@ export default class RenderText extends Component<Props> {
     let updatedHtml = htmlData.substring(0, end - 1); //remove our injected script tag from the document
 
     fs.writeFileSync(saveUrl, updatedHtml);
+    console.log(this.props);
     this.props.addNotification(`File saved! ${this.props.save}`)
   }
 

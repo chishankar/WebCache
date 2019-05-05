@@ -1,9 +1,9 @@
 const fs = require('fs');
 const util = require('util');
 const cheerio = require('cheerio');
+var path = require('path');
 const readFile = util.promisify(fs.readFile);
 
-// NOTE: This file has only been very lightly tested.
 // TODO: MORE TESTING
 // TODO: more robust error handling
 
@@ -70,6 +70,8 @@ const readFile = util.promisify(fs.readFile);
 async function ScrapbookToWebcacheHTML(htmlFilePath) {
     // contents of the file, assumed to be an HTML file
     var html = await readFile(htmlFilePath, {encoding: 'utf8'});
+
+    html = replacePathsDirectory(htmlFilePath,html);
 
     var result = {lastUpdated:""};
     result.highlightData = new Array(0);
@@ -299,4 +301,16 @@ function randomID() {
             .replace(/[^a-z]+/g, '').substr(2,10));
 }
 
+// Returns the directory resource
+function replacePathsDirectory(htmlPath,html){
+  var htmlPathDir = getResourceDirectory(htmlPath);
+  html = html.replace(/href="([^#].+?)"/g, "href=\"" + path.resolve(htmlPathDir, "$1") + "\"");
+  html = html.replace(/src="([^#].+?)"/g, "src=\"" + path.resolve(htmlPathDir, "$1") + "\"");
+  return html;
+}
+
+// Returns the base resource
+function getResourceDirectory(resourcePath){
+    return path.join(resourcePath, '..') + '/';
+}
 // ############################################################################/
