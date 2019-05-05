@@ -106,6 +106,8 @@ export default class RenderText extends Component<Props> {
    */
   componentDidMount(){
     window.addEventListener('message',this.handleIFrameTask)
+    //console.log("current props:");
+      //console.log(this.props);
   }
 
   /**
@@ -114,6 +116,11 @@ export default class RenderText extends Component<Props> {
    */
   componentDidUpdate(prevProps){
 
+      // console.log("previous props:");
+      // console.log(prevProps);
+      // console.log("Next check current props");
+      // console.log("current props:");
+      // console.log(this.props);
       // handles what to do on an activeUrl update
       if (this.props.activeUrl != prevProps.activeUrl) {
 
@@ -137,9 +144,9 @@ export default class RenderText extends Component<Props> {
           this.props.clearHighlights();
           highlights.highlightData.forEach(highlight => {
             // only add it if it isn't arleady in the store
-            console.log("processing saved highlight: " + JSON.stringify(highlight));
+            //console.log("processing saved highlight: " + JSON.stringify(highlight));
             if (!this.props.annotations.some(element => {
-              console.log(this.props.annotations);
+              //console.log(this.props.annotations);
               return element.id == highlight.id;
             })) {
               this.props.addHighlight(highlight);
@@ -171,6 +178,7 @@ export default class RenderText extends Component<Props> {
 
       // This sends a message to the iFrame upon save request
       if (this.props.save != prevProps.save){
+        console.log("call from componentDidUpdate");
         this.handleSaveTask()
       }
 
@@ -200,8 +208,8 @@ export default class RenderText extends Component<Props> {
 
     //var annotationsFn = this.props.activeUrl.substring(5) + '/annotations-' + fileName + '.json';
     var annotationsFilePath = path.join(saveUrl, '..') + '/' + 'annotations-' + fileName + '.json';
-    console.log("SAVING HTML TO: " + saveUrl);
-    console.log("SAVING ANNOTATIONS TO: " + annotationsFilePath);
+    //console.log("SAVING HTML TO: " + saveUrl);
+    //console.log("SAVING ANNOTATIONS TO: " + annotationsFilePath);
     //var fd = fs.openSync(annotationsFilePath, 'w');
 
     let annotationJSON = Object.assign({},
@@ -245,7 +253,7 @@ export default class RenderText extends Component<Props> {
     let updatedHtml = htmlData.substring(0, end - 1); //remove our injected script tag from the document
 
     fs.writeFileSync(saveUrl, updatedHtml);
-    console.log(this.props);
+    //console.log(this.props);
     this.props.addNotification(`File saved! ${this.props.save}`)
   }
 
@@ -266,6 +274,7 @@ export default class RenderText extends Component<Props> {
 
     } else if (e.data.savedData){
       if (this.props.activeUrl !== 'app/default_landing_page.html') {
+        console.log("call from componentDidMount");
         this.handleSave(e.data.savedData);
       } else {
         this.props.addNotification("can't save annotations on the home page!")
