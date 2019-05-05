@@ -80,7 +80,6 @@ type Props = {
  * @return {Component} Renders the RenderText component which is responsible for connecting user application events to the iFrame
  */
 export default class RenderText extends Component<Props> {
-  props: Props;
 
   constructor(props){
     super(props);
@@ -210,6 +209,7 @@ export default class RenderText extends Component<Props> {
               console.log("adding new json to index");
               searchAPI.addFilesToMainIndex([annotationsFn]);
             } else {
+              console.log(err);
               console.log("error writing new annotations file");
             }
           });
@@ -236,6 +236,7 @@ export default class RenderText extends Component<Props> {
     let updatedHtml = htmlData.substring(0, end - 1); //remove our injected script tag from the document
 
     fs.writeFileSync(saveUrl, updatedHtml);
+    console.log(this.props);
     this.props.addNotification(`File saved! ${this.props.save}`)
   }
 
