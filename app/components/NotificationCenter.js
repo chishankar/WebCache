@@ -9,6 +9,10 @@ function mapStateToProps(state) {
   };
 }
 
+/**
+ * @class
+ * @return {Component} Notification Center component that holds the notifications
+ */
 class NotificationCenter extends Component{
   constructor(props){
     super(props)

@@ -1,9 +1,10 @@
 {
-  "name": "electron-react-boilerplate",
-  "productName": "ElectronReact",
+  "name": "WebCache Desktop Application",
+  "productName": "WebCache",
   "version": "0.17.1",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
+  "description": "An Electron based desktop application that makes annotating and commenting on websites very easy",
   "scripts": {
+    "docs:build": "documentation build app/** -f html -o docs",
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",
     "build-e2e": "cross-env E2E_BUILD=true yarn build",
@@ -264,6 +265,7 @@
     "connected-react-router": "^5.0.1",
     "create-react-class": "^15.6.3",
     "devtron": "^1.4.0",
+    "documentation": "^10.1.0",
     "electron-debug": "^2.0.0",
     "electron-log": "^2.2.17",
     "electron-updater": "^4.0.6",

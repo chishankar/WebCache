@@ -22,6 +22,11 @@ const UIstyles = theme => ({
   },
 });
 
+/**
+ * @class
+ * @param {Object} store
+ * @return {Component} FileSearch Component
+ */
 export default class FileSearch extends Component<Props>{
 
   constructor(props){
@@ -29,8 +34,13 @@ export default class FileSearch extends Component<Props>{
     this.store = this.props.store;
   }
 
-  // Handles logic for when user presses enter on a valid website
-  handleEnter = (event) => {
+  /**
+   * Handles logic for when a user searches for data
+   *
+   * @param  {Event} event Contains user input for what they are searching for
+   * @fires  changeSearchData
+   */
+  handleEnter = (event: Event) => {
     if (event.key === 'Enter'){
       var elem = event.srcElement || event.target;
       console.log("Search term: " + elem.value);
