@@ -140,7 +140,7 @@ export default class RenderText extends Component<Props> {
           // console.log(err);
         }
 
-        }
+      }
 
       // This updates color in index.js
       let data = {color: this.props.color};
