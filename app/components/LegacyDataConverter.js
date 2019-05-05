@@ -18,8 +18,7 @@ const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const isFile = util.promisify(fs.stat);
 
-//const fsPromises = require('fs').promises;
-
+// style for import button
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
@@ -28,7 +27,6 @@ const styles = theme => ({
     display: 'none',
   },
 });
-
 
 
 class LegacyDataConverter extends Component<Props> {
@@ -44,16 +42,19 @@ class LegacyDataConverter extends Component<Props> {
       //this.setState({ path: e.target.files[0].path });
       const destFolder = 'data/imported';
       const sourceFolder = e.target.files[0].path;
+
+      //first copy everything into the import folder under the data folder
       fs.copy(sourceFolder, destFolder, (err) => {
-        if (err) return this.props.addNotification(`${err}`)
+        if (err) return this.props.addNotification(`${err}`);
         try{
+
+          // iterate through the import folder and call legacydata conversion function FindFile
           this.FindFile(destFolder);
-          this.props.addNotification('Scrapebook data imported')
+          this.props.addNotification('Scrapebook data imported');
         } catch(e){
-          this.props.addNotification(`${e}`)
+          this.props.addNotification(`${e}`);
         }
 
-        console.log('success! moved files to data directory');
       });
 
     }
@@ -82,7 +83,7 @@ class LegacyDataConverter extends Component<Props> {
               this.WriteToFile(annotJsonPath, JSON.stringify(fileArr[1]));
               this.WriteToFile(snJsonPath, JSON.stringify(fileArr[2]));
             } catch(e) {
-              this.props.addNotification(`${e}`)
+              this.props.addNotification(`${e}`);
             }
           }
         }
