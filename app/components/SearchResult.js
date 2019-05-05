@@ -23,20 +23,25 @@ const styles = theme => ({
   }
 });
 
+/**
+ * @class
+ * @return {Component} SearchResult Component that holds each serach result information
+ * @param {Object} store
+ */
 class SearchResult extends React.Component {
  constructor(props){
     super(props)
     this.store = this.props.store;
   }
 
+  /**
+   * Handles the logic for clicking on a search result
+   */
   handleClick = () => {
-  // console.log("Search result got pressed!");
-  let filePath = path.join(__dirname, "../data/" + this.props.filename);
-  // console.log(filePath);
-  this.store.dispatch(urlsearchActions.changeActiveUrl('LOCAL' + filePath));
+    let filePath = path.join(__dirname, "../data/" + this.props.filename);
+    this.store.dispatch(urlsearchActions.changeActiveUrl('LOCAL' + filePath));
   };
-  // <ListItemText inset primary={'Filename: ' + this.props.filename + '\n'} />
-  // <ListItemText inset primary={'Matches: ' + this.props.count} />
+
   render() {
     var regexWebsite = this.props.filename.match(/((\w+\.)?\w+\.\w+)/);
     var regexDate = this.props.filename.match(/\-(\d+)\//);

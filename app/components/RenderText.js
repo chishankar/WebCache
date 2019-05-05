@@ -6,7 +6,6 @@ import styles from './Text.css';
 import HighlightText from './HighlightText';
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
-import * as resourcePath from '../utilities/ResourcePaths';
 import * as highlightActions from '../actions/sidebar';
 const searchAPI = require('../../webcache_testing/main5.js');
 import app from 'electron';
@@ -89,7 +88,12 @@ type Props = {
   hideHighlights: Boolean
 }
 
+/**
+ * @class
+ * @return {Component} Renders the RenderText component which is responsible for connecting user application events to the iFrame
+ */
 export default class RenderText extends Component<Props> {
+
   props: Props;
 
   constructor(props){
@@ -97,12 +101,17 @@ export default class RenderText extends Component<Props> {
     this.iframeRef = React.createRef();
   }
 
-  // Once the component mounts, add an event listener to listen for messages and pass all the messages to the handleIFrameTask
+  /**
+   * Once the component mounts, add an event listener to listen for messages and pass all the messages to the handleIFrameTask
+   */
   componentDidMount(){
     window.addEventListener('message',this.handleIFrameTask)
   }
 
-  // Upon URL change, change the URL
+  /**
+   * Handles changes on all the different store changes for different application states
+   * @param {Object} prevProps
+   */
   componentDidUpdate(prevProps){
 
       // handles what to do on an activeUrl update
@@ -180,15 +189,20 @@ export default class RenderText extends Component<Props> {
 
   }
 
-  // Logic for saving file
+  /**
+   * Handles logic for saving the data back to the file that it was read from
+   * @param {String} htmlData
+   */
   handleSave = (htmlData) => {
+    console.log("in save once!");
     var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
     let fileName = saveUrl.substring(saveUrl.lastIndexOf('/') + 1, saveUrl.lastIndexOf('.'));
 
-    var annotationsUrl = path.join(saveUrl, '..') + '/' + 'annotations-' + fileName + '.json';
+    //var annotationsFn = this.props.activeUrl.substring(5) + '/annotations-' + fileName + '.json';
+    var annotationsFilePath = path.join(saveUrl, '..') + '/' + 'annotations-' + fileName + '.json';
     console.log("SAVING HTML TO: " + saveUrl);
-    console.log("SAVING ANNOTATIONS TO: " + annotationsUrl);
-    var fd = fs.openSync(annotationsUrl, 'w');
+    console.log("SAVING ANNOTATIONS TO: " + annotationsFilePath);
+    //var fd = fs.openSync(annotationsFilePath, 'w');
 
     let annotationJSON = Object.assign({},
       {"highlightData":this.props.annotations},
@@ -196,28 +210,50 @@ export default class RenderText extends Component<Props> {
     )
 
     //update the old index of the annotations json page
-    fs.readFile(annotationsUrl, (err, buf) => {
-      if (err) {
-        fs.writeFileSync(fd, JSON.stringify(annotationJSON));
-        searchAPI.addFilesToMainIndex([annotationsUrl]);
-      }
-      fs.writeFileSync(fd, JSON.stringify(annotationJSON));
-      searchAPI.update(annotationsUrl, buf.toString());
-    });
+    try {
+      fs.readFile(annotationsFilePath, (err, buf) => {
+        if (err || buf.length === 0) {
+          fs.writeFile(annotationsFilePath, JSON.stringify(annotationJSON), (err) => {
+            if (!err) {
+              console.log("adding new json to index");
+              searchAPI.addFilesToMainIndex([annotationsFilePath]);
+            } else {
+              console.log(err);
+              console.log("error writing new annotations file");
+            }
+          });
+        }
+        else {
+          console.log("trying to write JSON index");
+
+          fs.writeFile(annotationsFilePath, JSON.stringify(annotationJSON), (err) => {
+            if (!err) {
+              console.log(buf.toString());
+              console.log('Updating json index')
+              searchAPI.update(annotationsFilePath, buf.toString());
+            } else {
+              console.log("error writing updated annotations file");
+            }
+          });
+        }
+      });
+    } catch(err) {
+      console.log(err);
+    }
 
     var end = htmlData.indexOf("<script id=\"webcache-script\">");
     let updatedHtml = htmlData.substring(0, end - 1); //remove our injected script tag from the document
-    // re write the current version of the html page and update the old index
-    fs.readFile(saveUrl, (err, buf) => {
-      fs.writeFileSync(saveUrl, updatedHtml);
-      searchAPI.update(annotationJSON, buf.toString());
-      this.props.addNotification(`File saved! ${this.props.save}`)
-      fs.writeFileSync(fd, JSON.stringify(annotationJSON));
-    });
 
+    fs.writeFileSync(saveUrl, updatedHtml);
+    console.log(this.props);
+    this.props.addNotification(`File saved! ${this.props.save}`)
   }
 
-  // Takes in data returned by window.postMessage from the iframe rendered within the component
+  /**
+   * Handles all iframe tasks requests
+   *
+   * @param {Object} e
+   */
   handleIFrameTask = (e) => {
 
     if (e.data == 'clicked button'){
@@ -243,7 +279,9 @@ export default class RenderText extends Component<Props> {
     }
   }
 
-  // Function to handle saving data
+  /**
+   * Sends save request to the iFrame
+   */
   handleSaveTask = () => {
 
     window.postMessage("save", '*');
@@ -253,11 +291,9 @@ export default class RenderText extends Component<Props> {
   render() {
 
     return (
-
       <div>
         {getRenderText(this.props.activeUrl,this.iframeRef)}
       </div>
-
     );
   }
 }

@@ -25,6 +25,10 @@ const UIstyles = theme => ({
   },
 });
 
+/**
+ * @class
+ * @return {Component} Handles logic and behavior for url search download
+ */
 export default class UrlSearch extends Component<Props>{
 
 
@@ -38,8 +42,11 @@ export default class UrlSearch extends Component<Props>{
     this.store = this.props.store;
   }
 
-  // Handles the validation of the input
-  handleInput = (event) => {
+  /**
+   * Handles the validation of the input
+   * @param  {Event} event
+   */
+  handleInput = (event: Event) => {
     let value = event.target.value;
     if (this.validURL(value)){
       this._setValidUrl(value);
@@ -49,15 +56,20 @@ export default class UrlSearch extends Component<Props>{
     }
   }
 
-  // Logic for showing and not showing loading bar
+  /**
+   * Logic for showing and not showing loading bar
+   */
   handleClickLoading = () => {
     this.setState(state => ({
       loading: !state.loading,
     }));
   };
 
-  // Handles logic for when user presses enter on a valid website
-  handleEnter = (event) => {
+  /**
+   * Handles logic for when user presses enter on a valid website
+   * @param  {Event} event
+   */
+  handleEnter = (event: Event) => {
     if (event.key === 'Enter' && this.state.showValidate){
       var save_location = "data/" + this.state.validUrl.replace(/https:\/\//g,"") + '-' + Date.now();
       this.handleClickLoading();
@@ -79,23 +91,33 @@ export default class UrlSearch extends Component<Props>{
     }
   }
 
-  // Sets state of url search component with valid url
-  _setValidUrl = (vUrl) =>{
+  /**
+   * Sets state of url search component with valid url
+   * @param  {String} vUrl
+   */
+  _setValidUrl = (vUrl: String) =>{
     this.setState({validUrl: vUrl});
   }
 
-  // turns on validation light
+  /**
+   * Turns on validation light
+   */
   _turnOnValidation= () =>{
     this.setState({showValidate: true});
   }
 
-  // turns off validation light
+ /**
+   * Turns off validation light
+   */
   _turnOffValidation = () =>{
     this.setState({showValidate: false});
   }
 
-  // handles logic of validating input for valid url
-  validURL = (str) => {
+  /**
+   * Handles logic of validating input for valid url
+   * @param  {String} str
+   */
+  validURL = (str: String) => {
     var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
       '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
       '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address

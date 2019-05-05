@@ -59,7 +59,7 @@ function getFileText(filePath, includeExtraWhiteSpace=false) {
 
 // DEMO STARTS HERE
 // the file path of this demo
-var primesFilePath = '../test/legacy-data/ScrapBook/data/20190327234416/index.html';
+var primesFilePath = 'test_docs/elasticlunr.html';
 
 console.log('##################################');
 console.log('#### WITH NO EXTRA WHITESPACE ####');
@@ -74,4 +74,3 @@ console.log('####################################');
 console.log('');
 console.log(getFileText(primesFilePath, true));
 console.log('');
- 

@@ -18,7 +18,7 @@ import NotificationCenter from './NotificationCenter';
 import Footer from './Footer';
 import Tools from './Toolbar';
 import homeStyles from './Home.css';
-import LegacyDataConverter from './LegacyDataConverter'
+import LegacyDataConverter from '../containers/LegacyDataConverterContainer'
 import FileDialogue from './FileSelector';
 import SideBarPage from '../containers/SideBarPage';
 import SearchSideBarPage from '../containers/SearchSideBarPage';
