@@ -130,7 +130,7 @@ class Home extends Component {
     this.setState({ open: false });
   };
 
-  componentDidUpdate(prevProps){
+  componentDidUpdate(prevProps: Object){
     if (!(this.props.sidebarState === prevProps.sidebarState)) {
       this.setState({
           showSearchSideBar: this.props.sidebarState

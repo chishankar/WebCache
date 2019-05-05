@@ -113,7 +113,7 @@ class HighlightText extends Component{
    * @param {Event} event
    * @fires addComment
    */
-  handleInput = (event) => {
+  handleInput = (event: Event) => {
     let value = event.target.value;
     this.setState({comment: value});
     let data = {
@@ -127,7 +127,7 @@ class HighlightText extends Component{
    * This updates the color of the highlighter to indicate the current color that is selected
    * @param  {String} color
    */
-  getHighlighterColorIcon = (color) => {
+  getHighlighterColorIcon = (color: String) => {
     return {color: color};
   }
 

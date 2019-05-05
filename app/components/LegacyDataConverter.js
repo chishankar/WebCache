@@ -30,16 +30,21 @@ const styles = theme => ({
 });
 
 
-
+/**
+ * @class
+ * @return {Component} Legacy Data Converter for converting legacy data information into our own native annotation system
+ */
 class LegacyDataConverter extends Component<Props> {
 
   constructor(props) {
     super(props);
-    console.log(props)
   }
 
-  // Handles path changes and updates state
-  onChange = (e) => {
+  /**
+   * Handles path changes and updates state
+   * @param  {Event} e
+   */
+  onChange = (e: Event) => {
     if (e.target.files[0] != null) {
       //this.setState({ path: e.target.files[0].path });
       const destFolder = 'data/imported';
@@ -59,7 +64,11 @@ class LegacyDataConverter extends Component<Props> {
     }
   };
 
-  async FindFile(dirPath) {
+  /**
+   * Finds File
+   * @param  {String} dirPath
+   */
+  async FindFile(dirPath: String) {
     fs.readdir(dirPath, async (err, files) => {
       if (!err) {
         for (var i = 0; i < files.length; i++) {
@@ -89,8 +98,12 @@ class LegacyDataConverter extends Component<Props> {
       }
     });
   }
-
-  async WriteToFile(filePath, replacement) {
+  /**
+   * Replaces file at path filePath with replacement text
+   * @param  {String} filePath
+   * @param  {String} replacement
+   */
+  async WriteToFile(filePath: String, replacement: String) {
     await writeFile(filePath, replacement);
   }
 

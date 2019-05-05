@@ -97,7 +97,7 @@ export default class RenderText extends Component<Props> {
    * Handles changes on all the different store changes for different application states
    * @param {Object} prevProps
    */
-  componentDidUpdate(prevProps){
+  componentDidUpdate(prevProps: Object){
 
       // handles what to do on an activeUrl update
       if (this.props.activeUrl != prevProps.activeUrl) {
@@ -182,7 +182,7 @@ export default class RenderText extends Component<Props> {
    * Handles logic for saving the data back to the file that it was read from
    * @param {String} htmlData
    */
-  handleSave = (htmlData) => {
+  handleSave = (htmlData: String) => {
     console.log("in save once!");
     var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
     let fileName = saveUrl.substring(saveUrl.lastIndexOf('/') + 1, saveUrl.lastIndexOf('.'));
@@ -197,8 +197,6 @@ export default class RenderText extends Component<Props> {
       {"highlightData":this.props.annotations},
       {"lastUpdated":this.props.save}
     )
-
-    console.log("HERRERERERERE");
 
     //update the old index of the annotations json page
     try {
@@ -245,7 +243,7 @@ export default class RenderText extends Component<Props> {
    *
    * @param {Object} e
    */
-  handleIFrameTask = (e) => {
+  handleIFrameTask = (e: Object) => {
 
     if (e.data == 'clicked button'){
       console.log("TEMPORARY")
