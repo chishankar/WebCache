@@ -1,5 +1,5 @@
 {
-  "name": "WebCache Desktop Application",
+  "name": "WebCache-Desktop-Application",
   "productName": "WebCache",
   "version": "0.17.1",
   "description": "An Electron based desktop application that makes annotating and commenting on websites very easy",

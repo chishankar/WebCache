@@ -58,7 +58,10 @@ type Props = {
 
 
 
-
+/**
+ * @class
+ * @return {Component} Holds a list of all highlights/annotations for page. Nest for HighlightText
+ */
 class SideBar extends Component<Props>{
   props: Props
 
@@ -69,8 +72,11 @@ class SideBar extends Component<Props>{
     }
   }
 
-  // Updates highlighter icon to the currently selected color
-  getHighlighterColorIcon = (color) => {
+  /**
+   * Updates highlighter icon to the currently selected color
+   * @param  {String} color
+   */
+  getHighlighterColorIcon = (color: String) => {
     // TODO: make this more robust? handle hexcodes
     if (color === 'red'){
       return red
