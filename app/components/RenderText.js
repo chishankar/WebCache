@@ -209,6 +209,7 @@ export default class RenderText extends Component<Props> {
               console.log("adding new json to index");
               searchAPI.addFilesToMainIndex([annotationsFn]);
             } else {
+              console.log(err);
               console.log("error writing new annotations file");
             }
           });

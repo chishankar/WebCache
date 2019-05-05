@@ -104,12 +104,18 @@ async function ScrapbookToWebcacheHTML(htmlFilePath) {
     for (i = 0; i < inlines.length; i++) {
         // set "class" attribute of i-th inline annotation
         // the convention is to use the class of the tag as an id
-        inlines.eq(i).attr('class', inlineJSONs[i].id);
+        inlines.eq(i).attr('class', inlineJSONs[i].id + " webcache-highlight-mark");
+        inlines.eq(i).removeAttr('style');
+        inlines.eq(i).css("background-color","grey");
+        inlines.eq(i).css("display","inline");
     }
 
     for (i = 0; i < highlights.length; i++) {
         // set "class" attribute of i-th highlight
-        highlights.eq(i).attr('class', highlightJSONs[i].id);
+        highlights.eq(i).attr('class', highlightJSONs[i].id + " webcache-highlight-mark");
+        highlights.eq(i).removeAttr('style');
+        highlights.eq(i).css("background-color",highlightJSONs[i].color);
+        highlights.eq(i).css("display","inline");
     }
 
     var annotationJson= highlightJSONs.concat(inlineJSONs);
@@ -192,13 +198,13 @@ function cheerioObjsToHighlightJSON(highlights) {
         // force the highlight styles into a single color
         var forceColor;
         if (style === highlightStyles[0]) {
-            forceColor = '#FFCC00';
+            forceColor = 'yellow';
         } else if(style === highlightStyles[1]) {
-            forceColor = '#33FF33';
+            forceColor = 'green';
         } else if (style === highlightStyles[2]) {
-            forceColor = '#CCFFFF';
+            forceColor = 'blue';
         } else if (style === highlightStyles[3]) {
-            forceColor = '#FFFF00';
+            forceColor = 'yellow';
         } else {
             // if it's not a highlight I recognize, then make it grey
             forceColor = '#999999';
