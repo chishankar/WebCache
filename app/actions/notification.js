@@ -4,7 +4,7 @@ import type { GetState, Dispatch } from '../reducers/types';
 /**
  * Creates a notification
  * @param  {String} notificationMessage
- * @returns ADDNOTIFICATION
+ * @returns {Action}  ADDNOTIFICATION
  */
 export const addNotification = (notificationMessage: String) => {
   return {
@@ -15,7 +15,7 @@ export const addNotification = (notificationMessage: String) => {
 /**
  * Deletes the notification
  * @param  {String} notificationId
- * @returns REMOVENOTIFICATION
+ * @returns {Action}  REMOVENOTIFICATION
  */
 export const removeNotification = (notificationId: String) => {
   return {

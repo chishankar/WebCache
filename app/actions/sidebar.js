@@ -2,7 +2,7 @@ import type { GetState, Dispatch } from '../reducers/types';
 /**
  * Adds highlight to annotations
  * @param  {Object} highlightData
- * @returns HIGHLIGHT action
+ * @returns {Action}  HIGHLIGHT action
  */
 export const addHighlight = (highlightData: Object) => {
   return {
@@ -13,7 +13,7 @@ export const addHighlight = (highlightData: Object) => {
 /**
  * Adds comment to highlight
  * @param  {Object} commentData
- * @returns COMMENT action
+ * @returns {Action}  COMMENT action
  */
 export const addComment = (commentData: Object) => {
   return {
@@ -24,7 +24,7 @@ export const addComment = (commentData: Object) => {
 /**
  * Sends delete request
  * @param  {String} deleteId
- * @returns DELETE action
+ * @returns {Action}  DELETE action
  */
 export const deleteHighlights = (deleteId: String) => {
   return {
@@ -36,7 +36,7 @@ export const deleteHighlights = (deleteId: String) => {
 /**
  * Tells which highlight id should be in view
  * @param  {String} id
- * @returns VIEW action
+ * @returns {Action}  VIEW action
  */
 export const viewHighlight = (id: String) => {
   return {
@@ -46,7 +46,7 @@ export const viewHighlight = (id: String) => {
 }
 /**
  * Switches boolean to hide all annotations on a page
- * @returns HIDEHIGHLIGHTS action
+ * @returns {Action}  HIDEHIGHLIGHTS action
  */
 export const hideHighlights = () => {
   return {
@@ -56,7 +56,7 @@ export const hideHighlights = () => {
 
 /**
  * Resets annotations list for new page
- * @returns CLEAR action
+ * @returns {Action}  CLEAR action
  */
 export const clearHighlights = () => {
   return {

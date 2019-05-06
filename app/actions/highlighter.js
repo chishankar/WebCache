@@ -2,7 +2,7 @@
 import type { GetState, Dispatch } from '../reducers/types';
 /**
  * Changes to red color
- * @returns RED action
+ * @returns {Action}  RED action
  */
 export const changeRed = () => {
   return {
@@ -11,7 +11,7 @@ export const changeRed = () => {
 }
 /**
  * Changes to green color
- * @returns GREEN action
+ * @returns {Action}  GREEN action
  */
 export const changeGreen = () => {
   return {
@@ -20,7 +20,7 @@ export const changeGreen = () => {
 }
 /**
  * Changes to blue color
- * @returns BLUE action
+ * @returns {Action}  BLUE action
  */
 export const changeBlue = () => {
   return {
@@ -29,7 +29,7 @@ export const changeBlue = () => {
 }
 /**
  * Changes to yellow color
- * @returns YELLOW action
+ * @returns {Action}  YELLOW action
  */
 export const changeYellow = () => {
   return {
@@ -38,7 +38,7 @@ export const changeYellow = () => {
 }
 /**
  * Changes to purple color
- * @returns PURPLE action
+ * @returns {Action}  PURPLE action
  */
 export const changePurple = () => {
   return {
@@ -47,7 +47,7 @@ export const changePurple = () => {
 }
 /**
  * Changes to default color (clear)
- * @returns DEFAULT action
+ * @returns {Action}  DEFAULT action
  */
 export const changeDefault = () => {
   return {
