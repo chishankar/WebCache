@@ -50,11 +50,14 @@ const styles = theme => ({
   },
 });
 
+// /**
+//  * @type {Props}
+//  */
 type Props = {
   highlights: Array,
   url: String,
-  addComment: Function,
   color: String,
+  addComment: Function,
 };
 
 
@@ -64,9 +67,11 @@ type Props = {
  * @return {Component} Holds a list of all highlights/annotations for page. Nest for HighlightText
  */
 class SideBar extends Component<Props>{
-  props: Props
-
-  constructor(props){
+  /**
+   *
+   * @param {Props} props
+   */
+  constructor(props: Props){
     super(props)
     this.state = {
       open: true,

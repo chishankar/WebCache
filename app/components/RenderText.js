@@ -63,6 +63,9 @@ function getRenderText(filePath, iframeRef, addHighlights) {
   );
 }
 
+// /**
+//  * @type {Props} Props for Render Text
+//  */
 type Props = {
   color: String,
   delete: String,
@@ -81,8 +84,10 @@ type Props = {
  * @return {Component} Renders the RenderText component which is responsible for connecting user application events to the iFrame
  */
 export default class RenderText extends Component<Props> {
-
-  constructor(props){
+  /**
+   * @param  {Props} props
+   */
+  constructor(props: Props){
     super(props);
     this.iframeRef = React.createRef();
   }
@@ -182,7 +187,7 @@ export default class RenderText extends Component<Props> {
 
   /**
    * Handles logic for saving the data back to the file that it was read from
-   * @param {String} htmlData
+   * @param {String} htmlData the html of what is in the iFrame
    */
   handleSave = (htmlData: String) => {
     console.log("in save once!");
@@ -243,7 +248,7 @@ export default class RenderText extends Component<Props> {
   /**
    * Handles all iframe tasks requests
    *
-   * @param {Object} e
+   * @param {Object} e A custom object used for communitication of different events between iframe and the RenderTextComponent
    */
   handleIFrameTask = (e: Object) => {
 
