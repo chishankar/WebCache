@@ -1,7 +1,7 @@
 import type { GetState, Dispatch } from '../reducers/types';
 /**
  * Adds highlight to annotations
- * @param  {Object} highlightData
+ * @param  {Object} highlightData An object that contains color, text, id
  * @returns {Action}  HIGHLIGHT action
  */
 export const addHighlight = (highlightData: Object) => {
@@ -12,7 +12,7 @@ export const addHighlight = (highlightData: Object) => {
 }
 /**
  * Adds comment to highlight
- * @param  {Object} commentData
+ * @param  {Object} commentData An object that takes a comment text and a id to associate to the correct highlight
  * @returns {Action}  COMMENT action
  */
 export const addComment = (commentData: Object) => {
@@ -23,7 +23,7 @@ export const addComment = (commentData: Object) => {
 }
 /**
  * Sends delete request
- * @param  {String} deleteId
+ * @param  {String} deleteId The id of the highlight that is to be deleted
  * @returns {Action}  DELETE action
  */
 export const deleteHighlights = (deleteId: String) => {
@@ -35,7 +35,7 @@ export const deleteHighlights = (deleteId: String) => {
 
 /**
  * Tells which highlight id should be in view
- * @param  {String} id
+ * @param  {String} id Id of the highlight that is to be veiwed/centered on the screen
  * @returns {Action}  VIEW action
  */
 export const viewHighlight = (id: String) => {

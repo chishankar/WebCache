@@ -24,6 +24,7 @@ const UIstyles = theme => ({
 
 /**
  * @class
+ * @constructor
  * @param {Object} store
  * @return {Component} FileSearch Component
  */
@@ -36,9 +37,10 @@ export default class FileSearch extends Component<Props>{
 
   /**
    * Handles logic for when a user searches for data
-   *
+   * @kind {Function}
    * @param  {Event} event Contains user input for what they are searching for
    * @fires  changeSearchData
+   * @this {FileSearch}
    */
   handleEnter = (event: Event) => {
     if (event.key === 'Enter'){

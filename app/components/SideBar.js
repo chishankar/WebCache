@@ -78,7 +78,6 @@ class SideBar extends Component<Props>{
    * @param  {String} color
    */
   getHighlighterColorIcon = (color: String) => {
-    // TODO: make this more robust? handle hexcodes
     return {
       color: getColor.getColor(color)
     }

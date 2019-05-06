@@ -10,7 +10,7 @@ export const SaveDoc = () => {
 }
 /**
  * Updates last updated date in application state
- * @param  {Object} val
+ * @param  {Object} val A new value to set the last update date value to
  * @returns {Action}  UPDATESAVE action
  */
 export const ChangeSave = (val: Object) => {
