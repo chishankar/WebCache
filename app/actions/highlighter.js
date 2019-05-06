@@ -1,5 +1,5 @@
 // @flow
-import type { GetState, Dispatch } from '../reducers/types';
+import type { Action } from '../reducers/types';
 /**
  * Changes to red color
  * @returns {Action}  RED action

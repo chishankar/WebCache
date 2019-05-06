@@ -1,4 +1,4 @@
-import type { GetState, Dispatch } from '../reducers/types';
+import type { Action } from '../reducers/types';
 /**
  * Adds highlight to annotations
  * @param  {Object} highlightData An object that contains color, text, id

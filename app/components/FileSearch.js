@@ -24,7 +24,7 @@ const UIstyles = theme => ({
 
 /**
  * @class
- * @param {Object} store
+ * @param {Store} store
  * @return {FileSearch} FileSearch Component.
  */
 export default class FileSearch extends Component<Props>{

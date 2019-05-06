@@ -1,4 +1,4 @@
-import type { GetState, Dispatch } from '../reducers/types'; //what to change in reducers/types
+import type { Action } from '../reducers/types'; //what to change in reducers/types
 /**
  * Actions to update active url in the store
  * @param  {String} activeUrl The url to download/scrape or the url that is currently displaying in the iframe window
