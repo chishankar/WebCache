@@ -68,8 +68,8 @@ type Props = {
  */
 class SideBar extends Component<Props>{
   /**
-   *
-   * @param {Props} props
+   * @param  {Props} props
+   * @this
    */
   constructor(props: Props){
     super(props)

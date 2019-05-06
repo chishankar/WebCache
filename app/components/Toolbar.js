@@ -58,6 +58,11 @@ const selectionstyles = themes => ({
  * @return {Tools} Container for all the utility components
  */
 class Tools extends Component<Props>{
+    /**
+   * @param  {Props} props
+   * @constructor
+   * @this
+   */
   constructor(props){
     super(props);
     this.state = {

@@ -25,10 +25,14 @@ function getDataDirectory() {
 
 /**
  * @class
- * @param {Object} store The store object that holds the applications state
+ * @param {Store} store The store object that holds the applications state
  * @return {FileDialogue} FileDialogue
  */
 class FileDialogue extends React.Component {
+  /**
+   * @param  {Props} props
+   * @this
+   */
   constructor(props) {
     super(props);
     this.state = {

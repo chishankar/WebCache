@@ -29,6 +29,10 @@ const styles = theme => ({
  * @param {Store} store
  */
 class SearchResult extends React.Component {
+    /**
+   * @param  {Props} props
+   * @this
+   */
  constructor(props){
     super(props)
     this.store = this.props.store;

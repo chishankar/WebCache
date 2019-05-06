@@ -6,10 +6,14 @@ import * as getColor from '../utilities/GetColor';
 
 /**
  * @class
+ * @param {Store} store
  * @return {Component} Highlight Component that allows you select color
  */
 export default class Highlight extends Component<Props> {
-
+  /**
+   * @param  {Props} props
+   * @this
+   */
   constructor(props){
     super(props);
     this.store = this.props.store;

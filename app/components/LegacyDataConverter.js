@@ -35,7 +35,10 @@ const styles = theme => ({
  * @return {Component} Legacy Data Converter for converting legacy data information into our own native annotation system
  */
 class LegacyDataConverter extends Component<Props> {
-
+  /**
+   * @param  {Props} props
+   * @this
+   */
   constructor(props) {
     super(props);
   }

@@ -28,6 +28,10 @@ function mapDispatchToProps(dispatch){
  * @return {Component} Notification component that gets triggered upon variety of events
  */
 class Notification extends Component {
+    /**
+   * @param  {Props} props
+   * @this
+   */
   constructor(props) {
     super(props);
     this.message = this.props.message

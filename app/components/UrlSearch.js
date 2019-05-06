@@ -31,8 +31,10 @@ const UIstyles = theme => ({
  * @return {UrlSearch} Handles logic and behavior for url search download
  */
 export default class UrlSearch extends Component<Props>{
-
-
+  /**
+   * @param  {Props} props
+   * @this
+   */
   constructor(props){
     super(props);
     this.state = {

@@ -63,9 +63,7 @@ function getRenderText(filePath, iframeRef, addHighlights) {
   );
 }
 
-// /**
-//  * @type {Props} Props for Render Text
-//  */
+
 type Props = {
   color: String,
   delete: String,
@@ -86,6 +84,7 @@ type Props = {
 export default class RenderText extends Component<Props> {
   /**
    * @param  {Props} props
+   * @this
    */
   constructor(props: Props){
     super(props);

@@ -19,7 +19,10 @@ function mapDispatchToProps(dispatch) {
  * @return {HideButton} HideButton Component
  */
 class HideButton extends Component{
-
+  /**
+   * @param  {Props} props
+   * @this
+   */
   constructor(props){
     super(props)
     this.state = {

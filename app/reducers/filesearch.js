@@ -2,10 +2,14 @@
 import type { Action } from './types';
 
 const initialState = {
-  searchData: JSON.stringify({results:[]})
+  searchData: String
 }
-
-export default function filesearch(state=initialState, action) {
+/**
+ * Dispatch handlers for SEARCHDATA
+ * @param  {Object} state State of filesearch.
+ * @param  {Action} action Action type.
+ */
+export default function filesearch(state=initialState, action: Action) {
     switch(action.type){
 
       case 'SEARCHDATA':

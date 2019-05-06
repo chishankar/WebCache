@@ -2,7 +2,8 @@
 import type { Action } from '../reducers/types';
 /**
  * Changes to red color
- * @returns {Action}  RED action
+ * @returns {type: Action}  RED action
+ *
  */
 export const changeRed = () => {
   return {
@@ -11,7 +12,7 @@ export const changeRed = () => {
 }
 /**
  * Changes to green color
- * @returns {Action}  GREEN action
+ * @returns {type: Action}  GREEN action
  */
 export const changeGreen = () => {
   return {
@@ -20,7 +21,7 @@ export const changeGreen = () => {
 }
 /**
  * Changes to blue color
- * @returns {Action}  BLUE action
+ * @returns {type: Action}  BLUE action
  */
 export const changeBlue = () => {
   return {
@@ -29,7 +30,7 @@ export const changeBlue = () => {
 }
 /**
  * Changes to yellow color
- * @returns {Action}  YELLOW action
+ * @returns {type: Action}  YELLOW action
  */
 export const changeYellow = () => {
   return {
@@ -38,7 +39,7 @@ export const changeYellow = () => {
 }
 /**
  * Changes to purple color
- * @returns {Action}  PURPLE action
+ * @returns {type: Action}  PURPLE action
  */
 export const changePurple = () => {
   return {
@@ -47,7 +48,7 @@ export const changePurple = () => {
 }
 /**
  * Changes to default color (clear)
- * @returns {Action}  DEFAULT action
+ * @returns {type: Action}  DEFAULT action
  */
 export const changeDefault = () => {
   return {

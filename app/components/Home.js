@@ -111,6 +111,10 @@ class Home extends Component {
   state = {
     open: false,
   }
+    /**
+   * @param  {Props} props
+   * @this
+   */
   constructor(props){
     super(props);
     this.store = this.props.store;

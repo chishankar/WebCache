@@ -28,7 +28,10 @@ const styles = theme => ({
  */
 class SearchSideBar extends Component<Props>{
   props: Props
-
+  /**
+   * @param  {Props} props
+   * @this
+   */
   constructor(props){
     super(props)
   }

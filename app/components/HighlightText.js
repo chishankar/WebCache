@@ -91,7 +91,10 @@ function mapDispatchToProps(dispatch) {
  * @return {HighlightText} Highlight Text Component, a component that allows you to interact with what you highlighted (shows up on sidebar)
  */
 class HighlightText extends Component{
-
+  /**
+   * @param  {Props} props
+   * @this
+   */
   constructor(props){
     super(props)
     this.text = this.props.text;
