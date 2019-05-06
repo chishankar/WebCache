@@ -8,6 +8,7 @@ import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import * as resourcePath from '../utilities/ResourcePaths';
 import * as highlightActions from '../actions/sidebar';
+import * as pickColor from '../utilities/GetColor'
 const searchAPI = require('../../webcache_testing/main5.js');
 
 const fs = require('fs');
@@ -143,7 +144,7 @@ export default class RenderText extends Component<Props> {
       }
 
       // This updates color in index.js
-      let data = {color: this.props.color};
+      let data = {color: pickColor.getColor(this.props.color)};
       window.postMessage(data,'*');
 
       // Sends delete request to the iFrame upone delete id change
