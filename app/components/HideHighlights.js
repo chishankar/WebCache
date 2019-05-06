@@ -16,7 +16,7 @@ function mapDispatchToProps(dispatch) {
  * Hides the highlights the button on the page
  *
  * @class
- * @return {Component} HideButton Component
+ * @return {HideButton} HideButton Component
  */
 class HideButton extends Component{
 

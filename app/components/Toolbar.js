@@ -54,7 +54,7 @@ const selectionstyles = themes => ({
 
 /**
  * @class
- * @return {Component} Container for all the utility components
+ * @return {Tools} Container for all the utility components
  */
 class Tools extends Component<Props>{
   constructor(props){

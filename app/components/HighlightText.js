@@ -62,8 +62,9 @@ const black={
 
 /**
  * Makes a small preview of the highlighted text to show as the face of the hightext component
- * @param  {String} str
- * @return {String}
+ * @name {preview}
+ * @param  {String} str Highlighted text
+ * @return {String} first 15 characters of string
  */
 function preview(str){
   if (str.length > 15){
@@ -87,7 +88,7 @@ function mapDispatchToProps(dispatch) {
  * @param {String} text Text that is highlighted
  * @param {String} color The color that the highlight is in
  * @param {String} iD The id of the highlight on the page
- * @return {Component} Highlight Text Component, a component that allows you to interact with what you highlighted (shows up on sidebar)
+ * @return {HighlightText} Highlight Text Component, a component that allows you to interact with what you highlighted (shows up on sidebar)
  */
 class HighlightText extends Component{
 
@@ -110,8 +111,8 @@ class HighlightText extends Component{
   /**
    *  This handles updating the comment data for the specific highlighted text
    *  Updates current state and updates the state in the store
-   * @param {Event} event
-   * @fires addComment
+   * @param {Event} event Click event
+   * @fires addComment Which is an acction trigger for adding a comment
    */
   handleInput = (event: Event) => {
     let value = event.target.value;
@@ -125,7 +126,7 @@ class HighlightText extends Component{
 
   /**
    * This updates the color of the highlighter to indicate the current color that is selected
-   * @param  {String} color
+   * @param  {String} color The current highlight color
    */
   getHighlighterColorIcon = (color: String) => {
     return {color: color};

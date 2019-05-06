@@ -25,8 +25,8 @@ function getDataDirectory() {
 
 /**
  * @class
- * @param {Object} store
- * @return {Component} FileDialogue
+ * @param {Object} store The store object that holds the applications state
+ * @return {FileDialogue} FileDialogue
  */
 class FileDialogue extends React.Component {
   constructor(props) {
@@ -40,7 +40,7 @@ class FileDialogue extends React.Component {
   /**
    * Handles path changes, updates state, and copies to data dir
    *
-   * @param  {Event} e
+   * @param  {Event} e Click event fired for user clicking on file from folder viewer
    */
   onChange = (e: Event) => {
     if (e.target.files[0]!=null){
@@ -51,7 +51,7 @@ class FileDialogue extends React.Component {
   /**
    * Updates activeUrl in store to new current user selected file from file browser
    *
-   * @param  {String} file
+   * @param  {String} file File path
    *
    */
   handleFile = (file: String) =>{

@@ -25,7 +25,7 @@ const styles = theme => ({
 
 /**
  * @class
- * @return {Component} SearchResult Component that holds each serach result information
+ * @return {SearchResult} SearchResult Component that holds each serach result information
  * @param {Object} store
  */
 class SearchResult extends React.Component {

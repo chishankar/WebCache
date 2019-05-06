@@ -21,6 +21,11 @@ const styles = theme => ({
   },
 });
 
+
+/**
+ * @class
+ * @returns {SearchSideBar} Search Sidebar Component
+ */
 class SearchSideBar extends Component<Props>{
   props: Props
 

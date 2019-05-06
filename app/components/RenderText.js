@@ -81,7 +81,7 @@ type Props = {
 
 /**
  * @class
- * @return {Component} Renders the RenderText component which is responsible for connecting user application events to the iFrame
+ * @return {RenderText} Renders the RenderText component which is responsible for connecting user application events to the iFrame
  */
 export default class RenderText extends Component<Props> {
   /**

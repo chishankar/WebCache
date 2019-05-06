@@ -38,7 +38,7 @@ class Notification extends Component {
   }
 
   /**
-   * Opens the notification
+   * Creates the notification
    */
   notificationOpen = () => {
     this.setState({

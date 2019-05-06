@@ -81,7 +81,7 @@ export default class Highlight extends Component<Props> {
     /**
    * Dispatches DEFAULT color for highlighting
    *
-   * @param  {String} col color
+   * @param  {String} col Current highlighting color
    * @returns {Object} Color styles object
    */
   _setColor = (col: String) => {

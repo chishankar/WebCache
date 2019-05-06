@@ -64,7 +64,7 @@ type Props = {
 
 /**
  * @class
- * @return {Component} Holds a list of all highlights/annotations for page. Nest for HighlightText
+ * @return {SideBar} Holds a list of all highlights/annotations for page. Nest for HighlightText
  */
 class SideBar extends Component<Props>{
   /**

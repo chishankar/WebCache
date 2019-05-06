@@ -692,6 +692,16 @@
               
                 
                 <li><a
+                  href='#searchsidebar'
+                  class="">
+                  SearchSideBar
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#sidebar'
                   class=" toggle-sibling">
                   SideBar
@@ -2599,7 +2609,7 @@ in the code.</p>
   
 
   
-    <div class='pre p1 fill-light mt0'>new FileSearch(props: any, store: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): Component</div>
+    <div class='pre p1 fill-light mt0'>new FileSearch(props: Props, store: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="#filesearch">FileSearch</a></div>
   
   
     <p>
@@ -2623,7 +2633,7 @@ in the code.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>props</span> <code class='quiet'>(any)</code>
+            <span class='code bold'>props</span> <code class='quiet'>(Props)</code>
 	    
           </div>
           
@@ -2645,7 +2655,7 @@ in the code.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>Component</code>:
+      <code><a href="#filesearch">FileSearch</a></code>:
         FileSearch Component
 
       
@@ -2890,7 +2900,7 @@ in the code.</p>
   
 
   
-    <div class='pre p1 fill-light mt0'>new FileDialogue(props: any, store: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): Component</div>
+    <div class='pre p1 fill-light mt0'>new FileDialogue(props: any, store: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="#filedialogue">FileDialogue</a></div>
   
   
     <p>
@@ -2923,7 +2933,8 @@ in the code.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>store</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    
+	    The store object that holds the applications state
+
           </div>
           
         </div>
@@ -2936,7 +2947,7 @@ in the code.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>Component</code>:
+      <code><a href="#filedialogue">FileDialogue</a></code>:
         FileDialogue
 
       
@@ -2985,7 +2996,8 @@ in the code.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>e</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/API/Event">Event</a>)</code>
-	    
+	    Click event fired for user clicking on file from folder viewer
+
           </div>
           
         </div>
@@ -3045,7 +3057,8 @@ in the code.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>file</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    
+	    File path
+
           </div>
           
         </div>
@@ -3100,7 +3113,7 @@ in the code.</p>
 
   <p>Hides the highlights the button on the page</p>
 
-    <div class='pre p1 fill-light mt0'>new HideButton(props: any): Component</div>
+    <div class='pre p1 fill-light mt0'>new HideButton(props: any): <a href="#hidebutton">HideButton</a></div>
   
   
     <p>
@@ -3138,7 +3151,7 @@ in the code.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>Component</code>:
+      <code><a href="#hidebutton">HideButton</a></code>:
         HideButton Component
 
       
@@ -3597,7 +3610,7 @@ in the code.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>col</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    color
+	    Current highlighting color
 
           </div>
           
@@ -3679,7 +3692,8 @@ in the code.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>str</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    
+	    Highlighted text
+
           </div>
           
         </div>
@@ -3693,7 +3707,7 @@ in the code.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>:
-        
+        first 15 characters of string
 
       
     
@@ -3729,7 +3743,7 @@ in the code.</p>
   
 
   
-    <div class='pre p1 fill-light mt0'>new HighlightText(props: any, text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, iD: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): Component</div>
+    <div class='pre p1 fill-light mt0'>new HighlightText(props: any, text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, iD: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="#highlighttext">HighlightText</a></div>
   
   
     <p>
@@ -3794,7 +3808,7 @@ in the code.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>Component</code>:
+      <code><a href="#highlighttext">HighlightText</a></code>:
         Highlight Text Component, a component that allows you to interact with what you highlighted (shows up on sidebar)
 
       
@@ -3844,7 +3858,8 @@ Updates current state and updates the state in the store</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>event</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/API/Event">Event</a>)</code>
-	    
+	    Click event
+
           </div>
           
         </div>
@@ -3904,7 +3919,8 @@ Updates current state and updates the state in the store</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
-	    
+	    The current highlight color
+
           </div>
           
         </div>
@@ -4500,7 +4516,7 @@ Updates current state and updates the state in the store</p>
 
   
 
-  <p>Opens the notification</p>
+  <p>Creates the notification</p>
 
     <div class='pre p1 fill-light mt0'>notificationOpen</div>
   
@@ -4608,7 +4624,7 @@ Updates current state and updates the state in the store</p>
   
 
   
-    <div class='pre p1 fill-light mt0'>new NotificationCenter(props: any): Component</div>
+    <div class='pre p1 fill-light mt0'>new NotificationCenter(props: any): <a href="#notificationcenter">NotificationCenter</a></div>
   
   
     <p>
@@ -4646,7 +4662,7 @@ Updates current state and updates the state in the store</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>Component</code>:
+      <code><a href="#notificationcenter">NotificationCenter</a></code>:
         Notification Center component that holds the notifications
 
       
@@ -4683,7 +4699,7 @@ Updates current state and updates the state in the store</p>
   
 
   
-    <div class='pre p1 fill-light mt0'>new RenderText(props: Props): Component</div>
+    <div class='pre p1 fill-light mt0'>new RenderText(props: Props): <a href="#rendertext">RenderText</a></div>
   
   
     <p>
@@ -4721,7 +4737,7 @@ Updates current state and updates the state in the store</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>Component</code>:
+      <code><a href="#rendertext">RenderText</a></code>:
         Renders the RenderText component which is responsible for connecting user application events to the iFrame
 
       
@@ -5040,7 +5056,7 @@ Updates current state and updates the state in the store</p>
   
 
   
-    <div class='pre p1 fill-light mt0'>new SearchResult(props: any, store: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): Component</div>
+    <div class='pre p1 fill-light mt0'>new SearchResult(props: any, store: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="#searchresult">SearchResult</a></div>
   
   
     <p>
@@ -5086,7 +5102,7 @@ Updates current state and updates the state in the store</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>Component</code>:
+      <code><a href="#searchresult">SearchResult</a></code>:
         SearchResult Component that holds each serach result information
 
       
@@ -5167,6 +5183,81 @@ Updates current state and updates the state in the store</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='searchsidebar'>
+      SearchSideBar
+    </h3>
+    
+    
+  </div>
+  
+
+  
+    <div class='pre p1 fill-light mt0'>new SearchSideBar(props: any): <a href="#searchsidebar">SearchSideBar</a></div>
+  
+  
+    <p>
+      Extends
+      
+        Component
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>props</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#searchsidebar">SearchSideBar</a></code>:
+        Search Sidebar Component
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='sidebar'>
       SideBar
     </h3>
@@ -5176,7 +5267,7 @@ Updates current state and updates the state in the store</p>
   
 
   
-    <div class='pre p1 fill-light mt0'>new SideBar(props: Props): Component</div>
+    <div class='pre p1 fill-light mt0'>new SideBar(props: Props): <a href="#sidebar">SideBar</a></div>
   
   
     <p>
@@ -5214,7 +5305,7 @@ Updates current state and updates the state in the store</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>Component</code>:
+      <code><a href="#sidebar">SideBar</a></code>:
         Holds a list of all highlights/annotations for page. Nest for HighlightText
 
       
@@ -5317,7 +5408,7 @@ Updates current state and updates the state in the store</p>
   
 
   
-    <div class='pre p1 fill-light mt0'>new Tools(props: any): Component</div>
+    <div class='pre p1 fill-light mt0'>new Tools(props: any): <a href="#tools">Tools</a></div>
   
   
     <p>
@@ -5355,7 +5446,7 @@ Updates current state and updates the state in the store</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>Component</code>:
+      <code><a href="#tools">Tools</a></code>:
         Container for all the utility components
 
       
@@ -5714,7 +5805,7 @@ Updates current state and updates the state in the store</p>
   
 
   
-    <div class='pre p1 fill-light mt0'>new UrlSearch(props: any): Component</div>
+    <div class='pre p1 fill-light mt0'>new UrlSearch(props: any): <a href="#urlsearch">UrlSearch</a></div>
   
   
     <p>
@@ -5752,7 +5843,7 @@ Updates current state and updates the state in the store</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>Component</code>:
+      <code><a href="#urlsearch">UrlSearch</a></code>:
         Handles logic and behavior for url search download
 
       

@@ -24,19 +24,21 @@ const UIstyles = theme => ({
 
 /**
  * @class
- * @constructor
  * @param {Object} store
- * @return {Component} FileSearch Component
+ * @return {FileSearch} FileSearch Component.
  */
 export default class FileSearch extends Component<Props>{
-
+  /**
+   * @constructor
+   * @param  {Props} props
+   */
   constructor(props){
     super(props);
     this.store = this.props.store;
   }
 
   /**
-   * Handles logic for when a user searches for data
+   * Handles logic for when a user searches for data.
    * @kind {Function}
    * @param  {Event} event Contains user input for what they are searching for
    * @fires  changeSearchData
