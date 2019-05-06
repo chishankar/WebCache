@@ -183,8 +183,6 @@ function deleteFile(filename, str) {
           if (wordIndMain >= 0) {
 
             //find corresponding range table
-            console.log(mainIndex[wordIndMain].w)
-            console.log(mainIndex[wordIndMain].fn);
             let rngInd = rngTbl.findIndex(ind => {return ind.fn === mainIndex[wordIndMain].fn});
             let offset = 0;
             //file path for BSON file
@@ -224,10 +222,8 @@ function deleteFile(filename, str) {
 
             //find all words to delete in that single range so we only have to read/write once
               while (deleteWords[c] <= rngTbl[rngInd].r[1]) {
-                console.log(c);
                 word = deleteWords[c];
-                console.log(word);
-                wordIndMain = mainIndex.findIndex(wordInd => {return wordInd.w === deleteWords[c]});
+                wordIndMain = mainIndex.findIndex(wordInd => wordInd.w === word);
 
                 if (wordIndMain >= 0) {
 
@@ -241,9 +237,6 @@ function deleteFile(filename, str) {
                         arr.splice(i, offset);
                         i += count + 2;
                         sizeBound -= offset;
-
-                        console.log(word);
-                        console.log(offset);
 
                       } else {
                         i += count + 2;
@@ -413,14 +406,12 @@ function getFileIndex(fileName) {
 
   return new Promise(resolve => {
     fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
-     // console.log("YO WE MADE IT");
       var t1 = performance.now();
       if (!err) {
         // TODO: REMOVE HTML TAGS
         // Case-sensitive indexing not implented for simplicity.
         var cleanText = '';
         if (fileName.slice(-5) === ".json") {
-          //console.log("Indexing annotations JSON");
           let json = JSON.parse(data);
           json.highlightData.forEach(highlight => {
             cleanText = cleanText + " \n " + highlight.comment;
@@ -575,10 +566,6 @@ function addToMainAux(fileIndex) {
   while(i < fileIndex.length) {
     let fileWord = fileIndex[i];
 
-    // if (fileWord.w == "another" || fileWord.w == "announcer") {
-    //   console.log("here");
-    // }
-
     // find correct range for fileWord
     while (fileWord.w > rngTbl[currRng].r[1]) { currRng++ };
 
@@ -616,10 +603,6 @@ function addToMainAux(fileIndex) {
 
     while(i < fileIndex.length && (fileWord = fileIndex[i]).w <= rngTbl[currRng].r[1]) {
       // find index of fileWord word in both rngIndex and mainIndex, or would-be index if fileWord hasn't been indexed.
-
-      // if (fileWord.w == "another" || fileWord.w == "announcer") {
-      //   console.log("here");
-      // }
 
       let wordIndRng = rngIndex.findIndex(rngWord => rngWord.w >= fileWord.w);
       let wordIndMain = mainIndex.findIndex(mainWord => mainWord.w >= fileWord.w);
