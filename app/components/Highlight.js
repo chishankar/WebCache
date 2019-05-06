@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import 'font-awesome/css/font-awesome.min.css';
 import popup from './Popup.css';
 import * as highlighterActions from '../actions/highlighter';
+import * as getColor from '../utilities/GetColor';
 
 /**
  * @class
@@ -77,6 +78,18 @@ export default class Highlight extends Component<Props> {
     this.store.dispatch(highlighterActions.changeDefault());
   }
 
+    /**
+   * Dispatches DEFAULT color for highlighting
+   *
+   * @param  {String} col color
+   * @returns {Object} Color styles object
+   */
+  _setColor = (col: String) => {
+    return{
+      color: getColor.getColor(col)
+    }
+  }
+
 
   render() {
     return (
@@ -96,4 +109,5 @@ export default class Highlight extends Component<Props> {
       </div>
     );
   }
+
 }
