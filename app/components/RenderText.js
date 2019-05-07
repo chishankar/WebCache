@@ -96,6 +96,7 @@ export default class RenderText extends Component<Props> {
   }
 
   shouldComponentUpdate(nextProps: Object, nextState: Object){
+    var data;
     if (this.props.activeUrl != nextProps.activeUrl) {
 
       // clear highlights when a new page is loaded
@@ -138,10 +139,13 @@ export default class RenderText extends Component<Props> {
       return true;
     }
 
-    // This updates color in index.js
-    let data = {color: pickColor.getColor(nextProps.color)};
-    window.postMessage(data,'*');
+    if (this.props.color !== nextProps.color) {
+      // This updates color in index.js
+      let data = {color: pickColor.getColor(nextProps.color)};
+      window.postMessage(data,'*');
 
+      return false;
+    }
 
     // Sends delete request to the iFrame upone delete id change
     if (this.props.delete !== nextProps.delete){
@@ -164,22 +168,15 @@ export default class RenderText extends Component<Props> {
       return false
     }
 
-    // Sends hideHighlights request to the iFrame
-    if (nextProps.hideHighlights){
-      data = 'hide'
+    // Sends hide or show highlights request to the iFrame
+    if (this.props.hideHighlights !== nextProps.hideHighlights){
+      data = this.props.hideHighlights ? 'hide' : 'show';
       window.postMessage(data,"*");
       return false
     }
 
     if (this.props.searchTerm != nextProps.searchTerm){
       data = {searchFor: nextProps.searchTerm}
-      window.postMessage(data,"*");
-      return false
-    }
-
-    // Sends show highlight request to the iframe
-    if (!nextProps.hideHighlights){
-      data = 'show'
       window.postMessage(data,"*");
       return false
     }
