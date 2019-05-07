@@ -111,6 +111,7 @@ function unwrap(spanList) {
 
 // Handles returning the data in the iFrame to send back for re-writing the file
 function handleSave(){
+  removeSearchHighlights();
   let data = {savedData: document.documentElement.innerHTML};
   window.parent.postMessage(data,"*");
 }
@@ -206,12 +207,17 @@ function generateRandomId() {
 
 }
 
-function doSearch(text) {
-
- try{
+function removeSearchHighlights(){
   if(document.querySelector('span[style*="background-color: yellow;"]') !== null){
     unwrap(document.querySelectorAll('span[style*="background-color: yellow;"]'))
   }
+}
+
+function doSearch(text) {
+
+ try{
+
+  removeSearchHighlights();
 
   if (window.find && window.getSelection) {
     document.designMode = "on";
