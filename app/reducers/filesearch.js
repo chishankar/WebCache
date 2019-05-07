@@ -2,7 +2,8 @@
 import type { Action } from './types';
 
 const initialState = {
-  searchData: JSON.stringify({results:[]})
+  searchData: JSON.stringify({results:[]}),
+  search: ""
 }
 
 export default function filesearch(state=initialState, action) {
@@ -12,6 +13,11 @@ export default function filesearch(state=initialState, action) {
         return Object.assign({},state, {
           searchData: action.searchData
        });
+
+      case 'SEARCHTERM':
+        return Object.assign({}, state, {
+          search: action.searchTerm
+        })
 
        default:
         return state;
