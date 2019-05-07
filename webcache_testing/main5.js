@@ -951,7 +951,7 @@ function searchIndex(searchStr) {
       });
     });
     console.log(finalResults);
-    return {results: finalResults};
+    return {results: _.sortBy(finalResults, result => {return -result.count})};
   }
 
   //  PART 1: Get list of files that contain all search words
@@ -1074,6 +1074,6 @@ function searchIndex(searchStr) {
 
   });
 
-  return {results: finalResults};
+  return {results: _.sortBy(finalResults, result => {return (-result.count)})};
 
 }

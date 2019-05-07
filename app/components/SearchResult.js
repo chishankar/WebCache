@@ -8,6 +8,7 @@ import Badge from '@material-ui/core/Badge';
 import Typography from '@material-ui/core/Typography';
 import * as urlsearchActions from '../actions/urlsearch';
 const path = require('path');
+const fs = require('fs');
 
 const styles = theme => ({
   root: {
@@ -61,13 +62,23 @@ class SearchResult extends React.Component {
     var regexWebsite = this.props.filename.match(/((\w+\.)?\w+\.\w+)/);
     var regexDate = this.props.filename.match(/\-(\d+)\//);
     var file;
+
     if(this.props.filename.endsWith(".json")){
+      let filePath = path.join(__dirname, '../data/' + this.props.filename);
+
+      fs.readFileSync(filePath, {encoding: 'utf-8'}, function(err,data){
+        if (!err) {
+          let json = JSON.parse(data);
+        }
+      });
+
       var regexFile = this.props.filename.match(/annotations-(.*)\.json/);
       file = regexFile[1] + ".html";
     } else {
       var regexFile = this.props.filename.match(/\/(.*)/);
       file = regexFile[1];
     }
+
     var website = regexWebsite[1];
     var date = regexDate[1];
 
