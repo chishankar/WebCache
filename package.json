@@ -4,7 +4,7 @@
   "version": "0.17.1",
   "description": "An Electron based desktop application that makes annotating and commenting on websites very easy",
   "scripts": {
-    "docs:build": "documentation build app/** -f html -o docs",
+    "docs:build": "documentation build app/** -f html -o docs/docs",
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",
     "build-e2e": "cross-env E2E_BUILD=true yarn build",
