@@ -68,7 +68,12 @@ class SearchResult extends React.Component {
 
       fs.readFileSync(filePath, {encoding: 'utf-8'}, function(err,data){
         if (!err) {
+          let currentState = this.store.getState()
+          console.log("8==D")
+          console.log(currentState);
           let json = JSON.parse(data);
+        } else{
+          console.log("there was an error");
         }
       });
 
