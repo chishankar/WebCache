@@ -55,7 +55,7 @@ function getRenderText(filePath, iframeRef, addHighlights) {
     resourceHtml = resourceHtml.replace(/src="([\.\/\w+]+)"/g, "src=\"" + resourceDir + "$1" + "\"");
   }
 
-
+  console.log("injected")
   return (
 
     <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml }></iframe>
@@ -184,7 +184,7 @@ export default class RenderText extends Component<Props> {
    * Handles logic for saving the data back to the file that it was read from
    * @param {String} htmlData
    */
-  handleSave = (htmlData: String) => {
+  handleSave = (htmlData) => {
     console.log("in save once!");
     var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
     let fileName = saveUrl.substring(saveUrl.lastIndexOf('/') + 1, saveUrl.lastIndexOf('.'));

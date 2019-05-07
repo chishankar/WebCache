@@ -11,6 +11,7 @@ document.onmouseup = function(event){
   highlight(color);
 };
 
+
 // traverses the DOM tree to get the next node until the endNode is reached
 function getNextNode(node, skipChildren, endNode) {
   if(endNode == node) {
@@ -29,7 +30,7 @@ function getNextNode(node, skipChildren, endNode) {
 }
 
 // Handles adding the highlight color to the highlighted text
-function highlight(color){
+function highlight(color: String){
   let data = {};
   var highlightId = generateRandomId();
   var subranges = [];
@@ -81,7 +82,7 @@ function highlight(color){
 }
 
 // given a class id, this will return all spans with that class id
-function getSpansWithHighlight(classId) {
+function getSpansWithHighlight(classId: String) {
   return document.querySelectorAll("span." + classId);
 }
 
@@ -108,11 +109,13 @@ function handleSave(){
 }
 
 // Changes the src of the iframe
-function changeIFrameSrc(path){
+function changeIFrameSrc(path: String){
   document.getElementById('content').src = path;
 }
 
 function hideHighlights(){
+  console.log("here")
+  highlightSearchTerms("a")
   let highlightList = getSpansWithHighlight(highlightIdentifier);
   highlightList.forEach(wrapper => {
     wrapper.classList.add('hide-webcache-highlight')
@@ -126,7 +129,17 @@ function showHighlights(){
   })
 }
 
-function scrollToId(id){
+function highlightSearchTerms(search: String){
+  console.log("highlighting")
+  let body = document.body;
+  let bodyContent = body.textContent;
+  let text = bodyContent.textContent;
+  var regex = new RegExp('('+search+')', 'ig');
+  text = text.replace(regex, '<span class="highlight">$1</span>');
+  body.innerHTML = text;
+}
+
+function scrollToId(id: String){
   // document.getElementsByClassName(id).scrollIntoView({
   //   behavior: 'smooth'
   // });
