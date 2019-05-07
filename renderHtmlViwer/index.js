@@ -3,8 +3,16 @@ var highlightIdentifier = 'webcache-highlight-mark'
 
 var hideStyle = document.createElement('style');
 hideStyle.type = 'text/css';
-hideStyle.innerHTML = '.hide-webcache-highlight { background-color: inherit !important; }';
+hideStyle.innerHTML = `
+  .hide-webcache-highlight {
+    background-color: inherit !important;
+  }
+  .search-highlight {
+    background-color: inherit !important;
+  }`;
 document.getElementsByTagName('head')[0].appendChild(hideStyle);
+
+var searchHighlight = document.createElement('style')
 
 // Event listener to highlighting within the iframe
 document.onmouseup = function(event){
@@ -113,6 +121,11 @@ function changeIFrameSrc(path){
 }
 
 function hideHighlights(){
+  try{
+    doSearch('high');
+  } catch (e){
+    console.log
+  }
   let highlightList = getSpansWithHighlight(highlightIdentifier);
   highlightList.forEach(wrapper => {
     wrapper.classList.add('hide-webcache-highlight')
@@ -178,6 +191,11 @@ window.parent.addEventListener('message',function(e){
     console.log("HERE")
   }
 
+  else if (data.searchFor){
+    console.log('here');
+    doSearch(data.searchFor)
+  }
+
 });
 
 
@@ -188,4 +206,54 @@ function generateRandomId() {
 
 }
 
+function doSearch(text) {
 
+ try{
+  if(document.querySelector('span[style*="background-color: yellow;"]') !== null){
+    unwrap(document.querySelectorAll('span[style*="background-color: yellow;"]'))
+  }
+
+  if (window.find && window.getSelection) {
+    document.designMode = "on";
+    var sel = window.getSelection();
+    sel.collapse(document.body, 0);
+
+    while (window.find(text)) {
+        document.execCommand("HiliteColor", false, "yellow");
+        sel.collapseToEnd();
+    }
+    document.designMode = "off";
+
+  } else if (document.body.createTextRange) {
+
+    var textRange = document.body.createTextRange();
+    while (textRange.findText(text)) {
+        textRange.execCommand("BackColor", false, "yellow");
+        textRange.collapse(false);
+    }
+  }
+
+  } catch (e){
+    console.log(e)
+  }
+
+}
+// function doSearch(text) {
+//   if (window.find && window.getSelection) {
+//       document.designMode = "on";
+//       var sel = window.getSelection();
+//       sel.collapse(document.body, 0);
+
+//       while (window.find(text)) {
+//           document.execCommand("HiliteColor", false, "yellow");
+//           sel.collapseToEnd();
+//       }
+//       document.designMode = "off";
+//   } else if (document.body.createTextRange) {
+//       var textRange = document.body.createTextRange();
+//       while (textRange.findText(text)) {
+//           textRange.execCommand("BackColor", false, "yellow");
+//           textRange.collapse(false);
+//       }
+//   }
+// }

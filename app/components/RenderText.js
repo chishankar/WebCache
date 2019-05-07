@@ -68,6 +68,7 @@ type Props = {
   delete: String,
   save: String,
   viewId: String,
+  searchTerm: String,
   addHighlight: Function,
   clearHighlights: Function,
   addNotification: Function,
@@ -171,6 +172,11 @@ export default class RenderText extends Component<Props> {
         window.postMessage(data,"*");
       }
 
+      if (this.props.searchTerm != prevProps.searchTerm){
+        data = {searchFor: this.props.searchTerm}
+        window.postMessage(data,"*");
+      }
+
       // Sends show highlight request to the iframe
       if (!this.props.hideHighlights){
         data = 'show'
@@ -269,6 +275,8 @@ export default class RenderText extends Component<Props> {
       }
     }
   }
+
+
 
   /**
    * Sends save request to the iFrame
