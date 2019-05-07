@@ -417,11 +417,13 @@ function getFileIndex(fileName) {
             cleanText = cleanText + " \n " + highlight.comment;
           });
           cleanText = cleanText.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, ' ');
+          cleanText = cleanText.toLowerCase();
         }
         else {
           const dom = new JSDOM(data);
           dom.window.document.querySelectorAll("script, style").forEach(node => node.parentNode.removeChild(node));
           cleanText = dom.window.document.documentElement.outerHTML.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, " ");
+          cleanText = cleanText.toLowerCase();
         }
         let wordMapping = wordLocsMapping(cleanText);
         wordMapping.forEach(function(value, key) {
