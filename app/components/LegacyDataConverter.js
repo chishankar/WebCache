@@ -7,6 +7,15 @@ import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import { ifError } from 'assert';
 import ScrapbookToWebcacheFormat from './convert-html.js';
+import * as notificationActions from '../actions/notification';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({
+    addNotification: notificationActions.addNotification
+  },dispatch)
+}
 
 
 var path = require('path');
@@ -131,5 +140,41 @@ class LegacyDataConverter extends Component<Props> {
   }
 }
 
+async function FindFile(dirPath) {
+  fs.readdir(dirPath, async (err, files) => {
+    // console.log(files);
+    // console.log(items);
+    if (!err) {
+      for (var i = 0; i < files.length; i++) {
 
-export default withStyles(styles, { withTheme: true })(LegacyDataConverter);
+        var htmlFilePath = path.join(dirPath,files[i]);
+        var stat = fs.lstatSync(htmlFilePath);
+        if (stat.isDirectory()) {
+          FindFile(htmlFilePath);
+        } else if (files[i].indexOf('index.html') == 0) {
+          var datFilePath = path.join(dirPath,'index.dat');
+          var annotJsonPath = path.join(dirPath,'annotations-index.json');
+          var snJsonPath = path.join(dirPath,'sticky.json');
+
+          var fileArr = await ScrapbookToWebcacheFormat(htmlFilePath, datFilePath);
+          // console.log(filePath)
+          //console.log(fileArr[0]);
+          //console.log(fileArr[3]);
+
+          WriteToFile(htmlFilePath, fileArr[0]);
+          WriteToFile(annotJsonPath, JSON.stringify(fileArr[1]));
+          WriteToFile(snJsonPath, JSON.stringify(fileArr[2]));
+        }
+      }
+    }
+  });
+}
+
+async function WriteToFile(filePath, replacement) {
+  await writeFile(filePath, replacement);
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(LegacyDataConverter));

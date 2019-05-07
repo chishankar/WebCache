@@ -2,7 +2,8 @@
 import type { Action } from './types';
 
 const initialState = {
-  searchData: String
+  searchData: JSON.stringify({results:[]}),
+  search: ""
 }
 /**
  * Dispatch handlers for SEARCHDATA
@@ -16,6 +17,11 @@ export default function filesearch(state=initialState, action: Action) {
         return Object.assign({},state, {
           searchData: action.searchData
        });
+
+      case 'SEARCHTERM':
+        return Object.assign({}, state, {
+          search: action.searchTerm
+        })
 
        default:
         return state;

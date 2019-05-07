@@ -11,3 +11,15 @@ export const changeSearchData = (searchData: Object) => {
       searchData
   }
 }
+
+/**
+ * Sends user search request
+ * @param  {Object} searchTerm
+ * @returns SEARCHTERM action
+ */
+export const updateSearchTerm = (searchTerm: String) => {
+  return {
+      type: "SEARCHTERM",
+      searchTerm
+  }
+}

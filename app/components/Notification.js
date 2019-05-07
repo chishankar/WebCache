@@ -78,6 +78,7 @@ class Notification extends Component {
       message={<span id="message-id">{this.message}</span>}
       action={[
         <IconButton
+          onClick={this.notificationClose}
           key="close"
           aria-label="Close"
           color="inherit"
