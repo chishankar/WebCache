@@ -7,6 +7,11 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 
+import app from 'electron';
+var path = require('path')
+const remoteApp = app.remote.app;
+const basePath = path.join(remoteApp.getAppPath(),'data');
+const things = "/Users/Chirag/Documents/WebCache/data"
 const fs = require('fs');
 
 const styles = theme => ({
@@ -32,7 +37,7 @@ class FileDialogue extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      path: ''
+      path: basePath
     };
     this.store = this.props.store;
   }
@@ -44,7 +49,8 @@ class FileDialogue extends React.Component {
    */
   onChange = (e: Event) => {
     if (e.target.files[0]!=null){
-      this.setState({ path: e.target.files[0].path });
+      // this.setState({ path: e.target.files[0].path });
+      this.setState({ path: basePath });
     }
   }
 
