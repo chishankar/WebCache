@@ -14,7 +14,8 @@ function mapStateToProps(state) {
     annotations: state.sidebar.highlights,
     hideHighlights: state.sidebar.hideHighlights,
     save: state.save.mostRecentUpdate,
-    viewId: state.sidebar.viewId
+    viewId: state.sidebar.viewId,
+    searchTerm: state.filesearch.search
   };
 }
 
