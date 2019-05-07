@@ -55,6 +55,10 @@ const selectionstyles = themes => ({
 
 const searchAPI = require('../../webcache_testing/main5.js');
 
+/**
+ * @class
+ * @return {Component} Container for all the utility components
+ */
 class Tools extends Component<Props>{
   constructor(props){
     super(props);
@@ -72,6 +76,9 @@ class Tools extends Component<Props>{
   }
 
   // Handles the logic for showing the highlighter color options
+  /**
+   *  Handles the logic for showing the highlighter color options
+   */
   _showHighlighter = () =>{
     this.setState({
       showHighlighter: !this.state.showHighlighter,
@@ -81,7 +88,9 @@ class Tools extends Component<Props>{
     this.store.dispatch(sideBarStateActions.changeSideBarState(false));
   }
 
-  // Handles the logic for showing the the URL search input
+    /**
+   *   Handles the logic for showing the the URL search input
+   */
   _showUrlSearch = () => {
     this.setState({
       showUrlSearch: !this.state.showUrlSearch,
@@ -90,6 +99,9 @@ class Tools extends Component<Props>{
     });
   }
 
+  /**
+   * Shows the file search bar when search is open
+   */
   _showFileSearch = () => {
     this.store.dispatch(sideBarStateActions.changeSideBarState(true));
     this.setState({
@@ -99,25 +111,32 @@ class Tools extends Component<Props>{
     });
   }
 
-  handleSave = (event) => {
+  /**
+   * Sends save request to RenderText component to save the iFrame Virtual DOM
+   * @param  {Event} event
+   */
+  handleSave = (event: Event) => {
     this.props.save()
   }
 
-  // Handles the change of the indicator bar to indicate current selection
-  handleChange = (event, value) => {
+  /**
+   * Handles the change of the indicator bar to indicate current selection
+   * @param  {Event} event
+   * @param  {Number} value
+   */
+  handleChange = (event: Event, value: Number) => {
     this.setState({ value });
   };
 
+   /**
+   * Handles the logic for showing the last update date
+   */
   showLastUpdateDate = () => {
     if (this.props.saveDate != ""){
       return true
     }
     return false
   }
-
-  // <Tab icon={<i className="far fa-comment"></i>} data-tip="Comment" />
-
-  // <Tab icon={<i className="far fa-comment-alt" />} data-tip="Annotation"/>
 
   render(){
     return(

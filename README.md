@@ -4,6 +4,9 @@
  	
 Webcache is standalone application that allows users to cache webpages as they appear at the time of saving. The user can then highlight text on the page and add annotations to the highlighted text. Webcache allows search through document texts and annotations.
 
+## Documentation
+
+Documentation can be found here: https://chishankar.github.io/WebCache/#filesearchhandleenter
 
 ## Features
 

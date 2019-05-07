@@ -8,6 +8,7 @@ const _ = require('underscore');
 const fs = require('fs');
 const sizeof = require('object-sizeof');
 const { PerformanceObserver, performance } = require('perf_hooks');
+const htmlParse = require(gethtmltext.js);
 
 const {app, BrowserWindow, Menu} = electron;
 
@@ -145,7 +146,7 @@ function getFileIndex(fileName) {
         if (!err) {
           // TODO: REMOVE HTML TAGS
           // Case-sensitive indexing not implented for simplicity.
-          let cleanText = data.replace(/<\/?[^>]+(>|$)/g, "");
+          // let cleanText =
           let fileWords = cleanText.toLowerCase().trim().split(/\s+/).filter(function(value, index, self){return self.indexOf(value) === index;});
           fileWords.forEach(function(word) {
             let locations = getIndicesOf(word,cleanText);
@@ -419,6 +420,7 @@ const mainMenuTemplate = [
           // }).then(function(index){
           // });
         }
+
       }
     ]
   }

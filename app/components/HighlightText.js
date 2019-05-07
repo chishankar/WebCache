@@ -59,7 +59,12 @@ const black={
   color: 'black'
 }
 
-// Makes a small preview of the highlighted text to show as the face of the hightext component
+
+/**
+ * Makes a small preview of the highlighted text to show as the face of the hightext component
+ * @param  {String} str
+ * @return {String}
+ */
 function preview(str){
   if (str.length > 15){
     return str.substring(0,15) + "...";
@@ -77,6 +82,13 @@ function mapDispatchToProps(dispatch) {
   },dispatch)
 }
 
+/**
+ * @class
+ * @param {String} text Text that is highlighted
+ * @param {String} color The color that the highlight is in
+ * @param {String} iD The id of the highlight on the page
+ * @return {Component} Highlight Text Component, a component that allows you to interact with what you highlighted (shows up on sidebar)
+ */
 class HighlightText extends Component{
 
   constructor(props){
@@ -94,9 +106,14 @@ class HighlightText extends Component{
     }
   }
 
-  // This handles updating the comment data for the specific highlighted text
-  // Updates current state and updates the state in the store
-  handleInput = (event) => {
+
+  /**
+   *  This handles updating the comment data for the specific highlighted text
+   *  Updates current state and updates the state in the store
+   * @param {Event} event
+   * @fires addComment
+   */
+  handleInput = (event: Event) => {
     let value = event.target.value;
     this.setState({comment: value});
     let data = {
@@ -106,28 +123,41 @@ class HighlightText extends Component{
     this.props.addComment(data);
   }
 
-  // This updates the color of the highlighter to indicate the current color that is selected
-  getHighlighterColorIcon = (color) => {
+  /**
+   * This updates the color of the highlighter to indicate the current color that is selected
+   * @param  {String} color
+   */
+  getHighlighterColorIcon = (color: String) => {
     return {color: color};
   }
 
-  // Handles the first drop down to show the comments and full text drop down
+  /**
+   * Handles the first drop down to show the comments
+   */
   handleClick = () => {
     this.setState(state => ({ open: !state.open }));
   };
 
+  /**
+   * Triggers showId() function to make this highlight centered on the page
+   * @fires showId
+   */
   handleShowId = () => {
     this.props.showId(this.id)
   }
 
-  // This is invoked when a user clicks on the delete button. It dispatches a delete action
-  // to the store
+  /**
+   * Triggers delete() function to delete this highlight
+   * @fires delete
+   */
   handleDeleteClick = () => {
     this.props.delete(this.id);
   }
 
 
-  // This handles the state for full text drop down
+/**
+ * Handles the dropdown for full text
+ */
   handleFullClick = () => {
     this.setState(state => ({ fullText: !state.fullText }));
   }
