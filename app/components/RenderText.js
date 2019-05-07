@@ -95,96 +95,188 @@ export default class RenderText extends Component<Props> {
     window.addEventListener('message',this.handleIFrameTask)
   }
 
-  /**
-   * Handles changes on all the different store changes for different application states
-   * @param {Object} prevProps
-   */
-  componentDidUpdate(prevProps: Object){
+  shouldComponentUpdate(nextProps: Object, nextState: Object){
+    if (this.props.activeUrl != nextProps.activeUrl) {
 
-      // handles what to do on an activeUrl update
-      if (this.props.activeUrl != prevProps.activeUrl) {
+      // clear highlights when a new page is loaded
+      this.props.clearHighlights();
 
-        // clear highlights when a new page is loaded
-        this.props.clearHighlights();
+      // get current url
+      var filePath = nextProps.activeUrl;
 
-        // get current url
-        var filePath = this.props.activeUrl;
+      // load the annotations from the json file
+      let resource = getResourceBuilder(filePath);
+      let resourceDir = getResourcePath(filePath);
+      let jsResource = getResourceBuilder('renderHtmlViwer/index.js');
+      let local = false;
 
-        // load the annotations from the json file
-        let resource = getResourceBuilder(filePath);
-        let resourceDir = getResourcePath(filePath);
-        let jsResource = getResourceBuilder('renderHtmlViwer/index.js');
-        let local = false;
-
-        if(filePath.startsWith("LOCAL")) {
-          local = true;
-          resource = filePath.substr(5, filePath.length);
-        }
-        let fileName = resource.substring(resource.lastIndexOf('/') + 1, resource.lastIndexOf('.'));
-        try {
-          var fd = fs.openSync(path.join(resource, '..') + '/' + 'annotations-' + fileName + '.json', 'r');
-          var highlights = JSON.parse(fs.readFileSync(fd));
-          // this.props.updateLastUpdate(highlights.lastUpdated)
-          this.props.clearHighlights();
-          highlights.highlightData.forEach(highlight => {
-            // only add it if it isn't arleady in the store
-            console.log("processing saved highlight: " + JSON.stringify(highlight));
-            if (!this.props.annotations.some(element => {
-              console.log(this.props.annotations);
-              return element.id == highlight.id;
-            })) {
-              this.props.addHighlight(highlight);
-            }
-          })
-        } catch (err) {
-          // this.handleSaveTask()
-          this.props.addNotification("No previous annotations");
-          // console.log(err);
-        }
-
+      if(filePath.startsWith("LOCAL")) {
+        local = true;
+        resource = filePath.substr(5, filePath.length);
       }
-
-      // This updates color in index.js
-      let data = {color: pickColor.getColor(this.props.color)};
-      window.postMessage(data,'*');
-
-      // Sends delete request to the iFrame upone delete id change
-      if (this.props.delete !== prevProps.delete){
-        console.log("sending delete request: " + this.props.delete)
-        data = {delete: this.props.delete};
-        window.postMessage(data, '*');
+      let fileName = resource.substring(resource.lastIndexOf('/') + 1, resource.lastIndexOf('.'));
+      try {
+        var fd = fs.openSync(path.join(resource, '..') + '/' + 'annotations-' + fileName + '.json', 'r');
+        var highlights = JSON.parse(fs.readFileSync(fd));
+        // this.props.updateLastUpdate(highlights.lastUpdated)
+        nextProps.clearHighlights();
+        highlights.highlightData.forEach(highlight => {
+          // only add it if it isn't arleady in the store
+          console.log("processing saved highlight: " + JSON.stringify(highlight));
+          if (!nextProps.annotations.some(element => {
+            console.log(nextProps.annotations);
+            return element.id == highlight.id;
+          })) {
+            nextProps.addHighlight(highlight);
+          }
+        })
+      } catch (err) {
+        // this.handleSaveTask()
+        nextProps.addNotification("No previous annotations");
+        // console.log(err);
       }
+      return true;
+    }
 
-      // This sends the id that the user wants to see
-      if (this.props.viewId !== prevProps.viewId){
-        data = {showHighlight: this.props.viewId};
-        window.postMessage(data, '*');
-      }
-
-      // This sends a message to the iFrame upon save request
-      if (this.props.save != prevProps.save){
-        this.handleSaveTask()
-      }
-
-      // Sends hideHighlights request to the iFrame
-      if (this.props.hideHighlights){
-        data = 'hide'
-        window.postMessage(data,"*");
-      }
-
-      if (this.props.searchTerm != prevProps.searchTerm){
-        data = {searchFor: this.props.searchTerm}
-        window.postMessage(data,"*");
-      }
-
-      // Sends show highlight request to the iframe
-      if (!this.props.hideHighlights){
-        data = 'show'
-        window.postMessage(data,"*");
-      }
+    // This updates color in index.js
+    let data = {color: pickColor.getColor(nextProps.color)};
+    window.postMessage(data,'*');
 
 
+    // Sends delete request to the iFrame upone delete id change
+    if (this.props.delete !== nextProps.delete){
+      console.log("sending delete request: " + nextProps.delete)
+      data = {delete: nextProps.delete};
+      window.postMessage(data, '*');
+      return false
+    }
+
+    // This sends the id that the user wants to see
+    if (this.props.viewId !== nextProps.viewId){
+      data = {showHighlight: nextProps.viewId};
+      window.postMessage(data, '*');
+      return false;
+    }
+
+    // This sends a message to the iFrame upon save request
+    if (this.props.save != nextProps.save){
+      this.handleSaveTask()
+      return false
+    }
+
+    // Sends hideHighlights request to the iFrame
+    if (nextProps.hideHighlights){
+      data = 'hide'
+      window.postMessage(data,"*");
+      return false
+    }
+
+    if (this.props.searchTerm != nextProps.searchTerm){
+      data = {searchFor: nextProps.searchTerm}
+      window.postMessage(data,"*");
+      return false
+    }
+
+    // Sends show highlight request to the iframe
+    if (!nextProps.hideHighlights){
+      data = 'show'
+      window.postMessage(data,"*");
+      return false
+    }
+
+    return false;
   }
+
+  // /**
+  //  * Handles changes on all the different store changes for different application states
+  //  * @param {Object} prevProps
+  //  */
+  // componentDidUpdate(prevProps: Object){
+
+  //     // handles what to do on an activeUrl update
+  //     if (this.props.activeUrl != prevProps.activeUrl) {
+
+  //       // clear highlights when a new page is loaded
+  //       this.props.clearHighlights();
+
+  //       // get current url
+  //       var filePath = this.props.activeUrl;
+
+  //       // load the annotations from the json file
+  //       let resource = getResourceBuilder(filePath);
+  //       let resourceDir = getResourcePath(filePath);
+  //       let jsResource = getResourceBuilder('renderHtmlViwer/index.js');
+  //       let local = false;
+
+  //       if(filePath.startsWith("LOCAL")) {
+  //         local = true;
+  //         resource = filePath.substr(5, filePath.length);
+  //       }
+  //       let fileName = resource.substring(resource.lastIndexOf('/') + 1, resource.lastIndexOf('.'));
+  //       try {
+  //         var fd = fs.openSync(path.join(resource, '..') + '/' + 'annotations-' + fileName + '.json', 'r');
+  //         var highlights = JSON.parse(fs.readFileSync(fd));
+  //         // this.props.updateLastUpdate(highlights.lastUpdated)
+  //         this.props.clearHighlights();
+  //         highlights.highlightData.forEach(highlight => {
+  //           // only add it if it isn't arleady in the store
+  //           console.log("processing saved highlight: " + JSON.stringify(highlight));
+  //           if (!this.props.annotations.some(element => {
+  //             console.log(this.props.annotations);
+  //             return element.id == highlight.id;
+  //           })) {
+  //             this.props.addHighlight(highlight);
+  //           }
+  //         })
+  //       } catch (err) {
+  //         // this.handleSaveTask()
+  //         this.props.addNotification("No previous annotations");
+  //         // console.log(err);
+  //       }
+
+  //     }
+
+  //     // This updates color in index.js
+  //     let data = {color: pickColor.getColor(this.props.color)};
+  //     window.postMessage(data,'*');
+
+  //     // Sends delete request to the iFrame upone delete id change
+  //     if (this.props.delete !== prevProps.delete){
+  //       console.log("sending delete request: " + this.props.delete)
+  //       data = {delete: this.props.delete};
+  //       window.postMessage(data, '*');
+  //     }
+
+  //     // This sends the id that the user wants to see
+  //     if (this.props.viewId !== prevProps.viewId){
+  //       data = {showHighlight: this.props.viewId};
+  //       window.postMessage(data, '*');
+  //     }
+
+  //     // This sends a message to the iFrame upon save request
+  //     if (this.props.save != prevProps.save){
+  //       this.handleSaveTask()
+  //     }
+
+  //     // Sends hideHighlights request to the iFrame
+  //     if (this.props.hideHighlights){
+  //       data = 'hide'
+  //       window.postMessage(data,"*");
+  //     }
+
+  //     if (this.props.searchTerm != prevProps.searchTerm){
+  //       data = {searchFor: this.props.searchTerm}
+  //       window.postMessage(data,"*");
+  //     }
+
+  //     // Sends show highlight request to the iframe
+  //     if (!this.props.hideHighlights){
+  //       data = 'show'
+  //       window.postMessage(data,"*");
+  //     }
+
+
+  // }
 
   /**
    * Handles logic for saving the data back to the file that it was read from
