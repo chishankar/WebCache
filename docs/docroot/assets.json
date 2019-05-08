@@ -1,0 +1,26 @@
+{
+  "app": {
+    "css": "assets/app-551e2c876c84ebe7bf1b.css",
+    "js": "assets/app-551e2c876c84ebe7bf1b.js"
+  },
+  "vendors~app": {
+    "js": "assets/1.551e2c876c84ebe7bf1b.js"
+  },
+  "": {
+    "js": [
+      "assets/2.551e2c876c84ebe7bf1b.js",
+      "assets/3.551e2c876c84ebe7bf1b.js",
+      "assets/4.551e2c876c84ebe7bf1b.js"
+    ],
+    "css": [
+      "assets/3-551e2c876c84ebe7bf1b.css",
+      "assets/4-551e2c876c84ebe7bf1b.css"
+    ],
+    "eot": "assets/YourFavoriteFont.eot",
+    "otf": "assets/YourFavoriteFont.otf",
+    "html": "index.html"
+  },
+  "metadata": {
+    "version": "1.3.4"
+  }
+}
