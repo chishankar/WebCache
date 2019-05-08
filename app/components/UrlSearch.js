@@ -3,10 +3,15 @@ import styles from './UrlSearch.css';
 import 'font-awesome/css/font-awesome.min.css';
 import getSite from '../utilities/webscraper';
 import * as urlsearchActions from '../actions/urlsearch';
+import * as notficationActions from '../actions/notification';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fade from '@material-ui/core/Fade';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
+const searchAPI = require('../../webcache_testing/main5.js');
+
+const fs = require('fs');
 
 const UIstyles = theme => ({
   root: {
@@ -22,6 +27,10 @@ const UIstyles = theme => ({
   },
 });
 
+/**
+ * @class
+ * @return {Component} Handles logic and behavior for url search download
+ */
 export default class UrlSearch extends Component<Props>{
 
 
@@ -35,8 +44,11 @@ export default class UrlSearch extends Component<Props>{
     this.store = this.props.store;
   }
 
-  // Handles the validation of the input
-  handleInput = (event) => {
+  /**
+   * Handles the validation of the input
+   * @param  {Event} event
+   */
+  handleInput = (event: Event) => {
     let value = event.target.value;
     if (this.validURL(value)){
       this._setValidUrl(value);
@@ -46,42 +58,79 @@ export default class UrlSearch extends Component<Props>{
     }
   }
 
-  // Logic for showing and not showing loading bar
+  /**
+   * Logic for showing and not showing loading bar
+   */
   handleClickLoading = () => {
     this.setState(state => ({
       loading: !state.loading,
     }));
   };
 
-  // Handles logic for when user presses enter on a valid website
-  handleEnter = (event) => {
+  /**
+   * Handles logic for when user presses enter on a valid website
+   * @param  {Event} event
+   */
+  handleEnter = (event: Event) => {
     if (event.key === 'Enter' && this.state.showValidate){
       var save_location = "data/" + this.state.validUrl.replace(/https:\/\//g,"") + '-' + Date.now();
-      this.handleClickLoading();
-      getSite.getSite(this.state.validUrl, save_location, () => {
-        this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
+      let error = getSite.getSite(this.state.validUrl, save_location, () => {
+        //add the newly donwloaded files to the main index
+        try{
+          fs.readdir('./' + save_location + '/', (err, files) => {
+            if(err){
+              this.store.dispatch(notficationActions.addNotification('Not a valid url'));
+              return;
+            }else{
+              this.handleClickLoading();
+              let update = files.filter(fn => {return !['img', 'js', 'css', 'fonts'].includes(fn)}).map((x) => {
+                return save_location.slice(5) + "/" + x
+              });
+              searchAPI.addFilesToMainIndex(update);
+
+              this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
+              this.handleClickLoading();
+            }
+          });
+          return;
+        } catch (exception){
+          this.store.dispatch(notficationActions.addNotification('Not a valid url'));
+          return;
+        }
         this.handleClickLoading();
+
       });
     }
+
   }
 
-  // Sets state of url search component with valid url
-  _setValidUrl = (vUrl) =>{
+  /**
+   * Sets state of url search component with valid url
+   * @param  {String} vUrl
+   */
+  _setValidUrl = (vUrl: String) =>{
     this.setState({validUrl: vUrl});
   }
 
-  // turns on validation light
+  /**
+   * Turns on validation light
+   */
   _turnOnValidation= () =>{
     this.setState({showValidate: true});
   }
 
-  // turns off validation light
+ /**
+   * Turns off validation light
+   */
   _turnOffValidation = () =>{
     this.setState({showValidate: false});
   }
 
-  // handles logic of validating input for valid url
-  validURL = (str) => {
+  /**
+   * Handles logic of validating input for valid url
+   * @param  {String} str
+   */
+  validURL = (str: String) => {
     var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
       '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
       '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address

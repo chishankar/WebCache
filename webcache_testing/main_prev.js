@@ -68,7 +68,7 @@ function checkIndexForChanges(lastFileStats, dirFiles, index) {
 
 function checkForNewFiles(lastFileStats, dirFiles, index) {
 
-  console.log("length: " + dirFiles.length)
+  // console.log("length: " + dirFiles.length)
   dirFiles.forEach(function(fileName) {
 
     var match = _.find(lastFileStats, {title: fileName});
@@ -84,7 +84,7 @@ function checkForNewFiles(lastFileStats, dirFiles, index) {
 
 
         if (err) {
-          console.log(`error trying to run: date -r test_docs/${fileName}`)
+          // console.log(`error trying to run: date -r test_docs/${fileName}`)
           // node couldn't execute the command
           return;
         }
@@ -101,7 +101,7 @@ function checkForNewFiles(lastFileStats, dirFiles, index) {
                 title: fileName,
                 lastMod: stdout
               });
-              console.log("File added to index");
+              // console.log("File added to index");
             } else {
               console.log(err);
             }
@@ -395,13 +395,13 @@ const mainMenuTemplate = [
         label: 'Search Test',
         click(){
           let searchStr = "it has";
-          console.log("Search Results for " + searchStr + ":");
+          // console.log("Search Results for " + searchStr + ":");
           let results = search(searchStr,mainIndex);
           results.forEach(obj => {
-            console.log(obj.fileName + " at " + obj.locations);
+            // console.log(obj.fileName + " at " + obj.locations);
           });
 
-          console.log("Size of index: " + sizeof(mainIndex));
+          // console.log("Size of index: " + sizeof(mainIndex));
 
 
           // let p = new Promise(function(resolve, reject){

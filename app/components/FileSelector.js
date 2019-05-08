@@ -23,6 +23,11 @@ function getDataDirectory() {
   return new resourcePath.ResourcePaths(null).getBaseDirectory() + '/data';
 }
 
+/**
+ * @class
+ * @param {Object} store
+ * @return {Component} FileDialogue
+ */
 class FileDialogue extends React.Component {
   constructor(props) {
     super(props);
@@ -32,15 +37,24 @@ class FileDialogue extends React.Component {
     this.store = this.props.store;
   }
 
-  // Handles path changes, updates state, and copies to data dir
-  onChange = (e) => {
+  /**
+   * Handles path changes, updates state, and copies to data dir
+   *
+   * @param  {Event} e
+   */
+  onChange = (e: Event) => {
     if (e.target.files[0]!=null){
       this.setState({ path: e.target.files[0].path });
     }
   }
 
-  // Dispatches new file path to url store on file click from file browser
-  handleFile = (file) =>{
+  /**
+   * Updates activeUrl in store to new current user selected file from file browser
+   *
+   * @param  {String} file
+   *
+   */
+  handleFile = (file: String) =>{
     this.store.dispatch(urlsearchActions.changeActiveUrl('LOCAL' + file.filePath));
   };
 
@@ -56,10 +70,9 @@ class FileDialogue extends React.Component {
         </label>
         <Divider />
         <h3>Files</h3>
-        <h4>{console.log(this.state.path)}</h4>
+
         <FileTree directory={this.state.path}
         onFileClick={this.handleFile} fileTreeStyle="light"/>
-
       </div>
     );
   }

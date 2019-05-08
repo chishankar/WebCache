@@ -2,8 +2,12 @@ import React, {Component} from 'react';
 import 'font-awesome/css/font-awesome.min.css';
 import popup from './Popup.css';
 import * as highlighterActions from '../actions/highlighter';
+import * as getColor from '../utilities/GetColor';
 
-
+/**
+ * @class
+ * @return {Component} Highlight Component that allows you select color
+ */
 export default class Highlight extends Component<Props> {
 
   constructor(props){
@@ -13,28 +17,77 @@ export default class Highlight extends Component<Props> {
 
   // Each of the below functions dispatches an actions for the designated color
   // These are invoked when a user clicks on an icon
+
+  /**
+   * Dispatches red color for highlighting
+   *
+   * @param  {}
+   * @fires highlighterActions.changeRed()
+   */
   _red = () => {
     this.store.dispatch(highlighterActions.changeRed());
   }
 
+  /**
+   * Dispatches green color for highlighting
+   *
+   * @param  {}
+   * @fires highlighterActions.changeGreen()
+   */
   _green = () => {
     this.store.dispatch(highlighterActions.changeGreen());
   }
 
+  /**
+   * Dispatches blue color for highlighting
+   *
+   * @param  {}
+   * @fires highlighterActions.changeBlue()
+   */
   _blue = () => {
     this.store.dispatch(highlighterActions.changeBlue());
   }
 
+  /**
+   * Dispatches yellow color for highlighting
+   *
+   * @param  {}
+   * @fires highlighterActions.changeYellow()
+   */
   _yellow = () => {
     this.store.dispatch(highlighterActions.changeYellow());
   }
 
+  /**
+   * Dispatches purple color for highlighting
+   *
+   * @param  {}
+   * @fires highlighterActions.changePurple()
+   */
   _purple = () => {
     this.store.dispatch(highlighterActions.changePurple());
   }
 
+  /**
+   * Dispatches DEFAULT color for highlighting
+   *
+   * @param  {}
+   * @fires highlighterActions.changeDefault()
+   */
   _default = () => {
     this.store.dispatch(highlighterActions.changeDefault());
+  }
+
+    /**
+   * Dispatches DEFAULT color for highlighting
+   *
+   * @param  {String} col color
+   * @returns {Object} Color styles object
+   */
+  _setColor = (col: String) => {
+    return{
+      color: getColor.getColor(col)
+    }
   }
 
 
@@ -56,4 +109,5 @@ export default class Highlight extends Component<Props> {
       </div>
     );
   }
+
 }

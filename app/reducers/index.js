@@ -5,6 +5,8 @@ import counter from './counter';
 import highlighter from './highlighter';
 import urlsearch from './urlsearch';
 import sidebar from './sidebar';
+import filesearch from './filesearch';
+import sidebarstate from './sidebarstate';
 import save from './save';
 import notification from './notification';
 
@@ -14,7 +16,9 @@ export default function createRootReducer(history: History) {
     counter,
     highlighter,
     urlsearch,
+    filesearch,
     sidebar,
+    sidebarstate,
     save,
     notification
   });

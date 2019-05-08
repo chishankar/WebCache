@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ListItemText from '@material-ui/core/ListItemText';
 import HideButton from './HideHighlights';
+import * as getColor from '../utilities/GetColor';
 
 import HighlightText from './HighlightText';
 import { Divider } from '@material-ui/core';
@@ -58,7 +59,10 @@ type Props = {
 
 
 
-
+/**
+ * @class
+ * @return {Component} Holds a list of all highlights/annotations for page. Nest for HighlightText
+ */
 class SideBar extends Component<Props>{
   props: Props
 
@@ -69,19 +73,14 @@ class SideBar extends Component<Props>{
     }
   }
 
-  // Updates highlighter icon to the currently selected color
-  getHighlighterColorIcon = (color) => {
+  /**
+   * Updates highlighter icon to the currently selected color
+   * @param  {String} color
+   */
+  getHighlighterColorIcon = (color: String) => {
     // TODO: make this more robust? handle hexcodes
-    if (color === 'red'){
-      return red
-    } else if (color === 'blue'){
-      return blue
-    }else if (color === 'green'){
-      return green
-    }else if (color === 'purple'){
-      return purple
-    }else if (color === 'yellow'){
-      return yellow
+    return {
+      color: getColor.getColor(color)
     }
   }
 

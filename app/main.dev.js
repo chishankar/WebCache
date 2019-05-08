@@ -14,6 +14,7 @@ import { app, BrowserWindow, Menu, MenuItem } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
+import { loadIndexFromFile } from '../webcache_testing/main5';
 
 export default class AppUpdater {
   constructor() {
@@ -58,6 +59,8 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', async () => {
+  // console.log("hello")
+  loadIndexFromFile('index_BSON', 'lookup_BSON', 'ranges_BSON');
   if (
     process.env.NODE_ENV === 'development' ||
     process.env.DEBUG_PROD === 'true'

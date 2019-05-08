@@ -1,128 +1,107 @@
-import React, { Component } from 'react';
-import * as sideBarActions from '../actions/sidebar';
-
+import React from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import TextField from '@material-ui/core/TextField';
-import ReactTooltip from 'react-tooltip';
-import List from '@material-ui/core/List';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Divider } from '@material-ui/core';
+import LabelIcon from '@material-ui/icons/Label';
+import Badge from '@material-ui/core/Badge';
+import Typography from '@material-ui/core/Typography';
+import * as urlsearchActions from '../actions/urlsearch';
+const path = require('path');
+const fs = require('fs');
 
 const styles = theme => ({
   root: {
     width: '100%',
     maxWidth: 360,
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
   },
   nested: {
     paddingLeft: theme.spacing.unit * 4,
   },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
-  },
+  inline: {
+    display: 'inline',
+  }
 });
 
-
-const black={
-  color: 'black'
-}
-
-function preview(str){
-  if (str.length > 15){
-    return str.substring(0,15) + "...";
-  }
-  return str;
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    addComment: sideBarActions.addComment,
-  },dispatch)
-}
-
-class SearchResult extends Component{
-
-  constructor(props){
+/**
+ * @class
+ * @return {Component} SearchResult Component that holds each serach result information
+ * @param {Object} store
+ */
+class SearchResult extends React.Component {
+ constructor(props){
     super(props)
-    this.text = this.props.text
-    this.preview = preview(this.text)
-    this.listref = React.createRef();
-    this.id = this.props.id;
-    this.state = {
-      open: false,
-      comment: ""
-    }
+    this.store = this.props.store;
   }
 
-  handleInput = (event) => {
-    let value = event.target.value;
-    this.setState({comment: value});
-    let data = {
-      id: this.id,
-      comment: value
-    }
-    this.props.addComment(data);
-  }
-
+  /**
+   * Handles the logic for clicking on a search result
+   */
   handleClick = () => {
-    this.setState(state => ({ open: !state.open }));
+    let filePath;
+
+    if (this.props.filename.endsWith("json")) {
+      var regexFile = this.props.filename.match(/annotations-(.*)\.json/)
+      var regexWebsite = this.props.filename.match(/((\w+\.)?\w+\.\w+\-\d+)/);
+      var file = regexFile[1]; //throw notification here if malformed (nil)
+      var website = regexWebsite[1];
+      filePath = path.join(__dirname, "../data/" + website + "/" + file + ".html");
+      console.log(file);
+      console.log(website);
+    }
+    else {
+      filePath = path.join(__dirname, "../data/" + this.props.filename);
+    }
+
+    console.log("Search result file path: " + filePath);
+    this.store.dispatch(urlsearchActions.changeActiveUrl('LOCAL' + filePath));
   };
 
-  render(){
-    const commentBox =
-      <TextField
-      id="outlined-textarea"
-      label="Comment"
-      multiline
-      value={this.state.comment}
-      className={styles.textField}
-      margin="normal"
-      variant="outlined"
-      onChange={this.handleInput}
-    />
+  render() {
+    var regexWebsite = this.props.filename.match(/((\w+\.)?\w+\.\w+)/);
+    var regexDate = this.props.filename.match(/\-(\d+)\//);
+    var file;
 
-    return(
-      <div>
-        <ListItem button ref={this.listref} data-tip={this.text} onClick={this.handleClick}>
-          <ListItemIcon >
-            <i className="fas fa-highlighter" style={this.getHighlighterColorIcon(this.color)}/>
-          </ListItemIcon>
+    if(this.props.filename.endsWith(".json")){
+      let filePath = path.join(__dirname, '../data/' + this.props.filename);
 
-          <ListItemText primary={this.preview} />
-          {this.state.open ?
-            <ExpandLess style={black}/> :
-            <ExpandMore style={black}/>}
-        </ListItem>
-        <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-            <ListItem button className={styles.nested}>
-                <ListItemIcon>
-                  <i className="far fa-comment-alt" />
-                </ListItemIcon>
-                <ListItemText inset primary={commentBox} />
-            </ListItem>
-            <ListItem button className={styles.nested}>
-            <ListItemIcon>
-              <i className="fas fa-align-left"></i>
-            </ListItemIcon>
-            <ListItemText inset primary={this.text} />
-        </ListItem>
-        </List>
-        </Collapse>
-        <Divider />
-      </div>
-    );
-  }
+      fs.readFileSync(filePath, {encoding: 'utf-8'}, function(err,data){
+        if (!err) {
+          let json = JSON.parse(data);
+        }
+      });
+
+      var regexFile = this.props.filename.match(/annotations-(.*)\.json/);
+      file = regexFile[1] + ".html";
+    } else {
+      var regexFile = this.props.filename.match(/\/(.*)/);
+      file = regexFile[1];
+    }
+
+    var website = regexWebsite[1];
+    var date = regexDate[1];
+
+    const unixEpochTimeMS = parseInt(date, 10);
+    const d = new Date(unixEpochTimeMS);
+    const strDate = d.toLocaleString();
+
+    return (
+
+          <ListItem button onClick={this.handleClick}>
+            <ListItemText
+              primary={file}
+              secondary={
+                  <React.Fragment>
+                    <b>Website: </b>{website + '\n'} <br/>
+                    <b>Date: </b>{(new Date(unixEpochTimeMS)) + '\n'} <br/>
+                    <b>Matches: </b>{this.props.count + '\n'}
+                  </React.Fragment>
+              }
+          />
+          </ListItem>
+  )
+}
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(SearchResult)
+export default withStyles(styles)(SearchResult);

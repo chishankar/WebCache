@@ -18,9 +18,10 @@ import NotificationCenter from './NotificationCenter';
 import Footer from './Footer';
 import Tools from './Toolbar';
 import homeStyles from './Home.css';
-import LegacyDataConverter from './LegacyDataConverter'
+import LegacyDataConverter from '../containers/LegacyDataConverterContainer'
 import FileDialogue from './FileSelector';
 import SideBarPage from '../containers/SideBarPage';
+import SearchSideBarPage from '../containers/SearchSideBarPage';
 import RenderTextPage from '../containers/RenderTextPage';
 
 // const theme = createMuiTheme({
@@ -43,8 +44,8 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    color: 'white',
-    backgroundColor: '#303030',
+    color: 'black',
+    backgroundColor: '#485665',
     zIndex: theme.zIndex.drawer + 1,
   },
   appBarShift: {
@@ -69,8 +70,8 @@ const styles = theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    color: 'white',
-    backgroundColor: '#303030 !important',
+    color: 'black',
+    backgroundColor: '485665 !important',
     padding: '0 !important',
     border: 'inherit'
   },
@@ -101,7 +102,6 @@ const styles = theme => ({
   list:{
     padding: '0px !important'
   }
-
 });
 
 type Props = {};
@@ -116,6 +116,11 @@ class Home extends Component {
     this.store = this.props.store;
   }
 
+  state = {
+    open: false,
+    showSearchSideBar: false
+  };
+
   // These two functions handle opening and closes the file tree menu component
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -125,7 +130,15 @@ class Home extends Component {
     this.setState({ open: false });
   };
 
-  render() {
+  componentDidUpdate(prevProps: Object){
+    if (!(this.props.sidebarState === prevProps.sidebarState)) {
+      this.setState({
+          showSearchSideBar: this.props.sidebarState
+       });
+     }
+  }
+
+  render(){
     const { classes, theme } = this.props;
     const { open } = this.state;
 
@@ -195,14 +208,21 @@ class Home extends Component {
             }}>
 
             <div className={classNames(classes.toolbar, classes.toolbarRight)}/>
+            {!this.state.showSearchSideBar &&
             <List className={classes.list}>
-              <SideBarPage store={this.store}/>
-            </List>
+                <SideBarPage store={this.store}/>
+            </List>}
+            {this.state.showSearchSideBar &&
+            <List className={classes.list}>
+               <SearchSideBarPage store={this.store}/>
+            </List>}
+
           </Drawer>
           <NotificationCenter />
         </div>
       );
     };
-}
+  }
+
 
   export default withStyles(styles, { withTheme: true })(Home);

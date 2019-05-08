@@ -21,6 +21,12 @@ function mapDispatchToProps(dispatch){
   },dispatch);
 }
 
+/**
+ * @class
+ * @param {String} message Text that is highlighted
+ * @param {String} id The color that the highlight is in
+ * @return {Component} Notification component that gets triggered upon variety of events
+ */
 class Notification extends Component {
   constructor(props) {
     super(props);
@@ -31,12 +37,19 @@ class Notification extends Component {
     }
   }
 
+  /**
+   * Opens the notification
+   */
   notificationOpen = () => {
     this.setState({
       open: true
     })
   }
 
+  /**
+   * Closes and removes the notification
+   * @fires removeNotification
+   */
   notificationClose = () => {
     this.setState({
       open: false
@@ -53,19 +66,20 @@ class Notification extends Component {
         horizontal: 'right',
       }}
       open={this.state.open}
+      onClose={this.notificationClose}
       autoHideDuration={6000}
-      onClose={this.handleClose}
       ContentProps={{
         'aria-describedby': 'message-id',
       }}
-      onClick={this.notificationClose}
       message={<span id="message-id">{this.message}</span>}
       action={[
         <IconButton
+          onClick={this.notificationClose}
           key="close"
           aria-label="Close"
           color="inherit"
           className={styles.close}
+          onClick={this.notificationClose}
         >
           <CloseIcon  />
         </IconButton>,

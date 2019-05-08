@@ -3,8 +3,16 @@ var highlightIdentifier = 'webcache-highlight-mark'
 
 var hideStyle = document.createElement('style');
 hideStyle.type = 'text/css';
-hideStyle.innerHTML = '.hide-webcache-highlight { background-color: inherit !important; }';
+hideStyle.innerHTML = `
+  .hide-webcache-highlight {
+    background-color: inherit !important;
+  }
+  .search-highlight {
+    background-color: inherit !important;
+  }`;
 document.getElementsByTagName('head')[0].appendChild(hideStyle);
+
+var searchHighlight = document.createElement('style')
 
 // Event listener to highlighting within the iframe
 document.onmouseup = function(event){
@@ -103,6 +111,7 @@ function unwrap(spanList) {
 
 // Handles returning the data in the iFrame to send back for re-writing the file
 function handleSave(){
+  removeSearchHighlights();
   let data = {savedData: document.documentElement.innerHTML};
   window.parent.postMessage(data,"*");
 }
@@ -113,6 +122,11 @@ function changeIFrameSrc(path){
 }
 
 function hideHighlights(){
+  try{
+    doSearch('high');
+  } catch (e){
+    console.log
+  }
   let highlightList = getSpansWithHighlight(highlightIdentifier);
   highlightList.forEach(wrapper => {
     wrapper.classList.add('hide-webcache-highlight')
@@ -132,7 +146,7 @@ function scrollToId(id){
   // });
   try{
     document.querySelector(`.${id}`).scrollIntoView({behavior: 'smooth'});
-    console.log("scrolling to: " + id)
+    // console.log("scrolling to: " + id)
   } catch (err){
     console.log("can't find "  + id)
   }
@@ -178,6 +192,11 @@ window.parent.addEventListener('message',function(e){
     console.log("HERE")
   }
 
+  else if (data.searchFor){
+    console.log('here');
+    doSearch(data.searchFor)
+  }
+
 });
 
 
@@ -188,4 +207,59 @@ function generateRandomId() {
 
 }
 
+function removeSearchHighlights(){
+  if(document.querySelector('span[style*="background-color: yellow;"]') !== null){
+    unwrap(document.querySelectorAll('span[style*="background-color: yellow;"]'))
+  }
+}
 
+function doSearch(text) {
+
+ try{
+
+  removeSearchHighlights();
+
+  if (window.find && window.getSelection) {
+    document.designMode = "on";
+    var sel = window.getSelection();
+    sel.collapse(document.body, 0);
+
+    while (window.find(text)) {
+        document.execCommand("HiliteColor", false, "yellow");
+        sel.collapseToEnd();
+    }
+    document.designMode = "off";
+
+  } else if (document.body.createTextRange) {
+
+    var textRange = document.body.createTextRange();
+    while (textRange.findText(text)) {
+        textRange.execCommand("BackColor", false, "yellow");
+        textRange.collapse(false);
+    }
+  }
+
+  } catch (e){
+    console.log(e)
+  }
+
+}
+// function doSearch(text) {
+//   if (window.find && window.getSelection) {
+//       document.designMode = "on";
+//       var sel = window.getSelection();
+//       sel.collapse(document.body, 0);
+
+//       while (window.find(text)) {
+//           document.execCommand("HiliteColor", false, "yellow");
+//           sel.collapseToEnd();
+//       }
+//       document.designMode = "off";
+//   } else if (document.body.createTextRange) {
+//       var textRange = document.body.createTextRange();
+//       while (textRange.findText(text)) {
+//           textRange.execCommand("BackColor", false, "yellow");
+//           textRange.collapse(false);
+//       }
+//   }
+// }
