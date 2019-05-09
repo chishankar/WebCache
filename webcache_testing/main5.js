@@ -110,11 +110,9 @@ function checkIndexForChanges(lookup) {
     let filePath = path.join(__dirname, '../data/' + `${file.fileName}`);
 
     fs.stat(filePath, function(err, stats){
-
       if(err) {
         console.log(`${file.fileName}` + ' file deleted');
       } else {
-
         //assuming file[1] holds last modification date
         if (stats.mtimeMs != file.lastMod) {
           console.log(`${file.fileName}` + ' file modified');
@@ -421,8 +419,25 @@ function getFileIndex(fileName) {
         }
         else {
           const dom = new JSDOM(data);
+          let meta = dom.window.document.querySelectorAll("meta");
+          console.log("Meta tag count: " + meta.length);
+          meta.forEach(tag => {
+            let content = tag.getAttribute('content');
+            console.log(content);
+            cleanText = cleanText + " " + content + " ";
+          })
+          let img = dom.window.document.querySelectorAll("img");
+          console.log("Img tag count: " + img.length);
+          img.forEach(tag => {
+            let alt =tag.getAttribute('alt');
+            console.log(alt);
+            cleanText = cleanText + " " + alt + " ";
+          });
           dom.window.document.querySelectorAll("script, style").forEach(node => node.parentNode.removeChild(node));
-          cleanText = dom.window.document.documentElement.outerHTML.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, " ");
+          cleanText = cleanText + " " + dom.window.document.documentElement.outerHTML.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, " ");
+          let pathStrs = fileName.split('/');
+          cleanText = cleanText + " " + pathStrs[0].slice(0, pathStrs[0].lastIndexOf('-'));
+          cleanText = cleanText + " " + pathStrs[1];
           cleanText = cleanText.toLowerCase();
         }
         let wordMapping = wordLocsMapping(cleanText);
@@ -889,8 +904,27 @@ export function search(searchStr) {
     return new Promise (function (resolve, reject) {
       loadIndexFromFile("index_BSON", "lookup_BSON", "ranges_BSON").then((thing) => {
         console.log("Index loaded from file." + performance.now());
-        let results = searchIndex(searchStr);
-        console.log(results);
+        var searchClauses = searchStr.trim().split('&&');
+        var results;
+        if (searchClauses.length > 1) {
+          console.log("Search clauses: " + searchClauses);
+          var clauseResults = [];
+          searchClauses.forEach(clause => {
+            searchIndex(clause).results.forEach(hit => {
+              var ind;
+              if ((ind = _.findIndex(clauseResults, clauseResult => clauseResult.filename === hit.filename)) >= 0) {
+                clauseResults[ind].clauses++;
+                clauseResults[ind].count += hit.count;
+              } else {
+                clauseResults.push({filename: hit.filename, clauses: 1, count: hit.count});
+              }
+            });
+          });
+          results = {results: clauseResults.filter(result => result.clauses == searchClauses.length)};
+        } else {
+          results = searchIndex(searchStr);
+          console.log(results);
+        }
         resolve(results);
       });
     });
@@ -900,7 +934,28 @@ export function search(searchStr) {
     // });
   } else {
     return new Promise (function (resolve, reject) {
-      resolve(searchIndex(searchStr));
+      var searchClauses = searchStr.trim().split('&&');
+      var results;
+      if (searchClauses.length > 1) {
+        console.log("Search clauses: " + searchClauses);
+        var clauseResults = [];
+        searchClauses.forEach(clause => {
+          searchIndex(clause).results.forEach(hit => {
+            var ind;
+            if ((ind = _.findIndex(clauseResults, clauseResult => clauseResult.filename === hit.filename)) >= 0) {
+              clauseResults[ind].clauses++;
+              clauseResults[ind].count += hit.count;
+            } else {
+              clauseResults.push({filename: hit.filename, clauses: 1, count: hit.count});
+            }
+          });
+        });
+        results = {results: clauseResults.filter(result => result.clauses == searchClauses.length)};
+      } else {
+        results = searchIndex(searchStr);
+        console.log(results);
+      }
+      resolve(results);
     });
   }
 }
