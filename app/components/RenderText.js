@@ -112,7 +112,7 @@ export default class RenderText extends Component<Props> {
       }
 
       return (
-        <iframe className={ styles.setWidth }  ref={(f) => this.iframeRef = f; } srcDoc={ resourceHtml } ></iframe>
+        <iframe className={ styles.setWidth }  ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml } ></iframe>
       );
     } catch (exception){
       this.props.addNotification("Url does not exist!")
