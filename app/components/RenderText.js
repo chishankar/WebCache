@@ -126,6 +126,10 @@ export default class RenderText extends Component<Props> {
     window.addEventListener('message',this.handleIFrameTask)
   }
 
+  componentWillUnmount(){
+    window.removeEventListener('message',this.handleIFrameTask)
+  }
+
   shouldComponentUpdate(nextProps: Object, nextState: Object){
     var data;
     if (this.props.activeUrl != nextProps.activeUrl) {

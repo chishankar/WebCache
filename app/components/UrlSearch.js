@@ -62,9 +62,12 @@ export default class UrlSearch extends Component<Props>{
    * Logic for showing and not showing loading bar
    */
   handleClickLoading = () => {
+
     this.setState(state => ({
       loading: !state.loading,
     }));
+
+    console.log(`loading is ${this.state.loading}`)
   };
 
   /**
@@ -74,6 +77,7 @@ export default class UrlSearch extends Component<Props>{
   handleEnter = (event: Event) => {
     if (event.key === 'Enter' && this.state.showValidate){
       var save_location = "data/" + this.state.validUrl.replace(/https:\/\//g,"") + '-' + Date.now();
+      this.handleClickLoading();
       let error = getSite.getSite(this.state.validUrl, save_location, () => {
         //add the newly donwloaded files to the main index
         try{
@@ -82,23 +86,25 @@ export default class UrlSearch extends Component<Props>{
               this.store.dispatch(notficationActions.addNotification('Not a valid url'));
               return;
             }else{
-              this.handleClickLoading();
               let update = files.filter(fn => {return !['img', 'js', 'css', 'fonts'].includes(fn)}).map((x) => {
                 return save_location.slice(5) + "/" + x
               });
-              searchAPI.addFilesToMainIndex(update);
+              searchAPI.addFilesToMainIndex(update).then(()=>{
+                this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
+                this.handleClickLoading();
+              });
 
-              this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
-              this.handleClickLoading();
             }
           });
           return;
         } catch (exception){
           this.store.dispatch(notficationActions.addNotification('Not a valid url'));
           return;
+        } finally {
+          if (this.state.loading){
+            this.handleClickLoading();
         }
-        this.handleClickLoading();
-
+        }
       });
     }
 

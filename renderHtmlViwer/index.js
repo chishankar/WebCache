@@ -1,5 +1,6 @@
 console.log("INDEX.JS successfully injected");
 var color;
+var windowId = generateRandomId();
 var highlightIdentifier = 'webcache-highlight-mark'
 
 var hideStyle = document.createElement('style');
@@ -114,6 +115,7 @@ function unwrap(spanList) {
 function handleSave(){
   removeSearchHighlights();
   let data = {savedData: document.documentElement.innerHTML};
+  console.log(`${windowId} sending the message`)
   window.parent.postMessage(data,"*");
 }
 
@@ -170,6 +172,7 @@ window.parent.addEventListener('message',function(e){
   }
 
   else if (data === "save"){
+    console.log(`${windowId} got the save message`)
     handleSave();
   }
 
