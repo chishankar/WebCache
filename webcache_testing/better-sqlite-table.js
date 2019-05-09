@@ -50,6 +50,64 @@ class BetterSqliteTable {
         }
     }
 
+
+    /**
+       Updates the table at the specified columns with the specified values, for
+       the specified conditions (longClause).
+
+       Not tested heavily yet, but it seems to work.
+
+       This method, while fast, cannot be hyperoptimized further. Further
+       hyperoptimizations require understanding better-sqlite3 more.
+
+       The parameter ``assignments`` takes the form of [
+           {assignments: {col1: val1, col2: val2}, longClause: "WHERE col = ..."},
+           ...
+       ]
+      */
+    update(assignments) {
+        if (Array.isArray(assignments) && assignments.length > 0) {
+            this.db.transaction((assignments) => {
+                for (var assignment of assignments) {
+                    // have default value for longClause
+                    var longClause =
+                        assignment.longClause
+                        ? assignment.longClause
+                        : '';
+
+                    // assignment is an object, convert its properties to a nested array
+                    var entries = Object.entries(assignment.assignments);
+                    // I can't use the object keys in the 
+                    var setClause = 'SET ' + entries.map(
+                        x => x[0].toString() + ' = ?'
+                    ).join(', ');
+                    var update_stmt = this.db.prepare(
+                        'UPDATE t ' + setClause + ' ' + longClause
+                    );
+                    // flatten the entry array
+                    update_stmt.run(entries.map(x => x[1]));
+                }
+            })(assignments);
+        }
+    }
+/*
+    update(cols, assignments, longClause='') {
+        if (Array.isArray(assignments) && assignments.length > 0) {
+            var update_stmt = this.db.prepare(
+                'UPDATE t SET '
+                    + cols.map(x => x.toString() + ' = ?').join(', ')
+                    + longClause
+            );
+
+            this.db.transaction((assignments) => {
+                for(var vals of assignments) {
+                    update_stmt.run(vals);
+                }
+            })(assignments);
+        }
+    }
+*/
+
     /**
        Deletes rows that match the specified condition from the table.
 
@@ -71,7 +129,6 @@ class BetterSqliteTable {
            you want distinct (unique) rows.
       */
     select(cols, options={isDistinct: false, longClause: ''}) {
-
         var select_stmt =
             'SELECT ' + (options.isDistinct ? 'DISTINCT ' : '')
             + cols.join(', ') + ' FROM t ' + options.longClause;
