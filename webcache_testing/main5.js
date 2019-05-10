@@ -427,17 +427,17 @@ function getFileIndex(fileName) {
           //parsing html and metadata
           const dom = new JSDOM(data);
           let meta = dom.window.document.querySelectorAll("meta");
-          console.log("Meta tag count: " + meta.length);
+          //console.log("Meta tag count: " + meta.length);
           meta.forEach(tag => {
             let content = tag.getAttribute('content');
-            console.log(content);
+            //console.log(content);
             cleanText = cleanText + " " + content + " ";
           })
           let img = dom.window.document.querySelectorAll("img");
-          console.log("Img tag count: " + img.length);
+          //console.log("Img tag count: " + img.length);
           img.forEach(tag => {
             let alt =tag.getAttribute('alt');
-            console.log(alt);
+            //console.log(alt);
             cleanText = cleanText + " " + alt + " ";
           });
           dom.window.document.querySelectorAll("script, style").forEach(node => node.parentNode.removeChild(node));

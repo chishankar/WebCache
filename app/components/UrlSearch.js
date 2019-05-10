@@ -88,7 +88,7 @@ export default class UrlSearch extends Component<Props>{
               });
               searchAPI.addFilesToMainIndex(update);
 
-              this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
+              this.store.dispatch(urlsearchActions.changeActiveUrl(save_location + '/index.html'));
               this.handleClickLoading();
             }
           });

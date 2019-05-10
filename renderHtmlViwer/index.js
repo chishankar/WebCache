@@ -112,6 +112,7 @@ function unwrap(spanList) {
 
 // Handles returning the data in the iFrame to send back for re-writing the file
 function handleSave(){
+  console.log("In iframe save");
   removeSearchHighlights();
   let data = {savedData: document.documentElement.innerHTML};
   window.parent.postMessage(data,"*");

@@ -55,18 +55,19 @@ export default class RenderText extends Component<Props> {
 
   constructor(props){
     super(props);
-    this.iframeRef = React.createRef();
+    let flag = false;
   }
-
+    /*
   getRenderText = (filePath, iframeRef, onloadFun) => {
     // clear highlights when a new page is loaded
-    this.props.clearHighlights();
+    //this.props.clearHighlights();
 
     if (filePath == 'app/default_landing_page.html') {
-        let jsResource = path.join(remoteApp.getAppPath(), '../../../../../../../renderHtmlViwer/index.js');
+        let jsResource = path.join(__dirname, '../renderHtmlViwer/index.js')
         let resourceHtml = fs.readFileSync(filePath).toString();
         var injectScript = fs.readFileSync(jsResource).toString();
         resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
+        console.log("about to return first")
         return (
           <iframe name="iframe" className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml }></iframe>
         );
@@ -74,7 +75,7 @@ export default class RenderText extends Component<Props> {
     let resource = getResourceBuilder(filePath);
     let resourceDir = getResourceDirectory(filePath);
 
-    let jsResource = path.join(remoteApp.getAppPath(), '../../../../../../../renderHtmlViwer/index.js');
+    let jsResource = path.join(__dirname, '../renderHtmlViwer/index.js')
 
     try{
       var resourceHtml = fs.readFileSync(resource).toString();
@@ -93,10 +94,85 @@ export default class RenderText extends Component<Props> {
       }
 
         resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
-
+/*
       // try to re-render the highlights
       try {
         var fd = fs.openSync(path.join(resource, '..') + '/' + 'annotations-' + fileName + '.json', 'r');
+        var highlights = JSON.parse(fs.readFileSync(fd));
+        highlights.highlightData.forEach(highlight => {
+          // only add it if it isn't already in the store
+          if (!this.props.annotations.some(element => {
+            return element.id == highlight.id;
+          })) {
+            //this.props.addHighlight(highlight);
+          }
+        })
+      } catch (err) {
+        // this.handleSaveTask()
+        //this.props.addNotification("No previous annotations");
+      }
+    console.log("about to return second");
+      return (
+        <iframe className={ styles.setWidth }  ref={iframeRef} srcDoc={ resourceHtml } ></iframe>
+      );
+    } catch (exception){
+      //this.props.addNotification("Url does not exist!")
+    }
+
+  } */
+
+
+  getRenderText = (filePath, iframeRef, onloadFun) => {
+    // clear highlights when a new page is loaded
+    if(!this.flag){
+      window.addEventListener('message',this.handleIFrameTask);
+    } else {
+      this.flag = true;
+      window.removeEventListener('message', this.handleIFrameTask);
+      window.addEventListener('message',this.handleIFrameTask);
+    }
+    this.props.clearHighlights();
+
+    let resourceHtmlPath;
+    if(filePath.startsWith("LOCAL")){
+      resourceHtmlPath = filePath.slice(5, filePath.length)
+    } else {
+      resourceHtmlPath = path.join(__dirname, "../" + filePath);
+    }
+
+    if (filePath == 'app/default_landing_page.html') {
+        let jsResource = path.join(__dirname, '../renderHtmlViwer/index.js');
+        let resourceHtml = fs.readFileSync(resourceHtmlPath).toString();
+        var injectScript = fs.readFileSync(jsResource).toString();
+        resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
+        return (
+          <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml }></iframe>
+        );
+    }
+    let resourceDir = path.join(__dirname, "../.." + filePath);
+
+    let jsResource = path.join(__dirname, '../renderHtmlViwer/index.js');
+
+    try{
+      var resourceHtml = fs.readFileSync(resourceHtmlPath).toString();
+
+      var injectScript = fs.readFileSync(jsResource).toString();
+
+      let fileName = resourceHtmlPath.substring(resourceHtmlPath.lastIndexOf('/') + 1, resourceHtmlPath.lastIndexOf('.'));
+      let annotations_file = path.join(resourceHtmlPath, '..') + '/' + 'annotations-' + fileName + '.json';
+
+      // change all paths to become relative
+      // check to see if the page has been saved before -> don't change it twice!!
+      if (filePath != "app/default_landing_page.html" && !fs.existsSync(annotations_file)) {
+        resourceHtml = resourceHtml.replace(/href="([^#].+?)"/g, "href=\"" + path.resolve(resourceDir, "$1") + "\"");
+        resourceHtml = resourceHtml.replace(/src="([^#].+?)"/g, "src=\"" + path.resolve(resourceDir, "$1") + "\"");
+      }
+
+      resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
+
+       // try to re-render the highlights
+      try {
+        var fd = fs.openSync(path.join(resourceHtmlPath, '..') + '/' + 'annotations-' + fileName + '.json', 'r');
         var highlights = JSON.parse(fs.readFileSync(fd));
         highlights.highlightData.forEach(highlight => {
           // only add it if it isn't already in the store
@@ -108,22 +184,29 @@ export default class RenderText extends Component<Props> {
         })
       } catch (err) {
         // this.handleSaveTask()
+
         this.props.addNotification("No previous annotations");
       }
 
       return (
-        <iframe className={ styles.setWidth }  ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml } ></iframe>
+        <iframe className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml } ></iframe>
       );
     } catch (exception){
+      console.log(exception.stack)
       this.props.addNotification("Url does not exist!")
     }
 
   }
 
 
+
   // Once the component mounts, add an event listener to listen for messages and pass all the messages to the handleIFrameTask
   componentDidMount(){
-    window.addEventListener('message',this.handleIFrameTask)
+    //window.addEventListener('message',this.handleIFrameTask)
+  }
+
+  componentWillUnmount(){
+    
   }
 
   shouldComponentUpdate(nextProps: Object, nextState: Object){
@@ -186,6 +269,7 @@ export default class RenderText extends Component<Props> {
    * @param {String} htmlData
    */
   handleSave = (htmlData: String) => {
+    console.log("Save called");
     var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
     let fileName = saveUrl.substring(saveUrl.lastIndexOf('/') + 1, saveUrl.lastIndexOf('.'));
 
@@ -233,7 +317,8 @@ export default class RenderText extends Component<Props> {
 
     fs.writeFileSync(saveUrl, updatedHtml);
     // console.log(this.props);
-    this.props.addNotification(`File saved! ${this.props.save}`)
+    alert("hello");
+    //this.props.addNotification(`File saved! ${this.props.save}`)
   }
 
   /**
@@ -241,6 +326,7 @@ export default class RenderText extends Component<Props> {
    *
    * @param {Object} e
    */
+  
   handleIFrameTask = (e: Object) => {
     if (e.data == 'highlighted text'){
 
@@ -248,6 +334,7 @@ export default class RenderText extends Component<Props> {
       window.postMessage(data,'*');
 
     } else if (e.data.savedData){
+      console.log("In handling iframe task")
       if (this.props.activeUrl !== 'app/default_landing_page.html') {
         this.handleSave(e.data.savedData);
       } else {
@@ -275,7 +362,7 @@ export default class RenderText extends Component<Props> {
   render() {
     return (
       <div>
-        {this.getRenderText(this.props.activeUrl,this.iframeRef,this.handleSaveTask)}
+        {this.getRenderText(this.props.activeUrl, React.createRef(),this.handleSaveTask)}
       </div>
     );
   }
