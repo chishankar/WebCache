@@ -22,7 +22,7 @@ function getResourceBuilder(resourcePath){
   if(resourcePath.startsWith('LOCAL')) {
     return resourcePath.substring(5);
   }
-  return path.join(remoteApp.getAppPath(), '../../../../../../../' + resourcePath + '/index.html');
+  return path.join(remoteApp.getAppPath(), '../../../../../' + resourcePath + '/index.html');
 }
 
 // Returns the base resource
@@ -30,7 +30,7 @@ function getResourceDirectory(resourcePath){
   if(resourcePath.startsWith('LOCAL')) {
     return path.join(resourcePath.substring(5), '..') + '/';
   }
-  return path.join(remoteApp.getAppPath(), '../../../../../../../' + resourcePath + '/');
+  return path.join(remoteApp.getAppPath(), '../../../../../' + resourcePath + '/');
 }
 
 type Props = {
@@ -63,7 +63,7 @@ export default class RenderText extends Component<Props> {
     this.props.clearHighlights();
 
     if (filePath == 'app/default_landing_page.html') {
-        let jsResource = path.join(remoteApp.getAppPath(), '../../../../../../../renderHtmlViwer/index.js');
+        let jsResource = path.join(remoteApp.getAppPath(), '../../../../../renderHtmlViwer', 'index.js');
         let resourceHtml = fs.readFileSync(filePath).toString();
         var injectScript = fs.readFileSync(jsResource).toString();
         resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
@@ -74,7 +74,7 @@ export default class RenderText extends Component<Props> {
     let resource = getResourceBuilder(filePath);
     let resourceDir = getResourceDirectory(filePath);
 
-    let jsResource = path.join(remoteApp.getAppPath(), '../../../../../../../renderHtmlViwer/index.js');
+    let jsResource = path.join(remoteApp.getAppPath(), '../../../../../renderHtmlViwer', 'index.js');
 
     try{
       var resourceHtml = fs.readFileSync(resource).toString();
