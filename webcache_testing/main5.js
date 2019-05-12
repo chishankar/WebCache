@@ -239,7 +239,7 @@ function deleteFile(filename, str) {
             arr = Object.values(readUint32ArrFileSync(filePath));
 
             //find all words to delete in that single range so we only have to read/write once
-              while (deleteWords[c] <= rngTbl[rngInd].r[1]) {
+              while (deleteWords[c] <= rngTbl[currRng].r[1]) {
                 word = deleteWords[c];
                 console.log("current word = " + word);
                 wordIndMain = mainIndex.findIndex(wordInd => wordInd.w === word);
