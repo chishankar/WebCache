@@ -68,7 +68,7 @@ export default class RenderText extends Component<Props> {
         var injectScript = fs.readFileSync(jsResource).toString();
         resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
         return (
-          <iframe name="iframe" className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml }></iframe>
+          <iframe name="iframe" className={ styles.setWidth }  ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml }></iframe>
         );
     }
     let resource = getResourceBuilder(filePath);
@@ -132,22 +132,21 @@ export default class RenderText extends Component<Props> {
       return true;
     }
 
-    if (this.props.color !== nextProps.color) {
-      // This updates color in index.js
-      let data = {color: pickColor.getColor(nextProps.color)};
-      window.postMessage(data,'*');
+    if (this.props.color != nextProps.color){
+      data = {color: pickColor.getColor(nextProps.color)};
+      this.iframeRef.contentWindow.postMessage(data,'*');
     }
 
     // Sends delete request to the iFrame upone delete id change
     if (this.props.delete !== nextProps.delete){
       data = {delete: nextProps.delete};
-      window.postMessage(data, '*');
+      this.iframeRef.contentWindow.postMessage(data, '*');
     }
 
     // This sends the id that the user wants to see
     if (this.props.viewId !== nextProps.viewId){
       data = {showHighlight: nextProps.viewId};
-      window.postMessage(data, '*');
+      this.iframeRef.contentWindow.postMessage(data, '*');
     }
 
     // This sends a message to the iFrame upon save request
@@ -158,28 +157,19 @@ export default class RenderText extends Component<Props> {
     // Sends hide or show highlights request to the iFrame
     if (this.props.hideHighlights !== nextProps.hideHighlights){
       data = nextProps.hideHighlights ? 'hide' : 'show';
-      window.postMessage(data,"*");
+      this.iframeRef.contentWindow.postMessage(data,"*");
     }
 
     if (this.props.searchTerm != nextProps.searchTerm){
       data = {searchFor: nextProps.searchTerm}
-      window.postMessage(data,"*");
+      this.iframeRef.contentWindow.postMessage(data,"*");
     }
 
     return false;
   }
 
   getAnnotationsFn = (filePath: String) => {
-    //var slashCount = 2;
-    // for (let i = filePath.length; i >= 0; i--){
-    //   if (filePath.indexOf('data')) {
-    //     slashCount--;
-    //     if (slashCount == 0) {
-    //       return filePath.substring(i);
-    //     }
-    //   }
-    // }
-    filePath.substring(filePath.indexOf('data')+4);
+    return filePath.substring(filePath.indexOf('data')+4);
   }
 
   /**
@@ -217,7 +207,8 @@ export default class RenderText extends Component<Props> {
           fs.writeFile(annotationsFilePath, JSON.stringify(annotationJSON), (err) => {
             if (!err) {
               console.log(buf.toString());
-              console.log('Updating json index')
+              console.log("annotation filename: " + annotationsFn);
+              console.log('Updating json index');
               searchAPI.update(annotationsFn, buf.toString());
             } else {
               console.log("error writing updated annotations file");
@@ -249,11 +240,7 @@ export default class RenderText extends Component<Props> {
       window.postMessage(data,'*');
 
     } else if (e.data.savedData){
-      if (this.props.activeUrl !== 'app/default_landing_page.html') {
-        this.handleSave(e.data.savedData);
-      } else {
-        this.props.addNotification("can't save annotations on the home page!")
-      }
+      this.handleSave(e.data.savedData);
 
     } else if (e.data.highlight){
       if(e.data.highlight.text !== "" && e.data.highlight.color){
@@ -269,8 +256,13 @@ export default class RenderText extends Component<Props> {
    * Sends save request to the iFrame
    */
   handleSaveTask = () => {
-    window.postMessage("save", '*');
-
+    if (this.props.activeUrl !== 'app/default_landing_page.html') {
+      this.iframeRef.contentWindow.postMessage("save", '*');
+      console.log("sending save request to iframe")
+    } else {
+      console.log("tried to save on home page, incorrect usage")
+      this.props.addNotification("can't save annotations on the home page!")
+    }
   }
 
   render() {

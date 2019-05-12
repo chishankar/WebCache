@@ -1,5 +1,5 @@
 console.log("INDEX.JS successfully injected");
-var color;
+var color = "default";
 var highlightIdentifier = 'webcache-highlight-mark'
 
 var hideStyle = document.createElement('style');
@@ -17,6 +17,7 @@ var searchHighlight = document.createElement('style')
 
 // Event listener to highlighting within the iframe
 document.onmouseup = function(event){
+  console.log("User has highglighted content in iFrame")
   highlight(color);
 };
 
@@ -40,53 +41,56 @@ function getNextNode(node, skipChildren, endNode) {
 // Handles adding the highlight color to the highlighted text
 function highlight(color){
   let data = {};
-  var highlightId = generateRandomId();
-  var subranges = [];
-  var spans = [];
+  console.log("Highlight got this color: " + color)
+  if (color.toLowerCase() !== 'default'){
+    console.log("I did not reach this statement")
+    var highlightId = generateRandomId();
+    var subranges = [];
+    var spans = [];
 
-  sel = window.getSelection();
-  data.text = sel.toString();
-  if (sel.rangeCount && sel.getRangeAt) {
-      range = sel.getRangeAt(0);
-      var startNode = range.startContainer;
-      do {
-        var nextNode = getNextNode(startNode, false, range.endContainer);
-        // check if the node is a TEXT node
-        if (startNode.nodeType == 3) {
-          var subrange = document.createRange();
-          subrange.setStart(startNode, startNode == range.startContainer ? range.startOffset : 0);
-          subrange.setEnd(startNode, startNode == range.endContainer ? range.endOffset : startNode.length);
+    sel = window.getSelection();
+    data.text = sel.toString();
+    if (sel.rangeCount && sel.getRangeAt) {
+        range = sel.getRangeAt(0);
+        var startNode = range.startContainer;
+        do {
+          var nextNode = getNextNode(startNode, false, range.endContainer);
+          // check if the node is a TEXT node
+          if (startNode.nodeType == 3) {
+            var subrange = document.createRange();
+            subrange.setStart(startNode, startNode == range.startContainer ? range.startOffset : 0);
+            subrange.setEnd(startNode, startNode == range.endContainer ? range.endOffset : startNode.length);
 
-          var span = document.createElement('span');
-          span.style.backgroundColor = color;
-          span.style.display = 'inline';
-          span.classList.add(highlightId);
-          span.classList.add(highlightIdentifier);
+            var span = document.createElement('span');
+            span.style.backgroundColor = color;
+            span.style.display = 'inline';
+            span.classList.add(highlightId);
+            span.classList.add(highlightIdentifier);
 
-          subranges.push(subrange);
-          spans.push(span);
-        }
-        if (!nextNode) {
-          break;
-        }
-        startNode = nextNode;
-      } while (true);
-  }
+            subranges.push(subrange);
+            spans.push(span);
+          }
+          if (!nextNode) {
+            break;
+          }
+          startNode = nextNode;
+        } while (true);
+    }
 
-  for (let i = 0; i < subranges.length; i++) {
-    subranges[i].surroundContents(spans[i]);
-  }
+    for (let i = 0; i < subranges.length; i++) {
+      subranges[i].surroundContents(spans[i]);
+    }
 
-  sel.removeAllRanges();
+    sel.removeAllRanges();
 
-  data.color = color;
-  data.id = highlightId;
-  data.comment = ""
+    data.color = color;
+    data.id = highlightId;
+    data.comment = ""
 
-  if(data.color != "DEFAULT") {
     window.top.postMessage({highlight: data}, '*');
   }
-  return data;
+
+  return data
 }
 
 // given a class id, this will return all spans with that class id
@@ -113,7 +117,10 @@ function unwrap(spanList) {
 // Handles returning the data in the iFrame to send back for re-writing the file
 function handleSave(){
   removeSearchHighlights();
+  console.log("getting the innerHTML data")
   let data = {savedData: document.documentElement.innerHTML};
+  console.log(data)
+  console.log("sending data back to renderText component")
   window.parent.postMessage(data,"*");
 }
 
@@ -154,7 +161,7 @@ function scrollToId(id){
 }
 
 // Event listener for events coming from the parent
-window.parent.addEventListener('message',function(e){
+window.addEventListener('message',function(e){
   let data = e.data;
 
   if (data.delete) {
@@ -163,6 +170,7 @@ window.parent.addEventListener('message',function(e){
 
   if (data.color){
     color = data.color;
+    console.log("Color has been updated in iframe to: " + color)
   }
 
   else if (data.src){
@@ -170,6 +178,7 @@ window.parent.addEventListener('message',function(e){
   }
 
   else if (data === "save"){
+    console.log("recieved save request")
     handleSave();
   }
 
@@ -239,22 +248,3 @@ function doSearch(text) {
   }
 
 }
-// function doSearch(text) {
-//   if (window.find && window.getSelection) {
-//       document.designMode = "on";
-//       var sel = window.getSelection();
-//       sel.collapse(document.body, 0);
-
-//       while (window.find(text)) {
-//           document.execCommand("HiliteColor", false, "yellow");
-//           sel.collapseToEnd();
-//       }
-//       document.designMode = "off";
-//   } else if (document.body.createTextRange) {
-//       var textRange = document.body.createTextRange();
-//       while (textRange.findText(text)) {
-//           textRange.execCommand("BackColor", false, "yellow");
-//           textRange.collapse(false);
-//       }
-//   }
-// }

@@ -162,13 +162,25 @@ export function update(filename, oldStr) {
   */
 function deleteFile(filename, str) {
 
+  console.log("Entered delete, above promise");
+  console.log("filename: " + filename);
+  console.log("toDelete: " + str);
+
   return new Promise(resolve => {
 
+        console.log("entered promise");
+
         let lookupID = lookup.findIndex(entry => {return entry.fileName === filename});
+
+        console.log("LookupID found");
+
         let arr = [];
 
         //if file doesn't exist, don't need to delete
         if (lookupID < 0) { console.log("deleting file not here"); resolve(); }
+
+        console.log("LookupID verified");
+
 
         let fileID = lookup[lookupID].ID;
         lookup[lookupID].fileName = '';
@@ -179,12 +191,14 @@ function deleteFile(filename, str) {
         //deletes each word individually
         let c = 0;
         while (c < deleteWords.length) {
+          console.log("entered delete loop");
           let word = deleteWords[c];
+          console.log(word);
           let wordIndMain = mainIndex.findIndex(wordInd => {return wordInd.w === word});
 
           //Only delete word if it exists
           if (wordIndMain >= 0) {
-
+            console.log(word + " was found!");
             //find corresponding range table
             let rngInd = rngTbl.findIndex(ind => {return ind.fn === mainIndex[wordIndMain].fn});
             let offset = 0;
@@ -195,6 +209,7 @@ function deleteFile(filename, str) {
 
             //if word is exclusive word
             if (checkExclusiveWord(word)) {
+              console.log("exclusive word");
               let locArr = Object.values(extractRngIndex(rngTbl[currRng]));
               let i = 0;
               //remove values as usual
@@ -226,6 +241,7 @@ function deleteFile(filename, str) {
             //find all words to delete in that single range so we only have to read/write once
               while (deleteWords[c] <= rngTbl[rngInd].r[1]) {
                 word = deleteWords[c];
+                console.log("current word = " + word);
                 wordIndMain = mainIndex.findIndex(wordInd => wordInd.w === word);
 
                 if (wordIndMain >= 0) {
@@ -275,16 +291,21 @@ function deleteFile(filename, str) {
                     rngTbl[currRng].sz -= offset;
                   }
 
-                  c++;
+                c++;
               }
             }
 
+            console.log(c)
+            console.log("trying to store")
             let toStore = new Uint32Array(arr);
             writeUint32ArrFileSync(filePath, toStore);
 
           }
           //word doesn't exist, move onto next one
-          else { c++; }
+          else {
+            console.log("words deleted - incremending c")
+            c++;
+          }
      }
     resolve();
   });

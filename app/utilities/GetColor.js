@@ -13,6 +13,8 @@ exports.getColor = function(color: String){
     return '#fbcafb'
   } else if (color.toLowerCase() === "yellow"){
     return '#ffffa9'
+  } else if (color.toLowerCase() === "default"){
+    return 'default'
   }
 }
 
