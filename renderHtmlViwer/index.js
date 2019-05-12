@@ -130,11 +130,6 @@ function changeIFrameSrc(path){
 }
 
 function hideHighlights(){
-  try{
-    doSearch('high');
-  } catch (e){
-    console.log
-  }
   let highlightList = getSpansWithHighlight(highlightIdentifier);
   highlightList.forEach(wrapper => {
     wrapper.classList.add('hide-webcache-highlight')
