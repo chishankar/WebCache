@@ -22,7 +22,7 @@ function getResourceBuilder(resourcePath){
   if(resourcePath.startsWith('LOCAL')) {
     return resourcePath.substring(5);
   }
-  return path.join(remoteApp.getAppPath(), '../../../../../../../' + resourcePath + '/index.html');
+  return resourcePath + '/index.html';
 }
 
 // Returns the base resource
@@ -30,7 +30,7 @@ function getResourceDirectory(resourcePath){
   if(resourcePath.startsWith('LOCAL')) {
     return path.join(resourcePath.substring(5), '..') + '/';
   }
-  return path.join(remoteApp.getAppPath(), '../../../../../../../' + resourcePath + '/');
+  return resourcePath;
 }
 
 type Props = {
@@ -60,21 +60,23 @@ export default class RenderText extends Component<Props> {
 
   getRenderText = (filePath, iframeRef, onloadFun) => {
     // clear highlights when a new page is loaded
-    //this.props.clearHighlights();
+    this.props.clearHighlights();
+
+    let jsResource = path.join(remoteApp.getAppPath(), './renderHtmlViewer/index.js');
 
     if (filePath == 'app/default_landing_page.html') {
-        let jsResource = path.join(remoteApp.getAppPath(), '../../../../../../../renderHtmlViwer/index.js');
-        let resourceHtml = fs.readFileSync(filePath).toString();
+        let resourceHtml = fs.readFileSync(path.join(remoteApp.getAppPath(), './' + filePath)).toString();
         var injectScript = fs.readFileSync(jsResource).toString();
         resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
         return (
-          <iframe name="iframe" className={ styles.setWidth }  ref={ iframeRef } srcDoc={ resourceHtml }></iframe>
+          <iframe name="iframe" className={ styles.setWidth }  ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml }></iframe>
         );
     }
     let resource = getResourceBuilder(filePath);
     let resourceDir = getResourceDirectory(filePath);
 
-    let jsResource = path.join(remoteApp.getAppPath(), '../../../../../../../renderHtmlViwer/index.js');
+    console.log("RESOURCE: " + resource);
+    console.log("RESOURCEDIR: " + resourceDir);
 
     try{
       var resourceHtml = fs.readFileSync(resource).toString();
@@ -103,12 +105,14 @@ export default class RenderText extends Component<Props> {
           if (!this.props.annotations.some(element => {
             return element.id == highlight.id;
           })) {
-            //this.props.addHighlight(highlight);
+            // console.log("i want to add highlight: " + JSON.stringify(highlight));
+            this.props.addHighlight(highlight);
           }
         })
       } catch (err) {
         // this.handleSaveTask()
         //this.props.addNotification("No previous annotations");
+        console.log('INNER exception ' + err);
       }
 
       return (
@@ -116,6 +120,10 @@ export default class RenderText extends Component<Props> {
       );
     } catch (exception){
       //this.props.addNotification("Url does not exist!")
+      console.log('OUTER exception ' + exception);
+      return (
+        <div>NOOOOOOOOOOOOOOOOOOOOOOOOO</div>
+      )
     }
 
   }
@@ -135,19 +143,19 @@ export default class RenderText extends Component<Props> {
     if (this.props.color !== nextProps.color) {
       // This updates color in index.js
       let data = {color: pickColor.getColor(nextProps.color)};
-      window.postMessage(data,'*');
+      this.iframeRef.contentWindow.postMessage(data,'*');
     }
 
     // Sends delete request to the iFrame upone delete id change
     if (this.props.delete !== nextProps.delete){
       data = {delete: nextProps.delete};
-      window.postMessage(data, '*');
+      this.iframeRef.contentWindow.postMessage(data,'*');
     }
 
     // This sends the id that the user wants to see
     if (this.props.viewId !== nextProps.viewId){
       data = {showHighlight: nextProps.viewId};
-      window.postMessage(data, '*');
+      this.iframeRef.contentWindow.postMessage(data,'*');
     }
 
     // This sends a message to the iFrame upon save request
@@ -158,28 +166,15 @@ export default class RenderText extends Component<Props> {
     // Sends hide or show highlights request to the iFrame
     if (this.props.hideHighlights !== nextProps.hideHighlights){
       data = nextProps.hideHighlights ? 'hide' : 'show';
-      window.postMessage(data,"*");
+      this.iframeRef.contentWindow.postMessage(data,'*');
     }
 
     if (this.props.searchTerm != nextProps.searchTerm){
       data = {searchFor: nextProps.searchTerm}
-      window.postMessage(data,"*");
+      this.iframeRef.contentWindow.postMessage(data,'*');
     }
 
     return false;
-  }
-
-  getAnnotationsFn = (filePath: String) => {
-    //var slashCount = 2;
-    // for (let i = filePath.length; i >= 0; i--){
-    //   if (filePath.indexOf('data')) {
-    //     slashCount--;
-    //     if (slashCount == 0) {
-    //       return filePath.substring(i);
-    //     }
-    //   }
-    // }
-    filePath.substring(filePath.indexOf('data')+4);
   }
 
   /**
@@ -191,12 +186,19 @@ export default class RenderText extends Component<Props> {
     let fileName = saveUrl.substring(saveUrl.lastIndexOf('/') + 1, saveUrl.lastIndexOf('.'));
 
     var annotationsFilePath = path.join(saveUrl, '..') + '/annotations-' + fileName + '.json';
-    var annotationsFn = this.getAnnotationsFn(annotationsFilePath);
+    var annotationsFn = annotationsFilePath;
 
     let annotationJSON = Object.assign({},
       {"highlightData":this.props.annotations},
       {"lastUpdated":this.props.save}
     )
+
+    console.log("RenderText.js - saveUrl = " + saveUrl);
+    console.log("RenderText.js - fileName = " + fileName);
+    console.log("RenderText.js - annotationsFilePath = " + annotationsFilePath);
+
+    // add the file to the index for sanity
+    searchAPI.addFilesToMainIndex([saveUrl]);
 
     //update the old index of the annotations json page
     try {
@@ -243,18 +245,14 @@ export default class RenderText extends Component<Props> {
    * @param {Object} e
    */
   handleIFrameTask = (e: Object) => {
+    console.log('RenderText got: ' + e.data);
     if (e.data == 'highlighted text'){
 
       let data = {color: this.props.color};
       window.postMessage(data,'*');
 
     } else if (e.data.savedData){
-      if (this.props.activeUrl !== 'app/default_landing_page.html') {
-        this.handleSave(e.data.savedData);
-      } else {
-        this.props.addNotification("can't save annotations on the home page!")
-      }
-
+      this.handleSave(e.data.savedData);
     } else if (e.data.highlight){
       if(e.data.highlight.text !== "" && e.data.highlight.color){
         // add highlight to store
@@ -269,8 +267,11 @@ export default class RenderText extends Component<Props> {
    * Sends save request to the iFrame
    */
   handleSaveTask = () => {
-    window.postMessage("save", '*');
-
+    if (this.props.activeUrl != 'app/default_landing_page.html') {
+      this.iframeRef.contentWindow.postMessage("save", '*');
+    } else {
+      this.props.addNotification("can't save annotations on the home page!");
+    }
   }
 
   render() {

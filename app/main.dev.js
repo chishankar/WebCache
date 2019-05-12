@@ -60,7 +60,7 @@ app.on('window-all-closed', () => {
 
 app.on('ready', async () => {
   // console.log("hello")
-  loadIndexFromFile('index_BSON', 'lookup_BSON', 'ranges_BSON');
+  // loadIndexFromFile('index_BSON', 'lookup_BSON', 'ranges_BSON');
   if (
     process.env.NODE_ENV === 'development' ||
     process.env.DEBUG_PROD === 'true'
@@ -75,6 +75,7 @@ app.on('ready', async () => {
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
+  mainWindow.webContents.openDevTools();
 
   mainWindow.webContents.on('did-finish-load', () => {
     if (!mainWindow) {
@@ -106,5 +107,5 @@ app.on('ready', async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
+  // new AppUpdater();
 });

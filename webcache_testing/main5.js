@@ -11,6 +11,17 @@ const BSON = require('bson');
 var readline = require("readline");
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
+import app from 'electron';
+
+let remoteApp;
+if (app && app.remote) {
+  remoteApp = app.remote.app;
+  console.log("main5.js REMOTEAPP exists: " + remoteApp.getPath('appData'));
+} else{
+  console.log("main5.js: remoteApp doesn't exist??????");
+}
+
+const WORD_INDS_LOCATION = (remoteApp ? remoteApp.getPath('appData') : '/Users/peterwang/desktop' )+ '/word_inds';
 
 const stopWords = ["i", "me", "my", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"];
 const INDEX_DIRECTORY = false;
@@ -189,7 +200,7 @@ function deleteFile(filename, str) {
             let rngInd = rngTbl.findIndex(ind => {return ind.fn === mainIndex[wordIndMain].fn});
             let offset = 0;
             //file path for BSON file
-            let filePath = path.join(__dirname, "../data/word_inds/" + mainIndex[wordIndMain].fn);
+            let filePath = path.join(WORD_INDS_LOCATION, "./" + mainIndex[wordIndMain].fn);
             let currRng = 0;
             while (word > rngTbl[currRng].r[1]) { currRng++ };
 
@@ -224,7 +235,7 @@ function deleteFile(filename, str) {
             arr = Object.values(readUint32ArrFileSync(filePath));
 
             //find all words to delete in that single range so we only have to read/write once
-              while (deleteWords[c] <= rngTbl[rngInd].r[1]) {
+              while (deleteWords[c] <= rngTbl[currRng].r[1]) {
                 word = deleteWords[c];
                 wordIndMain = mainIndex.findIndex(wordInd => wordInd.w === word);
 
@@ -299,15 +310,15 @@ function deleteFile(filename, str) {
   */
 export function saveIndexToFile(indexFn, fileTableFn, rngTableFn) {
 
-  let filePath = path.join(__dirname, '../data/word_inds/' + indexFn);
+  let filePath = path.join(WORD_INDS_LOCATION, './' + indexFn);
   return new Promise(resolve => {
 
     fs.writeFile(filePath, BSON.serialize(mainIndex), function (err) {
       if (err) throw err;
-      let filePath = path.join(__dirname, '../data/word_inds/' + fileTableFn);
+      let filePath = path.join(WORD_INDS_LOCATION, './' + fileTableFn);
       fs.writeFile(filePath, BSON.serialize(lookup), function (err) {
         if (err) throw err;
-        let filePath = path.join(__dirname, '../data/word_inds/' + rngTableFn);
+        let filePath = path.join(WORD_INDS_LOCATION, './' + rngTableFn);
         fs.writeFile(filePath, BSON.serialize(rngTbl), function (err) {
           if (err) throw err;
           console.log('Index saved to file');
@@ -325,18 +336,19 @@ export function saveIndexToFile(indexFn, fileTableFn, rngTableFn) {
    @param {string} rngTableFn - filename of the range table
   */
 export function loadIndexFromFile(indexFn, tableFn, rngTableFn) {
-  let filePath = path.join(__dirname, '../data/word_inds/' + indexFn);
+  console.log("inside loadIndexFromFile, WORD_INDS_LOCATION = " + WORD_INDS_LOCATION);
+  let filePath = path.join(WORD_INDS_LOCATION, './' + indexFn);
   return new Promise(resolve => {
     fs.readFile(filePath, function(err,data1){
       if (err) {mainIndex = []; return;}
 
       mainIndex = Object.values(BSON.deserialize(data1));
       console.log('Index loaded from file');
-      let filePath = path.join(__dirname, '../data/word_inds/' + tableFn);
+      let filePath = path.join(WORD_INDS_LOCATION, './' + tableFn);
       fs.readFile(filePath, function(err,data2){
         if (err) {lookup = [{fileName: "", a: []}]; return;}
         lookup = Object.values(BSON.deserialize(data2));
-        filePath = path.join(__dirname, '../data/word_inds/' + rngTableFn);
+        filePath = path.join(WORD_INDS_LOCATION, './' + rngTableFn);
 
         fs.readFile(filePath, function(err,data3){
           if (err) {rngTbl = []; return;}
@@ -385,13 +397,13 @@ function getLastMod(fileName) {
 /**
    Takes a file and returns a list of all indexed words in the file
    with their locations. It calls wordLocsMapping to accomplish this.
-   @param {string} fileName - name of the file we are indexing
+   @param {string} filePath - path of the file we are indexing
    @return array - returns an array of objects. Each object has a word field,
    denoted 'w', indicating which word in the file it represents. It also has an
    all-locations field, denoted 'a', which is an array of integers.
    Each integer is the starting position of an instance of the word in the file.
   */
-function getFileIndex(fileName) {
+function getFileIndex(filePath) {
 
   let fileIndex = [];
   //We give file IDs sequentually - we can just set it equal to the length of the
@@ -400,13 +412,12 @@ function getFileIndex(fileName) {
   let fileNum = lookup.length;
 
   var newEntry = {
-    fileName: fileName,
+    fileName: filePath,
     ID: fileNum,
      lastMod: 0
   };
 
   lookup.push(newEntry);
-  let filePath = path.join(__dirname, '../data/' + fileName);
 
   return new Promise(resolve => {
     fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
@@ -415,7 +426,7 @@ function getFileIndex(fileName) {
         // Case-sensitive indexing not implented for simplicity.
         var cleanText = '';
         //if annotations file
-        if (fileName.slice(-5) === ".json") {
+        if (filePath.slice(-5) === ".json") {
           let json = JSON.parse(data);
           json.highlightData.forEach(highlight => {
             cleanText = cleanText + " \n " + highlight.comment;
@@ -442,7 +453,8 @@ function getFileIndex(fileName) {
           });
           dom.window.document.querySelectorAll("script, style").forEach(node => node.parentNode.removeChild(node));
           cleanText = cleanText + " " + dom.window.document.documentElement.outerHTML.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, " ");
-          let pathStrs = fileName.split('/');
+          let pathStrs = filePath.split('/');
+          // TODO: this might break
           cleanText = cleanText + " " + pathStrs[0].slice(0, pathStrs[0].lastIndexOf('-'));
           cleanText = cleanText + " " + pathStrs[1];
           cleanText = cleanText.toLowerCase();
@@ -509,7 +521,7 @@ function extractRngIndex(rng) {
     let currInd = 0;
     rng.af.forEach(fn => {
       if (currInd < rng.sz) {
-        let filePath = path.join(__dirname, "../data/word_inds/" + fn);
+        let filePath = path.join(WORD_INDS_LOCATION, "./" + fn);
         let listInFile = readUint32ArrFileSync(filePath);
         wordList.set(listInFile, currInd);
         currInd += listInFile.length;
@@ -519,7 +531,7 @@ function extractRngIndex(rng) {
   }
   else {
     //console.log("reading from file: " + rng.fn);
-    let filePath = path.join(__dirname, "../data/word_inds/" + rng.fn);
+    let filePath = path.join(WORD_INDS_LOCATION, "./" + rng.fn);
     let listInRng = readUint32ArrFileSync(filePath);
     let rngIndex = [];
     let i = mainIndex.findIndex(wordInd => {return wordInd.w === rng.r[0]});
@@ -555,7 +567,7 @@ function storeRngIndex(rng, rngIndex) {
       let remainder = rng.sz - currInt;
       if (remainder > 0) {
         let fileSz = remainder < MAX_INT_PER_FILE ? remainder : MAX_INT_PER_FILE;
-        let filePath = path.join(__dirname, "../data/word_inds/" + fn);
+        let filePath = path.join(WORD_INDS_LOCATION, "./" + fn);
         writeUint32ArrFileSync(filePath, wordList.slice(currInt, currInt + fileSz));
         currInt += fileSz;
       }
@@ -571,7 +583,7 @@ function storeRngIndex(rng, rngIndex) {
     while (i < mainIndex.length && (wordInd = mainIndex[i++]).w <= rng.r[1]) {
       locArrNew.set(rngIndex[j++].a, wordInd.st);
     }
-    let filePath = path.join(__dirname, "../data/word_inds/" + rng.fn);
+    let filePath = path.join(WORD_INDS_LOCATION, "./" + rng.fn);
     writeUint32ArrFileSync(filePath, locArrNew);
   }
 }
@@ -877,6 +889,11 @@ function addToMainAux(fileIndex) {
   */
 
 export function addFilesToMainIndex(fileNames) {
+  console.log("inside addFilesToMainIndex: WORD_INDS_LOCATION = " + WORD_INDS_LOCATION);
+  console.log("called with: " + JSON.stringify(fileNames));
+  if (!fs.existsSync(WORD_INDS_LOCATION)){
+    fs.mkdirSync(WORD_INDS_LOCATION);
+  }
 
   //determines if we have seen a file before - if we have,
   //we don't index it.
@@ -1063,7 +1080,7 @@ function searchIndex(searchStr) {
       let locsList = extractRngIndex(rngTbl[rngInd]);
       wordLocs = getWordLocs(locsList);
     } else {
-      let filePath = path.join(__dirname, "../data/word_inds/" + results.fn);
+      let filePath = path.join(WORD_INDS_LOCATION, "./" + results.fn);
       wordLocs = getWordLocs((readUint32ArrFileSync(filePath)).slice(results.st, results.st + results.sz));
     }
     wordResults.push(wordLocs);

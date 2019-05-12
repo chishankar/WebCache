@@ -41,17 +41,13 @@ class SearchResult extends React.Component {
   handleClick = () => {
     let filePath;
 
+    console.log("SearchResult.js clicked filepath: " + this.props.filename);
+
+    filePath = this.props.filename;
     if (this.props.filename.endsWith("json")) {
       var regexFile = this.props.filename.match(/annotations-(.*)\.json/)
-      var regexWebsite = this.props.filename.match(/((\w+\.)?\w+\.\w+\-\d+)/);
       var file = regexFile[1]; //throw notification here if malformed (nil)
-      var website = regexWebsite[1];
-      filePath = path.join(__dirname, "../data/" + website + "/" + file + ".html");
-      console.log(file);
-      console.log(website);
-    }
-    else {
-      filePath = path.join(__dirname, "../data/" + this.props.filename);
+      filePath = path.join(filePath, "../" + file + ".html");
     }
 
     console.log("Search result file path: " + filePath);
@@ -59,12 +55,14 @@ class SearchResult extends React.Component {
   };
 
   render() {
+    console.log("SearchResult.js filepath: " + this.props.filename);
     var regexWebsite = this.props.filename.match(/((\w+\.)?\w+\.\w+)/);
     var regexDate = this.props.filename.match(/\-(\d+)\//);
     var file;
 
     if(this.props.filename.endsWith(".json")){
-      let filePath = path.join(__dirname, '../data/' + this.props.filename);
+      // let filePath = path.join(__dirname, '../data/' + this.props.filename);
+      let filePath = this.props.filename;
 
       fs.readFileSync(filePath, {encoding: 'utf-8'}, function(err,data){
         if (!err) {
@@ -80,11 +78,11 @@ class SearchResult extends React.Component {
     }
 
     var website = regexWebsite[1];
-    var date = regexDate[1];
+    var date = regexDate ? regexDate[1] : null;
 
-    const unixEpochTimeMS = parseInt(date, 10);
-    const d = new Date(unixEpochTimeMS);
-    const strDate = d.toLocaleString();
+    const unixEpochTimeMS = date ? parseInt(date, 10) : 0;
+    const d = date ? new Date(unixEpochTimeMS) : null;
+    const strDate = d ? d.toLocaleString() : "no date";
 
     return (
 
@@ -94,7 +92,7 @@ class SearchResult extends React.Component {
               secondary={
                   <React.Fragment>
                     <b>Website: </b>{website + '\n'} <br/>
-                    <b>Date: </b>{(new Date(unixEpochTimeMS)) + '\n'} <br/>
+                    <b>Date: </b>{strDate + '\n'} <br/>
                     <b>Matches: </b>{this.props.count + '\n'}
                   </React.Fragment>
               }

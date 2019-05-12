@@ -1,5 +1,5 @@
 console.log("INDEX.JS successfully injected");
-var color;
+var color = "default";
 var highlightIdentifier = 'webcache-highlight-mark'
 
 var hideStyle = document.createElement('style');
@@ -39,6 +39,10 @@ function getNextNode(node, skipChildren, endNode) {
 
 // Handles adding the highlight color to the highlighted text
 function highlight(color){
+  if (color.toLowerCase() == 'default') {
+    return;
+  }
+
   let data = {};
   var highlightId = generateRandomId();
   var subranges = [];
@@ -83,9 +87,8 @@ function highlight(color){
   data.id = highlightId;
   data.comment = ""
 
-  if(data.color != "DEFAULT") {
-    window.top.postMessage({highlight: data}, '*');
-  }
+  window.top.postMessage({highlight: data}, '*');
+
   return data;
 }
 
@@ -154,7 +157,7 @@ function scrollToId(id){
 }
 
 // Event listener for events coming from the parent
-window.parent.addEventListener('message',function(e){
+window.addEventListener('message',function(e){
   let data = e.data;
 
   if (data.delete) {

@@ -57,14 +57,24 @@
   },
   "main": "./app/main.prod.js",
   "build": {
-    "productName": "ElectronReact",
+    "productName": "WebCache",
     "appId": "org.develar.ElectronReact",
     "files": [
       "app/dist/",
       "app/app.html",
       "app/main.prod.js",
       "app/main.prod.js.map",
-      "package.json"
+      "package.json",
+      "app/actions/*",
+      "app/components/*",
+      "app/containers/*",
+      "app/reducers/*",
+      "app/utilities/*",
+      "app/default_landing_page.html",
+      "app/default_landing_page.css",
+      "renderHtmlViewer/*",
+      "data/*",
+      "webcache_testing/*"
     ],
     "dmg": {
       "contents": [

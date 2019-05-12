@@ -10,6 +10,9 @@ import Fade from '@material-ui/core/Fade';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 const searchAPI = require('../../webcache_testing/main5.js');
+import app from 'electron';
+
+const remoteApp = app.remote.app;
 
 const fs = require('fs');
 
@@ -73,18 +76,19 @@ export default class UrlSearch extends Component<Props>{
    */
   handleEnter = (event: Event) => {
     if (event.key === 'Enter' && this.state.showValidate){
-      var save_location = "data/" + this.state.validUrl.replace(/https:\/\//g,"") + '-' + Date.now();
+      var save_location = remoteApp.getPath('desktop') + '/' + this.state.validUrl.replace(/https:\/\//g,"") + '-' + Date.now();
       this.handleClickLoading();
       getSite.getSite(this.state.validUrl, save_location, () => {
         //add the newly donwloaded files to the main index
-          console.log(save_location);
-          fs.readdir('./' + save_location + '/', (err, files) => {
+          console.log('SAVING NEW PAGE TO: ' + save_location);
+          fs.readdir(save_location, (err, files) => {
             if(err){
               //this.store.dispatch(notficationActions.addNotification('Not a valid url'));
               return;
             }else{
               let update = files.filter(fn => {return !['img', 'js', 'css', 'fonts'].includes(fn)}).map((x) => {
-                return save_location.slice(5) + "/" + x
+                console.log("adding " + save_location + '/' + x + " to index");
+                return save_location + "/" + x
               });
               searchAPI.addFilesToMainIndex(update);
             }
