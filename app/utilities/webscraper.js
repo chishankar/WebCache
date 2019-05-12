@@ -28,7 +28,10 @@ exports.getSite = function (inputUrl, save_location, callback){
         urls: [
           // filename: inputUrl.match(/\//g).length > 2 ? inputUrl.slice(inputUrl.lastIndexOf('/')) : 'index.html'
           {url: inputUrl, filename: "index.html"}
-        ], // Will be saved with default filename 'index.html',
+        ],
+        urlFilter: function(url) {
+          return (url.indexOf('github.com') === -1 || url.indexof('stackoverflow.com') === -1);
+        }, // Will be saved with default filename 'index.html',
         directory: save_location,
         recursive: true,
         maxRecursiveDepth: 1,
