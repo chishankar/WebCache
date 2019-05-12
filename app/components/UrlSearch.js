@@ -74,31 +74,23 @@ export default class UrlSearch extends Component<Props>{
   handleEnter = (event: Event) => {
     if (event.key === 'Enter' && this.state.showValidate){
       var save_location = "data/" + this.state.validUrl.replace(/https:\/\//g,"") + '-' + Date.now();
-      let error = getSite.getSite(this.state.validUrl, save_location, () => {
+      this.handleClickLoading();
+      getSite.getSite(this.state.validUrl, save_location, () => {
         //add the newly donwloaded files to the main index
-        try{
+          console.log(save_location);
           fs.readdir('./' + save_location + '/', (err, files) => {
             if(err){
-              this.store.dispatch(notficationActions.addNotification('Not a valid url'));
+              //this.store.dispatch(notficationActions.addNotification('Not a valid url'));
               return;
             }else{
-              this.handleClickLoading();
               let update = files.filter(fn => {return !['img', 'js', 'css', 'fonts'].includes(fn)}).map((x) => {
                 return save_location.slice(5) + "/" + x
               });
               searchAPI.addFilesToMainIndex(update);
-
-              this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
-              this.handleClickLoading();
             }
           });
-          return;
-        } catch (exception){
-          this.store.dispatch(notficationActions.addNotification('Not a valid url'));
-          return;
-        }
-        this.handleClickLoading();
-
+          this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
+          this.handleClickLoading();
       });
     }
 

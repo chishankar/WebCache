@@ -60,7 +60,7 @@ export default class RenderText extends Component<Props> {
 
   getRenderText = (filePath, iframeRef, onloadFun) => {
     // clear highlights when a new page is loaded
-    this.props.clearHighlights();
+    //this.props.clearHighlights();
 
     if (filePath == 'app/default_landing_page.html') {
         let jsResource = path.join(remoteApp.getAppPath(), '../../../../../../../renderHtmlViwer/index.js');
@@ -103,19 +103,19 @@ export default class RenderText extends Component<Props> {
           if (!this.props.annotations.some(element => {
             return element.id == highlight.id;
           })) {
-            this.props.addHighlight(highlight);
+            //this.props.addHighlight(highlight);
           }
         })
       } catch (err) {
         // this.handleSaveTask()
-        this.props.addNotification("No previous annotations");
+        //this.props.addNotification("No previous annotations");
       }
 
       return (
         <iframe className={ styles.setWidth }  ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml } ></iframe>
       );
     } catch (exception){
-      this.props.addNotification("Url does not exist!")
+      //this.props.addNotification("Url does not exist!")
     }
 
   }
@@ -170,15 +170,16 @@ export default class RenderText extends Component<Props> {
   }
 
   getAnnotationsFn = (filePath: String) => {
-    var slashCount = 2;
-    for (let i = filePath.length; i >= 0; i--){
-      if (filePath.charAt(i) == '/') {
-        slashCount--;
-        if (slashCount == 0) {
-          return filePath.substring(i);
-        }
-      }
-    }
+    //var slashCount = 2;
+    // for (let i = filePath.length; i >= 0; i--){
+    //   if (filePath.indexOf('data')) {
+    //     slashCount--;
+    //     if (slashCount == 0) {
+    //       return filePath.substring(i);
+    //     }
+    //   }
+    // }
+    filePath.substring(filePath.indexOf('data')+4);
   }
 
   /**
