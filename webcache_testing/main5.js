@@ -65,8 +65,6 @@ function wordLocsMapping(str, delimiter=/\s/) {
   return out;
 }
 
-// TODO: save array of N-bit integers as array of 8-bit integers
-// #############################################################################
 /**
    Synchronously write an array of 32-bit integers at the specified location.
    @param {string} filePath - the specified location on disk
@@ -89,17 +87,16 @@ function readUint32ArrFileSync(filePath) {
 }
 // #############################################################################
 
-function avg(mainIndex) {
-  let sum = 0;
-  mainIndex.forEach(w => {
-    sum += w.a.length;
-  });
-  return sum / mainIndex.length;
-}
+
 
 //Lookup table between file name and file number
 var lookup = [{fileName: "", a: []}];
 
+/**
+   Checks files in directory to see if anything has been
+   added, deleted, or modified since last open.
+   @param {array} lookup - the file to fileID lookup table
+  */
 function checkIndexForChanges(lookup) {
 
   for (i = 1; i < Object.keys(lookup).length; i++) {
@@ -110,11 +107,9 @@ function checkIndexForChanges(lookup) {
     let filePath = path.join(__dirname, '../data/' + `${file.fileName}`);
 
     fs.stat(filePath, function(err, stats){
-
       if(err) {
         console.log(`${file.fileName}` + ' file deleted');
       } else {
-
         //assuming file[1] holds last modification date
         if (stats.mtimeMs != file.lastMod) {
           console.log(`${file.fileName}` + ' file modified');
@@ -125,25 +120,28 @@ function checkIndexForChanges(lookup) {
 }
 
 
-
-
-
-
-function delFilesFromIndex(mainIndex, fileNames, origData) {
-  // case for when files are removed outside of the application, whole index must be traversed
-  if (origData === undefined || origData.length == 0) {
-
-  }
-}
-
-
-//checks if word is in exclusive word range
+/**
+   Checks if a word appears in an "exclusive index" - it appears
+   so many times in the cached pages that it fills up an entire
+   range index by itself. There are special cases for handling these words.
+   @param {string} word - the word in question
+   @return boolean
+  */
 function checkExclusiveWord(word) {
   let wordIndMain = mainIndex.findIndex(wordInd => {return wordInd.w === word});
   if (wordIndMain === -1) {return false;}
   return (mainIndex[wordIndMain].fn.slice(0,1) == SINGLE_WORD_FLAG);
 }
 
+/**
+   Updates a given file. If the file exists, we iterate through the old
+   contents of the file and delete the file word by word.
+   Then, we add the file again with the same name.
+   The file should already be updated in the directory.
+   @param {string} filename - the file we are updating
+   @param {string} oldStr - the old contents of the file, which
+   we iterate through and delete word by word.
+  */
 export function update(filename, oldStr) {
   if (lookup.findIndex(entry => {return entry.fileName === filename}) < 0) {
     addFilesToMainIndex([filename]);
@@ -156,16 +154,33 @@ export function update(filename, oldStr) {
   }
 }
 
-//takes a
+/**
+   Deletes a file by iterating through the old contents word by word
+   and removing/updating the index and range files
+   @param {string} filename - the file we are deleting
+   @param {string} str - the contents of the file
+  */
 function deleteFile(filename, str) {
+
+  console.log("Entered delete, above promise");
+  console.log("filename: " + filename);
+  console.log("toDelete: " + str);
 
   return new Promise(resolve => {
 
+        console.log("entered promise");
+
         let lookupID = lookup.findIndex(entry => {return entry.fileName === filename});
+
+        console.log("LookupID found");
+
         let arr = [];
 
         //if file doesn't exist, don't need to delete
         if (lookupID < 0) { console.log("deleting file not here"); resolve(); }
+
+        console.log("LookupID verified");
+
 
         let fileID = lookup[lookupID].ID;
         lookup[lookupID].fileName = '';
@@ -176,12 +191,14 @@ function deleteFile(filename, str) {
         //deletes each word individually
         let c = 0;
         while (c < deleteWords.length) {
+          console.log("entered delete loop");
           let word = deleteWords[c];
+          console.log(word);
           let wordIndMain = mainIndex.findIndex(wordInd => {return wordInd.w === word});
 
           //Only delete word if it exists
           if (wordIndMain >= 0) {
-
+            console.log(word + " was found!");
             //find corresponding range table
             let rngInd = rngTbl.findIndex(ind => {return ind.fn === mainIndex[wordIndMain].fn});
             let offset = 0;
@@ -192,6 +209,7 @@ function deleteFile(filename, str) {
 
             //if word is exclusive word
             if (checkExclusiveWord(word)) {
+              console.log("exclusive word");
               let locArr = Object.values(extractRngIndex(rngTbl[currRng]));
               let i = 0;
               //remove values as usual
@@ -223,6 +241,7 @@ function deleteFile(filename, str) {
             //find all words to delete in that single range so we only have to read/write once
               while (deleteWords[c] <= rngTbl[rngInd].r[1]) {
                 word = deleteWords[c];
+                console.log("current word = " + word);
                 wordIndMain = mainIndex.findIndex(wordInd => wordInd.w === word);
 
                 if (wordIndMain >= 0) {
@@ -272,21 +291,33 @@ function deleteFile(filename, str) {
                     rngTbl[currRng].sz -= offset;
                   }
 
-                  c++;
+                c++;
               }
             }
 
+            console.log(c)
+            console.log("trying to store")
             let toStore = new Uint32Array(arr);
             writeUint32ArrFileSync(filePath, toStore);
 
           }
           //word doesn't exist, move onto next one
-          else { c++; }
+          else {
+            console.log("words deleted - incremending c")
+            c++;
+          }
      }
     resolve();
   });
 }
 
+/**
+   Saves the current in-application indices to disk.
+   This includes the mainIndex, lookup table, and range table.
+   @param {string} indexFn - filename we are storing the main index as
+   @param {string} fileTableFn - filename we are storing lookup table as
+   @param {string} rngTableFn - filename we are storing range table as
+  */
 export function saveIndexToFile(indexFn, fileTableFn, rngTableFn) {
 
   let filePath = path.join(__dirname, '../data/word_inds/' + indexFn);
@@ -308,8 +339,13 @@ export function saveIndexToFile(indexFn, fileTableFn, rngTableFn) {
   });
 }
 
+/**
+   Loads indices from disk into application memory.
+   @param {string} indexFn - filename of the main index
+   @param {string} fileTableFn - filename of the lookup table
+   @param {string} rngTableFn - filename of the range table
+  */
 export function loadIndexFromFile(indexFn, tableFn, rngTableFn) {
-
   let filePath = path.join(__dirname, '../data/word_inds/' + indexFn);
   return new Promise(resolve => {
     fs.readFile(filePath, function(err,data1){
@@ -333,39 +369,15 @@ export function loadIndexFromFile(indexFn, tableFn, rngTableFn) {
           resolve();
         });
       });
-
     });
   });
 }
 
-function getIndicesOf(searchStr, str, caseSensitive) {
-  var searchStrLen = searchStr.length;
-  if (searchStrLen == 0) {
-      return [];
-  }
-  var startIndex = 0, index, indices = [];
-  if (!caseSensitive) {
-      str = str.toLowerCase();
-      searchStr = searchStr.toLowerCase();
-  }
-  while ((index = str.indexOf(searchStr, startIndex)) > -1) {
-    //Check if this instance is a substring of another word (if next char is whitespace or not) <- FIX
-    //TODO: MAKE SURE ALL WORDS HAVE LOCATIONS
-    let nextCharIndex = index + searchStrLen;
-
-    if (str.slice(nextCharIndex, nextCharIndex+1).match(/\s/g) &&
-        str.slice(index-1, index).match(/\s/g)) {
-      indices.push(index);
-    }
-    startIndex = nextCharIndex;
-  }
-  return indices;
-}
-
-//Takes a file name, returns a list of objects containing words
-// and all of the unique IDs of locations that word appears
-
-
+/**
+   Returns last modification date for file
+   @param {string} fileName - file we are checking
+   @return Date
+  */
 function getLastMod(fileName) {
 
   let lastMod = 0;
@@ -375,6 +387,7 @@ function getLastMod(fileName) {
     let fp = path.join(__dirname, '/test_docs/' + `${fileName}`);
     fs.stat(fp, function(err, stats){
 
+      //if file doesn't exist
       if(err) {
         console.log("error");
       } else {
@@ -388,10 +401,23 @@ function getLastMod(fileName) {
 
 
 
+
+
+/**
+   Takes a file and returns a list of all indexed words in the file
+   with their locations. It calls wordLocsMapping to accomplish this.
+   @param {string} fileName - name of the file we are indexing
+   @return array - returns an array of objects. Each object has a word field,
+   denoted 'w', indicating which word in the file it represents. It also has an
+   all-locations field, denoted 'a', which is an array of integers.
+   Each integer is the starting position of an instance of the word in the file.
+  */
 function getFileIndex(fileName) {
 
   let fileIndex = [];
-
+  //We give file IDs sequentually - we can just set it equal to the length of the
+  //lookup tabble that holds all of the files that have been indexed before
+  //the current file.
   let fileNum = lookup.length;
 
   var newEntry = {
@@ -401,16 +427,15 @@ function getFileIndex(fileName) {
   };
 
   lookup.push(newEntry);
-
   let filePath = path.join(__dirname, '../data/' + fileName);
 
   return new Promise(resolve => {
     fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
       var t1 = performance.now();
       if (!err) {
-        // TODO: REMOVE HTML TAGS
         // Case-sensitive indexing not implented for simplicity.
         var cleanText = '';
+        //if annotations file
         if (fileName.slice(-5) === ".json") {
           let json = JSON.parse(data);
           json.highlightData.forEach(highlight => {
@@ -420,12 +445,32 @@ function getFileIndex(fileName) {
           cleanText = cleanText.toLowerCase();
         }
         else {
+          //parsing html and metadata
           const dom = new JSDOM(data);
+          let meta = dom.window.document.querySelectorAll("meta");
+          //console.log("Meta tag count: " + meta.length);
+          meta.forEach(tag => {
+            let content = tag.getAttribute('content');
+           // console.log(content);
+            cleanText = cleanText + " " + content + " ";
+          })
+          let img = dom.window.document.querySelectorAll("img");
+         // console.log("Img tag count: " + img.length);
+          img.forEach(tag => {
+            let alt =tag.getAttribute('alt');
+          //  console.log(alt);
+            cleanText = cleanText + " " + alt + " ";
+          });
           dom.window.document.querySelectorAll("script, style").forEach(node => node.parentNode.removeChild(node));
-          cleanText = dom.window.document.documentElement.outerHTML.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, " ");
+          cleanText = cleanText + " " + dom.window.document.documentElement.outerHTML.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, " ");
+          let pathStrs = fileName.split('/');
+          cleanText = cleanText + " " + pathStrs[0].slice(0, pathStrs[0].lastIndexOf('-'));
+          cleanText = cleanText + " " + pathStrs[1];
           cleanText = cleanText.toLowerCase();
         }
+        //returns the locations for every word in the file
         let wordMapping = wordLocsMapping(cleanText);
+        //pushes all of these to a list to return
         wordMapping.forEach(function(value, key) {
           fileIndex.push({
             w: key,
@@ -446,6 +491,13 @@ function getFileIndex(fileName) {
 
 let tempIndex = [];
 
+/**
+   Takes a list of words and locations returned by getFileIndex
+   and adds them to the main index. These are added to a temporary index first
+   before being stored to the main index and written to file to reduce individual i/o calls
+   and instead do a batch i/o when we reach a certain capacity.
+   @param {array} fileIndex - returned by calling getFileIndex on the name of the file
+  */
 function addToMainIndex(fileIndex) {
 
   //assumes unique words, and no preexisting entries for the file being added
@@ -460,7 +512,18 @@ function addToMainIndex(fileIndex) {
   });
 }
 
-// takes rng struct, gets list from range file, formats as index
+/**
+   Takes a range struct, gets the content of file as a list,
+   and formats it as an index of words -> location arrays
+   @param {Object} rng - A range object, which holds the filename
+   of the range it refers to, as well as the upper and lower bounds
+   for the words it contains. (i.e., words from apple to dog)
+   @return array - returns an array of objects. Each object has a word field,
+   denoted 'w', indicating which word in the file it represents. It also has an
+   all-locations field, denoted 'a', which is an array of integers.
+   From these integers we can call GetWordLocs and get a list of files
+   and locations within the files.
+  */
 function extractRngIndex(rng) {
   if (rng.fn.slice(0,1) == SINGLE_WORD_FLAG) {
     let wordList = new Uint32Array(rng.sz);
@@ -491,7 +554,14 @@ function extractRngIndex(rng) {
     return rngIndex;
   }
 }
-// takes rngIndex, converts to single list and stores to respective file
+
+/**
+   Takes a range object, converts it to a single list, and
+   stores it in the range index. Afterward, it will write the
+   range index to file in the data/word_inds folder.
+   @param {Object} rng - Range object we want to store
+   @param {Object} rngIndex - our index that stores ranges
+**/
 function storeRngIndex(rng, rngIndex) {
   if (rng.fn.slice(0,1) == SINGLE_WORD_FLAG) {
     let wordList = rngIndex[0].a;
@@ -527,9 +597,16 @@ function storeRngIndex(rng, rngIndex) {
   }
 }
 
-function addToMainAux(fileIndex) {
-  fileCount++;
 
+/**
+   Does most of the work for converting a fileIndex and storing it
+   in our main index and range tables. Deals with all logic of creating
+   range files, adding new files, and removing stuff.
+   @param {Array} fileIndex - a file index object returned by getFileIndex
+  */
+function addToMainAux(fileIndex) {
+
+  fileCount++;
   fileIndex = _.sortBy(fileIndex, wordInd => {return wordInd.w});
 
   // if rngTbl is empty, init with range of fileIndex
@@ -541,7 +618,6 @@ function addToMainAux(fileIndex) {
         sz: 0
       });
   }
-
   // Predetermine if fileindex will require first and/or last ranges to be expanded
   else {
     if (fileIndex[fileIndex.length - 1].w > rngTbl[rngTbl.length - 1].r[1]) {
@@ -580,7 +656,6 @@ function addToMainAux(fileIndex) {
         locArrNew.set(fileWord.a, locArr.length);
         mainIndex[mainIndex.findIndex(mainWord => mainWord.w == fileWord.w)].sz = locArrNew.length;
         storeRngIndex(rngTbl[currRng], [{w: fileWord.w , a: locArrNew}]);
-        // WE HAVE TO BREAK OUT OF THE MAIN LOOP HERE!! IDK IF THIS DOES IT:
         break;
       }
       else {
@@ -612,7 +687,6 @@ function addToMainAux(fileIndex) {
       let hasBeenIndexed = (wordIndRng >= 0 && rngIndex[wordIndRng].w === fileWord.w);
 
       // if locations fit in rng, add them accordingly
-
 
       if (hasBeenIndexed) {
         let locArr = rngIndex[wordIndRng].a;
@@ -796,6 +870,7 @@ function addToMainAux(fileIndex) {
           try {
             storeRngIndex(rngTbl[currRng + 1], upperRngIndex);
           } catch(error) {
+            console.log(error.stack);
             console.log("ERROR: Storage issue at word " + fileWord.w + " at file " + fileCount + ":\n" + error);
           }
         }
@@ -807,13 +882,25 @@ function addToMainAux(fileIndex) {
     try {
       storeRngIndex(rngTbl[currRng], rngIndex);
     } catch(error) {
+      console.log(error.stack);
       console.log("ERROR: Storage issue at word " + fileWord.w + ":\n" + error);
     }
   }
 }
 
+
+
+/**
+   Main function that will be called by the front end when we
+   want to index files. This calls all the previous methods in tandem
+   to take a list of filenames and index all the words within.
+   @param {Array of strings} fileNames - names of the file we are indexing
+  */
+
 export function addFilesToMainIndex(fileNames) {
 
+  //determines if we have seen a file before - if we have,
+  //we don't index it.
   let newFiles = [];
 
   fileNames.forEach(fileName => {
@@ -835,7 +922,7 @@ export function addFilesToMainIndex(fileNames) {
           var t2 = performance.now();
           sizeCheckTime += (t2 - t1);
           if (tempSize > MAX_CLUSTER) {
-            //console.log(sizeof(tempIndex));
+            //store temp index to file
             addToMainAux(tempIndex);
             tempIndex = [];
           }
@@ -855,11 +942,17 @@ export function addFilesToMainIndex(fileNames) {
   });
 }
 
-//Enter the array we have stored in the index,
-//return a list of words with filenames locations
-//that we can use in search method
-
-
+/**
+   Takes an array of numbers returned by extractRng and converts them
+   into objects for the search function.
+   @param {Array of integers} codes - An array of integers that give all
+   locations of a specific word. The format is:
+   Number of times it appears in file, fileID, starting locations
+   So, [1,4,25] means the word appears once in file 4 at location 25.
+   @return array - returns an array of objects associated with the word.
+   The objects have the filename and locations within the file. Each
+   object corresponds to a single file.
+  */
 function getWordLocs(codes) {
   let wordLocs = [];
 
@@ -884,26 +977,86 @@ function getWordLocs(codes) {
   return wordLocs;
 }
 
+
+/**
+   Search function that is called when the user searches for a term.
+   If the main Index and tables have not been loaded from file, they are
+   loaded and then the searchIndex function is called. Otherwise, we just
+   call the searchIndex function.
+   @param {string} searchStr - The term or phrase we are searching for
+   @return array - returns a JSON object of filenames and locations where the
+   word or phrase was found. If the phrase was not found, the object is empty
+  */
 export function search(searchStr) {
+  //if we need to laod index from file
   if (mainIndex.length === 0) {
     return new Promise (function (resolve, reject) {
       loadIndexFromFile("index_BSON", "lookup_BSON", "ranges_BSON").then((thing) => {
         console.log("Index loaded from file." + performance.now());
-        let results = searchIndex(searchStr);
-        console.log(results);
+        var searchClauses = searchStr.trim().split('&&');
+        var results;
+        if (searchClauses.length > 1) {
+          console.log("Search clauses: " + searchClauses);
+          var clauseResults = [];
+          searchClauses.forEach(clause => {
+            searchIndex(clause).results.forEach(hit => {
+              var ind;
+              if ((ind = _.findIndex(clauseResults, clauseResult => clauseResult.filename === hit.filename)) >= 0) {
+                clauseResults[ind].clauses++;
+                clauseResults[ind].count += hit.count;
+              } else {
+                clauseResults.push({filename: hit.filename, clauses: 1, count: hit.count});
+              }
+            });
+          });
+          results = {results: clauseResults.filter(result => result.clauses == searchClauses.length)};
+        } else {
+          results = searchIndex(searchStr);
+          console.log(results);
+        }
         resolve(results);
       });
     });
-    // loadIndexFromFile("index_BSON", "lookup_BSON", "ranges_BSON").then(result => {
-    //   console.log("Index loaded from file." + performance.now());
-    //   return searchIndex(searchStr);
-    // });
+
   } else {
     return new Promise (function (resolve, reject) {
-      resolve(searchIndex(searchStr));
+      var searchClauses = searchStr.trim().split('&&');
+      var results;
+      if (searchClauses.length > 1) {
+        console.log("Search clauses: " + searchClauses);
+        var clauseResults = [];
+        searchClauses.forEach(clause => {
+          searchIndex(clause).results.forEach(hit => {
+            var ind;
+            if ((ind = _.findIndex(clauseResults, clauseResult => clauseResult.filename === hit.filename)) >= 0) {
+              clauseResults[ind].clauses++;
+              clauseResults[ind].count += hit.count;
+            } else {
+              clauseResults.push({filename: hit.filename, clauses: 1, count: hit.count});
+            }
+          });
+        });
+        results = {results: clauseResults.filter(result => result.clauses == searchClauses.length)};
+      } else {
+        results = searchIndex(searchStr);
+        console.log(results);
+      }
+      resolve(results);
     });
   }
 }
+
+
+/**
+   Search function that looks through our index and range files to
+   retrieve all locations of a word. It first gets a list of files that contain
+   each word. If the search was only for a single word, then the search is done.
+   Otherwise, we then check these files to see which ones contain all the words,
+   and then if any of those contain the phrase.
+   @param {string} searchStr - The term or phrase we are searching for
+   @return array - returns a JSON object of filenames and locations where the
+   word or phrase was found. If the phrase was not found, the object is empty
+  */
 
 function searchIndex(searchStr) {
 
@@ -924,6 +1077,8 @@ function searchIndex(searchStr) {
     if (results == null) return {results: finalResults};
     //Changes into filename and location format
     let wordLocs = [];
+    //If word is in an exclusive range, we need to retrieve its
+    //locations in a special way
     if (results.fn.slice(0,1) === SINGLE_WORD_FLAG) {
       let rngInd = rngTbl.findIndex(rng => rng.fn == results.fn);
       let locsList = extractRngIndex(rngTbl[rngInd]);
@@ -939,6 +1094,7 @@ function searchIndex(searchStr) {
     fileLists.push(wordFiles);
   }
 
+  //search for a single term means we can stop here
   if (searchWords.length <= 1) {
     wordResults.forEach(obj => {
       obj.forEach( entry => {
