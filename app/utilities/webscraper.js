@@ -26,11 +26,16 @@ class MyPlugin {
 exports.getSite = function (inputUrl, save_location, callback){
     var options = {
         urls: [
-          {url: inputUrl, filename: 'index.html'}
-        ], // Will be saved with default filename 'index.html',
+          // filename: inputUrl.match(/\//g).length > 2 ? inputUrl.slice(inputUrl.lastIndexOf('/')) : 'index.html'
+          {url: inputUrl, filename: "index.html"}
+        ],
+        urlFilter: function(url) {
+          return (url.indexOf('github.com') === -1 || url.indexof('stackoverflow.com') === -1);
+        }, // Will be saved with default filename 'index.html',
         directory: save_location,
         recursive: true,
-        maxDepth: 1,
+        maxRecursiveDepth: 1,
+        maxDepth: 2,
         outputPathGenerator: function(resource, directory){
             var urlObject = urlUtil.parse(resource.url);
             // Todo: add logic to check if it is an HTML page which does not end in '.html'
@@ -41,7 +46,7 @@ exports.getSite = function (inputUrl, save_location, callback){
         subdirectories: [
             {
                 directory: 'img',
-                extensions: ['.jpg', '.png', '.svg']
+                extensions: ['.gif', '.jpg', '.png', '.svg']
             },
             {
                 directory: 'js',
@@ -54,6 +59,10 @@ exports.getSite = function (inputUrl, save_location, callback){
             {
                 directory: 'fonts',
                 extensions: ['.woff','.ttf']
+            },
+            {
+              directory: 'misc',
+              extensions: ['']
             }
         ],
         sources: [
