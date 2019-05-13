@@ -30,19 +30,25 @@ exports.getSite = function (inputUrl, save_location, callback){
           {url: inputUrl, filename: "index.html"}
         ],
         urlFilter: function(url) {
-          return (url.indexOf('github.com') === -1 || url.indexof('stackoverflow.com') === -1);
+          var req = new XMLHttpRequest();
+          req.open('HEAD', url, false);
+          req.send(null);
+          var headers = req.getAllResponseHeaders();
+          if (headers['x-frame-options'] || headers.includes('x-frame-options')){
+            console.log('This website cannot be cached')
+            return false
+          }
+          console.log(headers);
+          return true
+          //Show alert with response headers.
+          // alert(headers);
+
+          // return (url.indexOf('github.com') === -1 || url.indexof('stackoverflow.com') === -1);
         }, // Will be saved with default filename 'index.html',
         directory: save_location,
         recursive: true,
         maxRecursiveDepth: 1,
         maxDepth: 2,
-        outputPathGenerator: function(resource, directory){
-            var urlObject = urlUtil.parse(resource.url);
-            // Todo: add logic to check if it is an HTML page which does not end in '.html'
-            // If so, append '/index.html'
-            var relativePath = './data/' + urlObject.path;
-            return pathUtil.resolve(directory, relativePath);
-        },
         subdirectories: [
             {
                 directory: 'img',

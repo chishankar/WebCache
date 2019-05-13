@@ -22,6 +22,10 @@ if (app && app.remote) {
 }
 
 const WORD_INDS_LOCATION = (remoteApp ? remoteApp.getPath('appData') : '/Users/peterwang/desktop' )+ '/word_inds';
+const virtualConsole = new jsdom.VirtualConsole();
+virtualConsole.on("error", () => {
+  console.log('Can\'t parse this css sheet')
+});
 
 const stopWords = ["i", "me", "my", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"];
 const INDEX_DIRECTORY = false;
@@ -173,13 +177,25 @@ export function update(filename, oldStr) {
   */
 function deleteFile(filename, str) {
 
+  console.log("Entered delete, above promise");
+  console.log("filename: " + filename);
+  console.log("toDelete: " + str);
+
   return new Promise(resolve => {
 
+        console.log("entered promise");
+
         let lookupID = lookup.findIndex(entry => {return entry.fileName === filename});
+
+        console.log("LookupID found");
+
         let arr = [];
 
         //if file doesn't exist, don't need to delete
         if (lookupID < 0) { console.log("deleting file not here"); resolve(); }
+
+        console.log("LookupID verified");
+
 
         let fileID = lookup[lookupID].ID;
         lookup[lookupID].fileName = '';
@@ -190,12 +206,14 @@ function deleteFile(filename, str) {
         //deletes each word individually
         let c = 0;
         while (c < deleteWords.length) {
+          console.log("entered delete loop");
           let word = deleteWords[c];
+          console.log(word);
           let wordIndMain = mainIndex.findIndex(wordInd => {return wordInd.w === word});
 
           //Only delete word if it exists
           if (wordIndMain >= 0) {
-
+            console.log(word + " was found!");
             //find corresponding range table
             let rngInd = rngTbl.findIndex(ind => {return ind.fn === mainIndex[wordIndMain].fn});
             let offset = 0;
@@ -206,6 +224,7 @@ function deleteFile(filename, str) {
 
             //if word is exclusive word
             if (checkExclusiveWord(word)) {
+              console.log("exclusive word");
               let locArr = Object.values(extractRngIndex(rngTbl[currRng]));
               let i = 0;
               //remove values as usual
@@ -237,6 +256,7 @@ function deleteFile(filename, str) {
             //find all words to delete in that single range so we only have to read/write once
               while (deleteWords[c] <= rngTbl[currRng].r[1]) {
                 word = deleteWords[c];
+                console.log("current word = " + word);
                 wordIndMain = mainIndex.findIndex(wordInd => wordInd.w === word);
 
                 if (wordIndMain >= 0) {
@@ -286,16 +306,21 @@ function deleteFile(filename, str) {
                     rngTbl[currRng].sz -= offset;
                   }
 
-                  c++;
+                c++;
               }
             }
 
+            console.log(c)
+            console.log("trying to store")
             let toStore = new Uint32Array(arr);
             writeUint32ArrFileSync(filePath, toStore);
 
           }
           //word doesn't exist, move onto next one
-          else { c++; }
+          else {
+            console.log("words deleted - incremending c")
+            c++;
+          }
      }
     resolve();
   });
@@ -436,28 +461,37 @@ function getFileIndex(filePath) {
         }
         else {
           //parsing html and metadata
-          const dom = new JSDOM(data);
-          let meta = dom.window.document.querySelectorAll("meta");
-          //console.log("Meta tag count: " + meta.length);
-          meta.forEach(tag => {
-            let content = tag.getAttribute('content');
-           // console.log(content);
-            cleanText = cleanText + " " + content + " ";
-          })
-          let img = dom.window.document.querySelectorAll("img");
-         // console.log("Img tag count: " + img.length);
-          img.forEach(tag => {
-            let alt =tag.getAttribute('alt');
-          //  console.log(alt);
-            cleanText = cleanText + " " + alt + " ";
-          });
-          dom.window.document.querySelectorAll("script, style").forEach(node => node.parentNode.removeChild(node));
-          cleanText = cleanText + " " + dom.window.document.documentElement.outerHTML.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, " ");
-          let pathStrs = filePath.split('/');
-          // TODO: this might break
-          cleanText = cleanText + " " + pathStrs[0].slice(0, pathStrs[0].lastIndexOf('-'));
-          cleanText = cleanText + " " + pathStrs[1];
-          cleanText = cleanText.toLowerCase();
+          try{
+            console.log(filePath)
+            console.log('1')
+            const dom = new JSDOM(data, { virtualConsole });
+            console.log('2')
+            let meta = dom.window.document.querySelectorAll("meta");
+            //console.log("Meta tag count: " + meta.length);
+            console.log('3')
+            meta.forEach(tag => {
+              console.log('4')
+              let content = tag.getAttribute('content');
+             // console.log(content);
+              cleanText = cleanText + " " + content + " ";
+            })
+            console.log('5')
+            let img = dom.window.document.querySelectorAll("img");
+           // console.log("Img tag count: " + img.length);
+            img.forEach(tag => {
+              let alt =tag.getAttribute('alt');
+            //  console.log(alt);
+              cleanText = cleanText + " " + alt + " ";
+            });
+            dom.window.document.querySelectorAll("script, style").forEach(node => node.parentNode.removeChild(node));
+            cleanText = cleanText + " " + dom.window.document.documentElement.outerHTML.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, " ");
+            let pathStrs = fileName.split('/');
+            cleanText = cleanText + " " + pathStrs[0].slice(0, pathStrs[0].lastIndexOf('-'));
+            cleanText = cleanText + " " + pathStrs[1];
+            cleanText = cleanText.toLowerCase();
+          }catch(e){
+            console.log("got the css error")
+          }
         }
         //returns the locations for every word in the file
         let wordMapping = wordLocsMapping(cleanText);

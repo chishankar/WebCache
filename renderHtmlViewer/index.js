@@ -17,6 +17,7 @@ var searchHighlight = document.createElement('style')
 
 // Event listener to highlighting within the iframe
 document.onmouseup = function(event){
+  console.log("User has highglighted content in iFrame")
   highlight(color);
 };
 
@@ -44,52 +45,56 @@ function highlight(color){
   }
 
   let data = {};
-  var highlightId = generateRandomId();
-  var subranges = [];
-  var spans = [];
+  console.log("Highlight got this color: " + color)
+  if (color.toLowerCase() !== 'default'){
+    console.log("I did not reach this statement")
+    var highlightId = generateRandomId();
+    var subranges = [];
+    var spans = [];
 
-  sel = window.getSelection();
-  data.text = sel.toString();
-  if (sel.rangeCount && sel.getRangeAt) {
-      range = sel.getRangeAt(0);
-      var startNode = range.startContainer;
-      do {
-        var nextNode = getNextNode(startNode, false, range.endContainer);
-        // check if the node is a TEXT node
-        if (startNode.nodeType == 3) {
-          var subrange = document.createRange();
-          subrange.setStart(startNode, startNode == range.startContainer ? range.startOffset : 0);
-          subrange.setEnd(startNode, startNode == range.endContainer ? range.endOffset : startNode.length);
+    sel = window.getSelection();
+    data.text = sel.toString();
+    if (sel.rangeCount && sel.getRangeAt) {
+        range = sel.getRangeAt(0);
+        var startNode = range.startContainer;
+        do {
+          var nextNode = getNextNode(startNode, false, range.endContainer);
+          // check if the node is a TEXT node
+          if (startNode.nodeType == 3) {
+            var subrange = document.createRange();
+            subrange.setStart(startNode, startNode == range.startContainer ? range.startOffset : 0);
+            subrange.setEnd(startNode, startNode == range.endContainer ? range.endOffset : startNode.length);
 
-          var span = document.createElement('span');
-          span.style.backgroundColor = color;
-          span.style.display = 'inline';
-          span.classList.add(highlightId);
-          span.classList.add(highlightIdentifier);
+            var span = document.createElement('span');
+            span.style.backgroundColor = color;
+            span.style.display = 'inline';
+            span.classList.add(highlightId);
+            span.classList.add(highlightIdentifier);
 
-          subranges.push(subrange);
-          spans.push(span);
-        }
-        if (!nextNode) {
-          break;
-        }
-        startNode = nextNode;
-      } while (true);
+            subranges.push(subrange);
+            spans.push(span);
+          }
+          if (!nextNode) {
+            break;
+          }
+          startNode = nextNode;
+        } while (true);
+    }
+
+    for (let i = 0; i < subranges.length; i++) {
+      subranges[i].surroundContents(spans[i]);
+    }
+
+    sel.removeAllRanges();
+
+    data.color = color;
+    data.id = highlightId;
+    data.comment = ""
+
+    window.top.postMessage({highlight: data}, '*');
   }
 
-  for (let i = 0; i < subranges.length; i++) {
-    subranges[i].surroundContents(spans[i]);
-  }
-
-  sel.removeAllRanges();
-
-  data.color = color;
-  data.id = highlightId;
-  data.comment = ""
-
-  window.top.postMessage({highlight: data}, '*');
-
-  return data;
+  return data
 }
 
 // given a class id, this will return all spans with that class id
@@ -116,7 +121,10 @@ function unwrap(spanList) {
 // Handles returning the data in the iFrame to send back for re-writing the file
 function handleSave(){
   removeSearchHighlights();
+  console.log("getting the innerHTML data")
   let data = {savedData: document.documentElement.innerHTML};
+  console.log(data)
+  console.log("sending data back to renderText component")
   window.parent.postMessage(data,"*");
 }
 
@@ -126,11 +134,6 @@ function changeIFrameSrc(path){
 }
 
 function hideHighlights(){
-  try{
-    doSearch('high');
-  } catch (e){
-    console.log
-  }
   let highlightList = getSpansWithHighlight(highlightIdentifier);
   highlightList.forEach(wrapper => {
     wrapper.classList.add('hide-webcache-highlight')
@@ -166,6 +169,7 @@ window.addEventListener('message',function(e){
 
   if (data.color){
     color = data.color;
+    console.log("Color has been updated in iframe to: " + color)
   }
 
   else if (data.src){
@@ -173,6 +177,7 @@ window.addEventListener('message',function(e){
   }
 
   else if (data === "save"){
+    console.log("recieved save request")
     handleSave();
   }
 
@@ -242,22 +247,3 @@ function doSearch(text) {
   }
 
 }
-// function doSearch(text) {
-//   if (window.find && window.getSelection) {
-//       document.designMode = "on";
-//       var sel = window.getSelection();
-//       sel.collapse(document.body, 0);
-
-//       while (window.find(text)) {
-//           document.execCommand("HiliteColor", false, "yellow");
-//           sel.collapseToEnd();
-//       }
-//       document.designMode = "off";
-//   } else if (document.body.createTextRange) {
-//       var textRange = document.body.createTextRange();
-//       while (textRange.findText(text)) {
-//           textRange.execCommand("BackColor", false, "yellow");
-//           textRange.collapse(false);
-//       }
-//   }
-// }

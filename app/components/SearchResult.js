@@ -61,7 +61,6 @@ class SearchResult extends React.Component {
     var file;
 
     if(this.props.filename.endsWith(".json")){
-      // let filePath = path.join(__dirname, '../data/' + this.props.filename);
       let filePath = this.props.filename;
 
       fs.readFileSync(filePath, {encoding: 'utf-8'}, function(err,data){

@@ -56,6 +56,9 @@ export default class RenderText extends Component<Props> {
   constructor(props){
     super(props);
     this.iframeRef = React.createRef();
+    this.state = {
+      savingStatus: false
+    }
   }
 
   getRenderText = (filePath, iframeRef, onloadFun) => {
@@ -69,7 +72,7 @@ export default class RenderText extends Component<Props> {
         var injectScript = fs.readFileSync(jsResource).toString();
         resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
         return (
-          <iframe name="iframe" className={ styles.setWidth }  ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml }></iframe>
+          <iframe name="iframe" className={ styles.setWidth } id="myIframe" ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml }></iframe>
         );
     }
     let resource = getResourceBuilder(filePath);
@@ -116,7 +119,7 @@ export default class RenderText extends Component<Props> {
       }
 
       return (
-        <iframe className={ styles.setWidth }  ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml } ></iframe>
+        <iframe className={ styles.setWidth }  className={ styles.setWidth } id="myIframe" ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml } ></iframe>
       );
     } catch (exception){
       //this.props.addNotification("Url does not exist!")
@@ -140,22 +143,21 @@ export default class RenderText extends Component<Props> {
       return true;
     }
 
-    if (this.props.color !== nextProps.color) {
-      // This updates color in index.js
-      let data = {color: pickColor.getColor(nextProps.color)};
+    if (this.props.color != nextProps.color){
+      data = {color: pickColor.getColor(nextProps.color)};
       this.iframeRef.contentWindow.postMessage(data,'*');
     }
 
     // Sends delete request to the iFrame upone delete id change
     if (this.props.delete !== nextProps.delete){
       data = {delete: nextProps.delete};
-      this.iframeRef.contentWindow.postMessage(data,'*');
+      this.iframeRef.contentWindow.postMessage(data, '*');
     }
 
     // This sends the id that the user wants to see
     if (this.props.viewId !== nextProps.viewId){
       data = {showHighlight: nextProps.viewId};
-      this.iframeRef.contentWindow.postMessage(data,'*');
+      this.iframeRef.contentWindow.postMessage(data, '*');
     }
 
     // This sends a message to the iFrame upon save request
@@ -166,22 +168,38 @@ export default class RenderText extends Component<Props> {
     // Sends hide or show highlights request to the iFrame
     if (this.props.hideHighlights !== nextProps.hideHighlights){
       data = nextProps.hideHighlights ? 'hide' : 'show';
-      this.iframeRef.contentWindow.postMessage(data,'*');
+      this.iframeRef.contentWindow.postMessage(data,"*");
     }
 
     if (this.props.searchTerm != nextProps.searchTerm){
       data = {searchFor: nextProps.searchTerm}
-      this.iframeRef.contentWindow.postMessage(data,'*');
+      this.iframeRef.contentWindow.postMessage(data,"*");
     }
 
     return false;
+  }
+
+  getAnnotationsFn = (filePath: String) => {
+    return filePath.substring(filePath.indexOf('data')+4);
+  }
+
+  _startSaving= () => {
+    this.setState({
+      savingStatus: true
+    })
+  }
+
+  _doneSaving = () => {
+    this.setState({
+      savingStatus: false
+    })
   }
 
   /**
    * Handles logic for saving the data back to the file that it was read from
    * @param {String} htmlData
    */
-  handleSave = (htmlData: String) => {
+  handleSave = (htmlData: String, callback: Function) => {
     var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
     let fileName = saveUrl.substring(saveUrl.lastIndexOf('/') + 1, saveUrl.lastIndexOf('.'));
 
@@ -219,7 +237,8 @@ export default class RenderText extends Component<Props> {
           fs.writeFile(annotationsFilePath, JSON.stringify(annotationJSON), (err) => {
             if (!err) {
               console.log(buf.toString());
-              console.log('Updating json index')
+              console.log("annotation filename: " + annotationsFn);
+              console.log('Updating json index');
               searchAPI.update(annotationsFn, buf.toString());
             } else {
               console.log("error writing updated annotations file");
@@ -237,6 +256,7 @@ export default class RenderText extends Component<Props> {
     fs.writeFileSync(saveUrl, updatedHtml);
     // console.log(this.props);
     this.props.addNotification(`File saved! ${this.props.save}`)
+    callback();
   }
 
   /**
@@ -252,7 +272,11 @@ export default class RenderText extends Component<Props> {
       window.postMessage(data,'*');
 
     } else if (e.data.savedData){
-      this.handleSave(e.data.savedData);
+      if (!this.state.savingStatus){
+        this._startSaving()
+        this.handleSave(e.data.savedData,this._doneSaving);
+      }
+
     } else if (e.data.highlight){
       if(e.data.highlight.text !== "" && e.data.highlight.color){
         // add highlight to store
@@ -270,7 +294,8 @@ export default class RenderText extends Component<Props> {
     if (this.props.activeUrl != 'app/default_landing_page.html') {
       this.iframeRef.contentWindow.postMessage("save", '*');
     } else {
-      this.props.addNotification("can't save annotations on the home page!");
+      console.log("tried to save on home page, incorrect usage")
+      this.props.addNotification("can't save annotations on the home page!")
     }
   }
 
