@@ -30,7 +30,20 @@ exports.getSite = function (inputUrl, save_location, callback){
           {url: inputUrl, filename: "index.html"}
         ],
         urlFilter: function(url) {
-          return (url.indexOf('github.com') === -1 || url.indexof('stackoverflow.com') === -1);
+          var req = new XMLHttpRequest();
+          req.open('HEAD', url, false);
+          req.send(null);
+          var headers = req.getAllResponseHeaders();
+          if (headers['x-frame-options'] || headers.includes('x-frame-options')){
+            console.log('This website cannot be cached')
+            return false
+          }
+          console.log(headers);
+          return true
+          //Show alert with response headers.
+          // alert(headers);
+
+          // return (url.indexOf('github.com') === -1 || url.indexof('stackoverflow.com') === -1);
         }, // Will be saved with default filename 'index.html',
         directory: save_location,
         recursive: true,

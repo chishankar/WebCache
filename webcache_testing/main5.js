@@ -11,6 +11,10 @@ const BSON = require('bson');
 var readline = require("readline");
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
+const virtualConsole = new jsdom.VirtualConsole();
+virtualConsole.on("error", () => {
+  console.log('Can\'t parse this css sheet')
+});
 
 const stopWords = ["i", "me", "my", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"];
 const INDEX_DIRECTORY = false;
@@ -446,27 +450,37 @@ function getFileIndex(fileName) {
         }
         else {
           //parsing html and metadata
-          const dom = new JSDOM(data);
-          let meta = dom.window.document.querySelectorAll("meta");
-          //console.log("Meta tag count: " + meta.length);
-          meta.forEach(tag => {
-            let content = tag.getAttribute('content');
-           // console.log(content);
-            cleanText = cleanText + " " + content + " ";
-          })
-          let img = dom.window.document.querySelectorAll("img");
-         // console.log("Img tag count: " + img.length);
-          img.forEach(tag => {
-            let alt =tag.getAttribute('alt');
-          //  console.log(alt);
-            cleanText = cleanText + " " + alt + " ";
-          });
-          dom.window.document.querySelectorAll("script, style").forEach(node => node.parentNode.removeChild(node));
-          cleanText = cleanText + " " + dom.window.document.documentElement.outerHTML.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, " ");
-          let pathStrs = fileName.split('/');
-          cleanText = cleanText + " " + pathStrs[0].slice(0, pathStrs[0].lastIndexOf('-'));
-          cleanText = cleanText + " " + pathStrs[1];
-          cleanText = cleanText.toLowerCase();
+          try{
+            console.log(filePath)
+            console.log('1')
+            const dom = new JSDOM(data, { virtualConsole });
+            console.log('2')
+            let meta = dom.window.document.querySelectorAll("meta");
+            //console.log("Meta tag count: " + meta.length);
+            console.log('3')
+            meta.forEach(tag => {
+              console.log('4')
+              let content = tag.getAttribute('content');
+             // console.log(content);
+              cleanText = cleanText + " " + content + " ";
+            })
+            console.log('5')
+            let img = dom.window.document.querySelectorAll("img");
+           // console.log("Img tag count: " + img.length);
+            img.forEach(tag => {
+              let alt =tag.getAttribute('alt');
+            //  console.log(alt);
+              cleanText = cleanText + " " + alt + " ";
+            });
+            dom.window.document.querySelectorAll("script, style").forEach(node => node.parentNode.removeChild(node));
+            cleanText = cleanText + " " + dom.window.document.documentElement.outerHTML.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, " ");
+            let pathStrs = fileName.split('/');
+            cleanText = cleanText + " " + pathStrs[0].slice(0, pathStrs[0].lastIndexOf('-'));
+            cleanText = cleanText + " " + pathStrs[1];
+            cleanText = cleanText.toLowerCase();
+          }catch(e){
+            console.log("got the css error")
+          }
         }
         //returns the locations for every word in the file
         let wordMapping = wordLocsMapping(cleanText);

@@ -80,7 +80,8 @@ export default class UrlSearch extends Component<Props>{
           console.log(save_location);
           fs.readdir('./' + save_location + '/', (err, files) => {
             if(err){
-              //this.store.dispatch(notficationActions.addNotification('Not a valid url'));
+              this.store.dispatch(notficationActions.addNotification('Not a valid url or URL cannot be loaded'));
+              console.log('errors suck')
               return;
             }else{
               let update = files.filter(fn => {return !['img', 'js', 'css', 'fonts'].includes(fn)}).map((x) => {
@@ -88,8 +89,8 @@ export default class UrlSearch extends Component<Props>{
               });
               searchAPI.addFilesToMainIndex(update);
             }
+            this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
           });
-          this.store.dispatch(urlsearchActions.changeActiveUrl(save_location));
           this.handleClickLoading();
       });
     }
