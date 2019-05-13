@@ -78,9 +78,6 @@ export default class RenderText extends Component<Props> {
     let resource = getResourceBuilder(filePath);
     let resourceDir = getResourceDirectory(filePath);
 
-    console.log("RESOURCE: " + resource);
-    console.log("RESOURCEDIR: " + resourceDir);
-
     try{
       var resourceHtml = fs.readFileSync(resource).toString();
 
@@ -113,17 +110,13 @@ export default class RenderText extends Component<Props> {
           }
         })
       } catch (err) {
-        // this.handleSaveTask()
-        //this.props.addNotification("No previous annotations");
-        console.log('INNER exception ' + err);
+        this.props.addNotification("No previous annotations");
       }
 
       return (
         <iframe className={ styles.setWidth }  className={ styles.setWidth } id="myIframe" ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml } ></iframe>
       );
     } catch (exception){
-      //this.props.addNotification("Url does not exist!")
-      console.log('OUTER exception ' + exception);
       return (
         <div>NOOOOOOOOOOOOOOOOOOOOOOOOO</div>
       )
@@ -211,9 +204,9 @@ export default class RenderText extends Component<Props> {
       {"lastUpdated":this.props.save}
     )
 
-    console.log("RenderText.js - saveUrl = " + saveUrl);
-    console.log("RenderText.js - fileName = " + fileName);
-    console.log("RenderText.js - annotationsFilePath = " + annotationsFilePath);
+    // console.log("RenderText.js - saveUrl = " + saveUrl);
+    // console.log("RenderText.js - fileName = " + fileName);
+    // console.log("RenderText.js - annotationsFilePath = " + annotationsFilePath);
 
     // add the file to the index for sanity
     searchAPI.addFilesToMainIndex([saveUrl]);
@@ -224,10 +217,8 @@ export default class RenderText extends Component<Props> {
         if (err || buf.length === 0) {
           fs.writeFile(annotationsFilePath, JSON.stringify(annotationJSON), (err) => {
             if (!err) {
-              console.log("adding new json to index");
               searchAPI.addFilesToMainIndex([annotationsFn]);
             } else {
-              console.log(err);
               console.log("error writing new annotations file");
             }
           });
@@ -236,9 +227,6 @@ export default class RenderText extends Component<Props> {
 
           fs.writeFile(annotationsFilePath, JSON.stringify(annotationJSON), (err) => {
             if (!err) {
-              console.log(buf.toString());
-              console.log("annotation filename: " + annotationsFn);
-              console.log('Updating json index');
               searchAPI.update(annotationsFn, buf.toString());
             } else {
               console.log("error writing updated annotations file");
@@ -265,7 +253,6 @@ export default class RenderText extends Component<Props> {
    * @param {Object} e
    */
   handleIFrameTask = (e: Object) => {
-    console.log('RenderText got: ' + e.data);
     if (e.data == 'highlighted text'){
 
       let data = {color: this.props.color};
@@ -294,7 +281,6 @@ export default class RenderText extends Component<Props> {
     if (this.props.activeUrl != 'app/default_landing_page.html') {
       this.iframeRef.contentWindow.postMessage("save", '*');
     } else {
-      console.log("tried to save on home page, incorrect usage")
       this.props.addNotification("can't save annotations on the home page!")
     }
   }

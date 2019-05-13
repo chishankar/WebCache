@@ -12,6 +12,9 @@ import Icons from './fileBrowserSource/icons'
 import folderIcon from '@material-ui/icons/folder';
 import 'font-awesome/css/font-awesome.min.css';
 import {connect} from 'react-redux';
+import app from 'electron';
+
+const remoteApp = app.remote.app;
 
 function mapStateToProps(state){
   return {
@@ -36,10 +39,6 @@ const styles = theme => ({
   }
 });
 
-// Builds the data directory path
-function getDataDirectory() {
-  return new resourcePath.ResourcePaths(null).getBaseDirectory() + '/data';
-}
 /**
  * @class
  * @param {Object} store
@@ -60,25 +59,14 @@ class FileDialogue extends React.Component {
         if (fs.lstatSync(fullPath).isDirectory()) {
            this.traverseDir(fullPath,result);
          } else {
-          if (fullPath.endsWith(".html")){
+          if (fullPath.endsWith(".html") || fullPath.endsWith(".htm")){
               result.push({
-              key: fullPath.slice(5)
+              key: fullPath.substring(remoteApp.getPath('userData').length)
             })
           }
          }
       });
   }
-
-  // /**
-  //  * Handles path changes, updates state, and copies to data dir
-  //  *
-  //  * @param  {Event} e
-  //  */
-  // onChange = (e: Event) => {
-  //   if (e.target.files[0]!=null){
-  //     this.setState({ path: e.target.files[0].path });
-  //   }
-  // }
 
   /**
    * Updates activeUrl in store to new current user selected file from file browser
@@ -87,14 +75,13 @@ class FileDialogue extends React.Component {
    *
    */
   handleFile = (file) =>{
-    console.log(file);
-    this.store.dispatch(urlsearchActions.changeActiveUrl("LOCALdata/" + file.key));
+    this.store.dispatch(urlsearchActions.changeActiveUrl("LOCAL" + remoteApp.getPath('userData') + '/' + file.key));
   };
 
   render(){
     const { classes } = this.props;
     var result = [];
-    this.traverseDir('./data',result);
+    this.traverseDir(remoteApp.getPath('userData'), result);
     return (
       <div>
         {/* <input type="file" webkitdirectory="true" onChange={this.onChange} className={classes.input} id="choose-directory" />
@@ -121,8 +108,6 @@ class FileDialogue extends React.Component {
         }}
         />
 
-        {/* <FileTree directory={this.state.path}
-        onFileClick={this.handleFile} fileTreeStyle="light"/> */}
       </div>
     );
   }

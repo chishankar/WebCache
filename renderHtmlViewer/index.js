@@ -1,4 +1,3 @@
-console.log("INDEX.JS successfully injected");
 var color = "default";
 var highlightIdentifier = 'webcache-highlight-mark'
 
@@ -17,7 +16,7 @@ var searchHighlight = document.createElement('style')
 
 // Event listener to highlighting within the iframe
 document.onmouseup = function(event){
-  console.log("User has highglighted content in iFrame")
+  // console.log("User has highglighted content in iFrame")
   highlight(color);
 };
 
@@ -45,9 +44,7 @@ function highlight(color){
   }
 
   let data = {};
-  console.log("Highlight got this color: " + color)
   if (color.toLowerCase() !== 'default'){
-    console.log("I did not reach this statement")
     var highlightId = generateRandomId();
     var subranges = [];
     var spans = [];
@@ -121,10 +118,7 @@ function unwrap(spanList) {
 // Handles returning the data in the iFrame to send back for re-writing the file
 function handleSave(){
   removeSearchHighlights();
-  console.log("getting the innerHTML data")
   let data = {savedData: document.documentElement.innerHTML};
-  console.log(data)
-  console.log("sending data back to renderText component")
   window.parent.postMessage(data,"*");
 }
 
@@ -169,7 +163,6 @@ window.addEventListener('message',function(e){
 
   if (data.color){
     color = data.color;
-    console.log("Color has been updated in iframe to: " + color)
   }
 
   else if (data.src){
@@ -177,7 +170,6 @@ window.addEventListener('message',function(e){
   }
 
   else if (data === "save"){
-    console.log("recieved save request")
     handleSave();
   }
 
@@ -192,11 +184,9 @@ window.addEventListener('message',function(e){
   else if (data.showHighlight){
 
     scrollToId(data.showHighlight)
-    console.log("HERE")
   }
 
   else if (data.searchFor){
-    console.log('here');
     doSearch(data.searchFor)
   }
 

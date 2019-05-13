@@ -4,25 +4,6 @@ var _ = require('lodash');
 const searchAPI = require('../../webcache_testing/main5.js');
 const path = require('path');
 
-
-
-class MyPlugin {
-
-  constructor(save_location){
-    this.loc = save_location
-  }
-
-  apply(registerAction) {
-      registerAction('onResourceSaved', ({resource}) => {
-        if (resource.type === "html"){
-          let fullPath = path.join('../',this.loc,resource.filename)
-          searchAPI.addFilesToMainIndex([fullPath]);
-        }
-      });
-  }
-}
-
-
 exports.getSite = function (inputUrl, save_location, callback){
     var options = {
         urls: [
@@ -33,17 +14,11 @@ exports.getSite = function (inputUrl, save_location, callback){
           var req = new XMLHttpRequest();
           req.open('HEAD', url, false);
           req.send(null);
-          var headers = req.getAllResponseHeaders();
-          if (headers['x-frame-options'] || headers.includes('x-frame-options')){
-            console.log('This website cannot be cached')
-            return false
+          var xframe = req.getResponseHeader("X-Frame-Options");
+          if (xframe.toLowerCase() == 'deny') {
+              return false;
           }
-          console.log(headers);
           return true
-          //Show alert with response headers.
-          // alert(headers);
-
-          // return (url.indexOf('github.com') === -1 || url.indexof('stackoverflow.com') === -1);
         }, // Will be saved with default filename 'index.html',
         directory: save_location,
         recursive: true,

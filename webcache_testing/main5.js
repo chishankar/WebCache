@@ -16,9 +16,6 @@ import app from 'electron';
 let remoteApp;
 if (app && app.remote) {
   remoteApp = app.remote.app;
-  console.log("main5.js REMOTEAPP exists: " + remoteApp.getPath('appData'));
-} else{
-  console.log("main5.js: remoteApp doesn't exist??????");
 }
 
 const WORD_INDS_LOCATION = (remoteApp ? remoteApp.getPath('appData') : '/Users/peterwang/desktop' )+ '/word_inds';
@@ -177,24 +174,21 @@ export function update(filename, oldStr) {
   */
 function deleteFile(filename, str) {
 
-  console.log("Entered delete, above promise");
-  console.log("filename: " + filename);
-  console.log("toDelete: " + str);
+  // console.log("Entered delete, above promise");
+  // console.log("filename: " + filename);
+  // console.log("toDelete: " + str);
 
   return new Promise(resolve => {
 
-        console.log("entered promise");
 
         let lookupID = lookup.findIndex(entry => {return entry.fileName === filename});
 
-        console.log("LookupID found");
 
         let arr = [];
 
         //if file doesn't exist, don't need to delete
         if (lookupID < 0) { console.log("deleting file not here"); resolve(); }
 
-        console.log("LookupID verified");
 
 
         let fileID = lookup[lookupID].ID;
@@ -206,14 +200,11 @@ function deleteFile(filename, str) {
         //deletes each word individually
         let c = 0;
         while (c < deleteWords.length) {
-          console.log("entered delete loop");
           let word = deleteWords[c];
-          console.log(word);
           let wordIndMain = mainIndex.findIndex(wordInd => {return wordInd.w === word});
 
           //Only delete word if it exists
           if (wordIndMain >= 0) {
-            console.log(word + " was found!");
             //find corresponding range table
             let rngInd = rngTbl.findIndex(ind => {return ind.fn === mainIndex[wordIndMain].fn});
             let offset = 0;
@@ -224,7 +215,6 @@ function deleteFile(filename, str) {
 
             //if word is exclusive word
             if (checkExclusiveWord(word)) {
-              console.log("exclusive word");
               let locArr = Object.values(extractRngIndex(rngTbl[currRng]));
               let i = 0;
               //remove values as usual
@@ -256,7 +246,6 @@ function deleteFile(filename, str) {
             //find all words to delete in that single range so we only have to read/write once
               while (deleteWords[c] <= rngTbl[currRng].r[1]) {
                 word = deleteWords[c];
-                console.log("current word = " + word);
                 wordIndMain = mainIndex.findIndex(wordInd => wordInd.w === word);
 
                 if (wordIndMain >= 0) {
@@ -289,7 +278,6 @@ function deleteFile(filename, str) {
 
                     //if word only appears in that file, remove it from index
                     if (mainIndex[wordIndMain].sz === 0) {
-                      console.log("deleting: " + mainIndex[wordIndMain].w);
                       mainIndex.splice(wordIndMain,1);
                       //if the upper or lower range is deleted
                       if (rngTbl[currRng].r[0] != rngTbl[currRng].r[1]) {
@@ -310,15 +298,12 @@ function deleteFile(filename, str) {
               }
             }
 
-            console.log(c)
-            console.log("trying to store")
             let toStore = new Uint32Array(arr);
             writeUint32ArrFileSync(filePath, toStore);
 
           }
           //word doesn't exist, move onto next one
           else {
-            console.log("words deleted - incremending c")
             c++;
           }
      }
@@ -346,7 +331,6 @@ export function saveIndexToFile(indexFn, fileTableFn, rngTableFn) {
         let filePath = path.join(WORD_INDS_LOCATION, './' + rngTableFn);
         fs.writeFile(filePath, BSON.serialize(rngTbl), function (err) {
           if (err) throw err;
-          console.log('Index saved to file');
           resolve();
         });
       });
@@ -361,14 +345,12 @@ export function saveIndexToFile(indexFn, fileTableFn, rngTableFn) {
    @param {string} rngTableFn - filename of the range table
   */
 export function loadIndexFromFile(indexFn, tableFn, rngTableFn) {
-  console.log("inside loadIndexFromFile, WORD_INDS_LOCATION = " + WORD_INDS_LOCATION);
   let filePath = path.join(WORD_INDS_LOCATION, './' + indexFn);
   return new Promise(resolve => {
     fs.readFile(filePath, function(err,data1){
       if (err) {mainIndex = []; return;}
 
       mainIndex = Object.values(BSON.deserialize(data1));
-      console.log('Index loaded from file');
       let filePath = path.join(WORD_INDS_LOCATION, './' + tableFn);
       fs.readFile(filePath, function(err,data2){
         if (err) {lookup = [{fileName: "", a: []}]; return;}
@@ -378,10 +360,6 @@ export function loadIndexFromFile(indexFn, tableFn, rngTableFn) {
         fs.readFile(filePath, function(err,data3){
           if (err) {rngTbl = []; return;}
           rngTbl = Object.values(BSON.deserialize(data3));
-          console.log("Index loaded from file.")
-          console.log("Index size: " + mainIndex.length);
-          console.log("Lookup size: " + lookup.length);
-          console.log("rngTbl size: " + rngTbl.length);
           resolve();
         });
       });
@@ -462,20 +440,13 @@ function getFileIndex(filePath) {
         else {
           //parsing html and metadata
           try{
-            console.log(filePath)
-            console.log('1')
             const dom = new JSDOM(data, { virtualConsole });
-            console.log('2')
             let meta = dom.window.document.querySelectorAll("meta");
-            //console.log("Meta tag count: " + meta.length);
-            console.log('3')
             meta.forEach(tag => {
-              console.log('4')
               let content = tag.getAttribute('content');
              // console.log(content);
               cleanText = cleanText + " " + content + " ";
             })
-            console.log('5')
             let img = dom.window.document.querySelectorAll("img");
            // console.log("Img tag count: " + img.length);
             img.forEach(tag => {
@@ -490,7 +461,6 @@ function getFileIndex(filePath) {
             cleanText = cleanText + " " + pathStrs[1];
             cleanText = cleanText.toLowerCase();
           }catch(e){
-            console.log("got the css error")
           }
         }
         //returns the locations for every word in the file
@@ -1022,11 +992,11 @@ export function search(searchStr) {
   if (mainIndex.length === 0) {
     return new Promise (function (resolve, reject) {
       loadIndexFromFile("index_BSON", "lookup_BSON", "ranges_BSON").then((thing) => {
-        console.log("Index loaded from file." + performance.now());
+        // console.log("Index loaded from file." + performance.now());
         var searchClauses = searchStr.trim().split('&&');
         var results;
         if (searchClauses.length > 1) {
-          console.log("Search clauses: " + searchClauses);
+          // console.log("Search clauses: " + searchClauses);
           var clauseResults = [];
           searchClauses.forEach(clause => {
             searchIndex(clause).results.forEach(hit => {
@@ -1042,7 +1012,7 @@ export function search(searchStr) {
           results = {results: clauseResults.filter(result => result.clauses == searchClauses.length)};
         } else {
           results = searchIndex(searchStr);
-          console.log(results);
+          // console.log(results);
         }
         resolve(results);
       });

@@ -10,6 +10,9 @@ import ScrapbookToWebcacheFormat from './convert-html.js';
 import * as notificationActions from '../actions/notification';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import app from 'electron';
+
+const remoteApp = app.remote.app;
 
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
@@ -56,7 +59,8 @@ class LegacyDataConverter extends Component<Props> {
   onChange = (e: Event) => {
     if (e.target.files[0] != null) {
       //this.setState({ path: e.target.files[0].path });
-      const destFolder = 'data/imported';
+      // const destFolder = 'data/imported';
+      const destFolder = remoteApp.getPath('userData') + '/imported';
       const sourceFolder = e.target.files[0].path;
       fs.copy(sourceFolder, destFolder, (err) => {
         if (err) return this.props.addNotification(`${err}`)
@@ -106,7 +110,8 @@ class LegacyDataConverter extends Component<Props> {
               this.WriteToFile(snJsonPath, JSON.stringify(fileArr[2]));
 
             } catch(e) {
-              this.props.addNotification(`${e}`)
+              // this.props.addNotification(`${e}`)
+              console.log('error in LegacyDataConverter.js: ' + e);
             }
           }
         }
@@ -135,7 +140,7 @@ class LegacyDataConverter extends Component<Props> {
         />
         <label htmlFor="import">
           <Button variant="contained" color="primary" component="span" className={classes.button}>
-            Import Legacy Data
+            Import Data
           </Button>
         </label>
       </div>

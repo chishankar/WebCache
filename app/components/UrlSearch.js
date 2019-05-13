@@ -69,9 +69,6 @@ export default class UrlSearch extends Component<Props>{
       }
     }
         //if it starts with http, replace with https
-
-
-      console.log(value);
     if (this.validURL(value)){
       this._setValidUrl(value);
       this._turnOnValidation();
@@ -95,19 +92,19 @@ export default class UrlSearch extends Component<Props>{
    */
   handleEnter = (event: Event) => {
     if (event.key === 'Enter' && this.state.showValidate){
-      var save_location = remoteApp.getPath('desktop') + '/' + this.state.validUrl.replace(/https:\/\//g,"") + '-' + Date.now();
+      var save_location = remoteApp.getPath('userData') + '/' + this.state.validUrl.replace(/https:\/\//g,"") + '-' + Date.now();
       this.handleClickLoading();
       getSite.getSite(this.state.validUrl, save_location, () => {
         //add the newly donwloaded files to the main index
-          console.log('SAVING NEW PAGE TO: ' + save_location);
+          // console.log('SAVING NEW PAGE TO: ' + save_location);
           fs.readdir(save_location, (err, files) => {
             if(err){
               this.store.dispatch(notficationActions.addNotification('Not a valid url or URL cannot be loaded'));
-              console.log('errors suck')
+              // console.log('errors suck')
               return;
             }else{
               let update = files.filter(fn => {return !['img', 'js', 'css', 'fonts'].includes(fn)}).map((x) => {
-                console.log("adding " + save_location + '/' + x + " to index");
+                // console.log("adding " + save_location + '/' + x + " to index");
                 return save_location + "/" + x
               });
               searchAPI.addFilesToMainIndex(update);
