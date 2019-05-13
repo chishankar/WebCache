@@ -56,6 +56,9 @@ export default class RenderText extends Component<Props> {
   constructor(props){
     super(props);
     this.iframeRef = React.createRef();
+    this.state = {
+      savingStatus: false
+    }
   }
 
   getRenderText = (filePath, iframeRef, onloadFun) => {
@@ -172,11 +175,23 @@ export default class RenderText extends Component<Props> {
     return filePath.substring(filePath.indexOf('data')+4);
   }
 
+  _startSaving= () => {
+    this.setState({
+      savingStatus: true
+    })
+  }
+
+  _doneSaving = () => {
+    this.setState({
+      savingStatus: false
+    })
+  }
+
   /**
    * Handles logic for saving the data back to the file that it was read from
    * @param {String} htmlData
    */
-  handleSave = (htmlData: String) => {
+  handleSave = (htmlData: String, callback: Function) => {
     var saveUrl = this.props.activeUrl.startsWith("LOCAL") ? this.props.activeUrl.substring(5) : this.props.activeUrl + '/index.html';
     let fileName = saveUrl.substring(saveUrl.lastIndexOf('/') + 1, saveUrl.lastIndexOf('.'));
 
@@ -226,6 +241,7 @@ export default class RenderText extends Component<Props> {
     fs.writeFileSync(saveUrl, updatedHtml);
     // console.log(this.props);
     this.props.addNotification(`File saved! ${this.props.save}`)
+    callback();
   }
 
   /**
@@ -240,7 +256,10 @@ export default class RenderText extends Component<Props> {
       window.postMessage(data,'*');
 
     } else if (e.data.savedData){
-      this.handleSave(e.data.savedData);
+      if (!this.state.savingStatus){
+        this._startSaving()
+        this.handleSave(e.data.savedData,this._doneSaving);
+      }
 
     } else if (e.data.highlight){
       if(e.data.highlight.text !== "" && e.data.highlight.color){
