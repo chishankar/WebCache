@@ -10,10 +10,18 @@ import FileBrowser from './fileBrowserSource/browser'
 import Moment from 'moment'
 import Icons from './fileBrowserSource/icons'
 import folderIcon from '@material-ui/icons/folder';
-import 'font-awesome/css/font-awesome.min.css'
+import 'font-awesome/css/font-awesome.min.css';
+import {connect} from 'react-redux';
+
+function mapStateToProps(state){
+  return {
+   url: state.urlsearch.activeUrl,
+  }
+}
 
 var path = require('path');
 const fs = require('fs');
+
 
 const styles = theme => ({
   button: {
@@ -40,42 +48,37 @@ function getDataDirectory() {
 class FileDialogue extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      path: '/data',
-      result: [],
-    };
+    // this.state = {
+    //   path: '/data',
+    // };
     this.store = this.props.store;
   }
 
- traverseDir = (dir: String) => {
+ traverseDir = (dir: String, result: Array) => {
       fs.readdirSync(dir).forEach(file => {
         let fullPath = path.join(dir, file);
         if (fs.lstatSync(fullPath).isDirectory()) {
-           this.traverseDir(fullPath);
+           this.traverseDir(fullPath,result);
          } else {
-          this.state.result.push({
-            key: fullPath.slice(5),
-            size: fs.lstatSync(fullPath).size,
-            modified: fs.lstatSync(fullPath).mtime,
-          })
+          if (fullPath.endsWith(".html")){
+              result.push({
+              key: fullPath.slice(5)
+            })
+          }
          }
       });
   }
 
-  componentWillMount(){
-    this.traverseDir('./data');
-  }
-
-  /**
-   * Handles path changes, updates state, and copies to data dir
-   *
-   * @param  {Event} e
-   */
-  onChange = (e: Event) => {
-    if (e.target.files[0]!=null){
-      this.setState({ path: e.target.files[0].path });
-    }
-  }
+  // /**
+  //  * Handles path changes, updates state, and copies to data dir
+  //  *
+  //  * @param  {Event} e
+  //  */
+  // onChange = (e: Event) => {
+  //   if (e.target.files[0]!=null){
+  //     this.setState({ path: e.target.files[0].path });
+  //   }
+  // }
 
   /**
    * Updates activeUrl in store to new current user selected file from file browser
@@ -90,20 +93,21 @@ class FileDialogue extends React.Component {
 
   render(){
     const { classes } = this.props;
-
+    var result = [];
+    this.traverseDir('./data',result);
     return (
       <div>
-        <input type="file" webkitdirectory="true" onChange={this.onChange} className={classes.input} id="choose-directory" />
+        {/* <input type="file" webkitdirectory="true" onChange={this.onChange} className={classes.input} id="choose-directory" />
         <label htmlFor="choose-directory">
           <Button variant="contained" component="span" className={classes.button}>
             Choose Directory
           </Button>
-        </label>
+        </label> */}
         <Divider />
         <h3>Files</h3>
 
         <FileBrowser
-          files={this.state.result}
+          files={result}
           onSelectFile={this.handleFile}
           icons={{
           File: <i className="fas fa-file"></i>,
@@ -124,4 +128,7 @@ class FileDialogue extends React.Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(FileDialogue);
+export default connect(
+  mapStateToProps,
+  null,
+)(withStyles(styles, { withTheme: true })(FileDialogue));
