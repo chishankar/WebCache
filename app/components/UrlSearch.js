@@ -49,7 +49,26 @@ export default class UrlSearch extends Component<Props>{
    * @param  {Event} event
    */
   handleInput = (event: Event) => {
+
     let value = event.target.value;
+
+    //Following code makes sure url starts with https
+
+    var pattern1 = new RegExp("^https:\/\/");
+    var pattern2 = new RegExp("^http:\/\/");
+
+    //if doesn't include http(s) add it
+    if (pattern1.test(value) === false) {
+      if (pattern2.test(value)) {
+        value = "https" + value.substring(4);
+      } else {
+      value = "https://" + value;
+      }
+    }
+        //if it starts with http, replace with https
+
+
+      console.log(value);
     if (this.validURL(value)){
       this._setValidUrl(value);
       this._turnOnValidation();
@@ -124,7 +143,7 @@ export default class UrlSearch extends Component<Props>{
    * @param  {String} str
    */
   validURL = (str: String) => {
-    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    var pattern = new RegExp( // protocol
       '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
       '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
       '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
