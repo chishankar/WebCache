@@ -54,20 +54,21 @@ export default class UrlSearch extends Component<Props>{
 
     //Following code makes sure url starts with https
 
-    var pattern1 = new RegExp("^https?:\/\/");
-    var pattern2 = new RegExp("^http:\/\//");
+    var pattern1 = new RegExp("^https:\/\/");
+    var pattern2 = new RegExp("^http:\/\/");
 
     //if doesn't include http(s) add it
     if (pattern1.test(value) === false) {
-      value = "https://" + value;
+      if (pattern2.test(value)) {
+        value = "https" + value.substring(4);
       } else {
-        //if it starts with http, replace with https
-        if (pattern2.test(value)) {
-          value = "https" + value.substring(4);
-        }
+      value = "https://" + value;
       }
+    }
+        //if it starts with http, replace with https
 
 
+      console.log(value);
     if (this.validURL(value)){
       this._setValidUrl(value);
       this._turnOnValidation();
