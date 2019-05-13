@@ -19,6 +19,7 @@ const remoteApp = app.remote.app;
 function mapStateToProps(state){
   return {
    url: state.urlsearch.activeUrl,
+   importState: state.imports.importState
   }
 }
 

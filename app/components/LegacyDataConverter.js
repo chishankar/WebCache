@@ -2,7 +2,7 @@ import React, { Component }from 'react';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import * as addNotification from '../actions/notification';
+import * as fileTreeActions from '../actions/import';
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import { ifError } from 'assert';
@@ -16,7 +16,8 @@ const remoteApp = app.remote.app;
 
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
-    addNotification: notificationActions.addNotification
+    addNotification: notificationActions.addNotification,
+    renderFileTree: fileTreeActions.importChange
   },dispatch)
 }
 
@@ -70,7 +71,7 @@ class LegacyDataConverter extends Component<Props> {
         } catch(e){
           this.props.addNotification(`${e}`)
         }
-
+        this.props.renderFileTree();
         console.log('success! moved files to data directory');
       });
 
@@ -88,6 +89,7 @@ class LegacyDataConverter extends Component<Props> {
 
           var htmlFilePath = path.join(dirPath,files[i]);
           var stat = fs.lstatSync(htmlFilePath);
+
           if (stat.isDirectory()) {
             this.FindFile(htmlFilePath);
           } else if (files[i].indexOf('index.html') == 0) {
