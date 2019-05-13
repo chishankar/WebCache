@@ -96,9 +96,15 @@ class LegacyDataConverter extends Component<Props> {
               //console.log(fileArr[0]);
               //console.log(fileArr[3]);
 
+              // Write converted HTML to files
               this.WriteToFile(htmlFilePath, fileArr[0]);
+
+              // Write converted annotation to files
               this.WriteToFile(annotJsonPath, JSON.stringify(fileArr[1]));
+
+              // Write stkicy jason to files
               this.WriteToFile(snJsonPath, JSON.stringify(fileArr[2]));
+
             } catch(e) {
               this.props.addNotification(`${e}`)
             }
@@ -135,40 +141,6 @@ class LegacyDataConverter extends Component<Props> {
       </div>
     );
   }
-}
-
-async function FindFile(dirPath) {
-  fs.readdir(dirPath, async (err, files) => {
-    // console.log(files);
-    // console.log(items);
-    if (!err) {
-      for (var i = 0; i < files.length; i++) {
-
-        var htmlFilePath = path.join(dirPath,files[i]);
-        var stat = fs.lstatSync(htmlFilePath);
-        if (stat.isDirectory()) {
-          FindFile(htmlFilePath);
-        } else if (files[i].indexOf('index.html') == 0) {
-          var datFilePath = path.join(dirPath,'index.dat');
-          var annotJsonPath = path.join(dirPath,'annotations-index.json');
-          var snJsonPath = path.join(dirPath,'sticky.json');
-
-          var fileArr = await ScrapbookToWebcacheFormat(htmlFilePath, datFilePath);
-          // console.log(filePath)
-          //console.log(fileArr[0]);
-          //console.log(fileArr[3]);
-
-          WriteToFile(htmlFilePath, fileArr[0]);
-          WriteToFile(annotJsonPath, JSON.stringify(fileArr[1]));
-          WriteToFile(snJsonPath, JSON.stringify(fileArr[2]));
-        }
-      }
-    }
-  });
-}
-
-async function WriteToFile(filePath, replacement) {
-  await writeFile(filePath, replacement);
 }
 
 export default connect(

@@ -77,6 +77,7 @@ export default class RenderText extends Component<Props> {
     let resource = getResourceBuilder(filePath);
     let resourceDir = getResourceDirectory(filePath);
 
+    console.log(resource);
     let jsResource = path.join(remoteApp.getAppPath(), '../../../../../../../renderHtmlViwer/index.js');
 
     try{
