@@ -3,7 +3,7 @@ var urlUtil = require('url');
 var _ = require('lodash');
 const searchAPI = require('../../webcache_testing/main5.js');
 const path = require('path');
-
+const iframeRegex = /x-frame-options:\s+(\w*)/
 
 
 class MyPlugin {
@@ -33,15 +33,18 @@ exports.getSite = function (inputUrl, save_location, callback){
           var req = new XMLHttpRequest();
           req.open('HEAD', url, false);
           req.send(null);
-          var headers = req.getAllResponseHeaders();
-          if (headers['x-frame-options'] || headers.includes('x-frame-options')){
-            console.log('This website cannot be cached')
+          let header = req.getAllResponseHeaders();
+
+          let matches = header.match(iframeRegex);
+
+          console.log(matches)
+          //  || matches[1].toLowerCase() === 'sameorigin')
+          if (matches && matches[1].toLowerCase() === 'deny'){
+            console.log(matches[1].toLowerCase())
             return false
           }
-          console.log(headers);
-          return true
-          //Show alert with response headers.
-          // alert(headers);
+
+          return true;
 
           // return (url.indexOf('github.com') === -1 || url.indexof('stackoverflow.com') === -1);
         }, // Will be saved with default filename 'index.html',
