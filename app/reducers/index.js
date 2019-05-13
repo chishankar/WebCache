@@ -9,6 +9,7 @@ import filesearch from './filesearch';
 import sidebarstate from './sidebarstate';
 import save from './save';
 import notification from './notification';
+import imports from './import'
 
 export default function createRootReducer(history: History) {
   return combineReducers({
@@ -20,6 +21,7 @@ export default function createRootReducer(history: History) {
     sidebar,
     sidebarstate,
     save,
-    notification
+    notification,
+    imports
   });
 }

@@ -16,6 +16,7 @@ import {connect} from 'react-redux';
 function mapStateToProps(state){
   return {
    url: state.urlsearch.activeUrl,
+   importState: state.imports.importState
   }
 }
 
@@ -60,7 +61,7 @@ class FileDialogue extends React.Component {
         if (fs.lstatSync(fullPath).isDirectory()) {
            this.traverseDir(fullPath,result);
          } else {
-          if (fullPath.endsWith(".html")){
+          if (fullPath.endsWith(".html") || fullPath.endsWith(".htm")){
               result.push({
               key: fullPath.slice(5)
             })

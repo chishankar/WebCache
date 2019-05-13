@@ -309,14 +309,13 @@ function randomID() {
 
 // Returns the directory resource
 function replacePathsDirectory(htmlPath,html){
-  var htmlPathDir = getResourceDirectory(htmlPath);
+  console.log(htmlPath);
+
+  var htmlPathDir = path.join(htmlPath, '..') + '/';
+
   html = html.replace(/href="([^#].+?)"/g, "href=\"" + path.resolve(htmlPathDir, "$1") + "\"");
   html = html.replace(/src="([^#].+?)"/g, "src=\"" + path.resolve(htmlPathDir, "$1") + "\"");
+  console.log( path.resolve(htmlPathDir, "$1"));
   return html;
-}
-
-// Returns the base resource
-function getResourceDirectory(resourcePath){
-    return path.join(resourcePath, '..') + '/';
 }
 // ############################################################################/
