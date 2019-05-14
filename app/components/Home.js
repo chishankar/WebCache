@@ -45,7 +45,7 @@ const styles = theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     color: 'black',
-    backgroundColor: '#485665',
+    backgroundColor: '#fff',
     zIndex: theme.zIndex.drawer + 1,
   },
   appBarShift: {
@@ -71,7 +71,7 @@ const styles = theme => ({
   drawerPaper: {
     width: drawerWidth,
     color: 'black',
-    backgroundColor: '485665 !important',
+    backgroundColor: '#fff!important',
     padding: '0 !important',
     border: 'inherit'
   },

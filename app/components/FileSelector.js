@@ -32,9 +32,6 @@ const styles = theme => ({
     display: 'none',
   },
 
-  folder: {
-    margin: 10 + 'px !important',
-  }
 });
 
 // Builds the data directory path
