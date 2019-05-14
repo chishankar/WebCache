@@ -431,11 +431,13 @@ function getFileIndex(filePath) {
         //if annotations file
         if (filePath.slice(-5) === ".json") {
           let json = JSON.parse(data);
-          json.highlightData.forEach(highlight => {
-            cleanText = cleanText + " \n " + highlight.comment;
-          });
-          cleanText = cleanText.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, ' ');
-          cleanText = cleanText.toLowerCase();
+          if(json.highlightData) {
+            json.highlightData.forEach(highlight => {
+              cleanText = cleanText + " \n " + highlight.comment;
+            });
+            cleanText = cleanText.replace(/<\/?[^>]+(>|$)/g, " ").replace(/[^\w\s]/gi, ' ');
+            cleanText = cleanText.toLowerCase();
+          }
         }
         else {
           //parsing html and metadata
@@ -883,7 +885,11 @@ function addToMainAux(fileIndex) {
   }
 }
 
-
+export function resetIndex() {
+  lookup = [{fileName: "", a: []}];
+  rngTbl = [];
+  mainIndex = [];
+}
 
 /**
    Main function that will be called by the front end when we
