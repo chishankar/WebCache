@@ -89,11 +89,8 @@ class LegacyDataConverter extends Component<Props> {
           this.FindFile(destFolder, this.turnOffLoading);
           this.props.addNotification('Scrapbook data imported')
         } catch(e){
-          console.log(e.stack);
-          console.log(e);
         }
         this.props.renderFileTree();
-        console.log('success! moved files to data directory');
       });
     }
   };

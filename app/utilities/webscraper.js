@@ -54,13 +54,9 @@ exports.getSite = function (inputUrl, save_location, callback){
     }
   scrape(options).then((result) => {
     // Outputs HTML
-    // console.log('result of scraping finishing: ' + result);
-    // console.log("Content succesfully downloaded");
     callback(true);
     return "passed"
 }).catch((err) => {
-    // console.log(err);
-    // console.log("error in webscraper.js: " + err)
     callback(false);
     return "failed"
 });

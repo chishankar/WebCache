@@ -213,7 +213,6 @@ export default class MenuBuilder {
             accelerator: 'Ctrl+O',
             click: () => {
               dialog.showOpenDialog(options, (filePath) => {
-                console.log(filePath);
                 this.store.dispatch(urlsearchActions.changeActiveUrl(filePaths));
               })
             }

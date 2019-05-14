@@ -110,16 +110,12 @@ export default class UrlSearch extends Component<Props>{
             this.store.dispatch(notficationActions.addNotification('Webpage could not be re-loaded.'));
             return;
           }
-          // console.log('SAVING NEW PAGE TO: ' + save_location);
-          // console.log('callback called with ' + success);
           fs.readdir(save_location, (err, files) => {
             if(err){
               this.store.dispatch(notifcationActions.addNotification('Not a valid url or URL cannot be loaded'));
-              console.log(err);
               return;
             }else{
               let update = files.filter(fn => {return !['img', 'js', 'css', 'fonts', 'misc'].includes(fn)}).map((x) => {
-                // console.log("adding " + save_location + '/' + x + " to index");
                 return save_location + "/" + x
               });
               searchAPI.addFilesToMainIndex(update);

@@ -63,15 +63,11 @@ export default class FileSearch extends Component<Props>{
   handleEnter = (event: Event) => {
     if (event.key === 'Enter'){
       var elem = event.srcElement || event.target;
-      // console.log("Search term: " + elem.value);
       var that = this;
       searchAPI.search(elem.value).then(result => {
-        console.log('search worked');
         this.store.dispatch(fileSearchActions.changeSearchData(JSON.stringify(result)));
         this.store.dispatch(fileSearchActions.updateSearchTerm(elem.value));
       }).catch(function (error) {
-        console.log('gonna delete and re-index.............');
-
         that.store.dispatch(notificationActions.addNotification('A fatal error has been caught. Your files are being re-indexed'));
         fs.removeSync(remoteApp.getPath('appData') + '/word_inds');
         searchAPI.resetIndex();
