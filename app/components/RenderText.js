@@ -127,7 +127,18 @@ export default class RenderText extends Component<Props> {
 
   // Once the component mounts, add an event listener to listen for messages and pass all the messages to the handleIFrameTask
   componentDidMount(){
-    window.addEventListener('message',this.handleIFrameTask)
+
+    let p = new Promise(function(resolve, reject){
+      window.addEventListener('message',this.handleIFrameTask);
+      resolve(true);
+    })
+
+    p.then(function(result){
+      let data = {color: pickColor.getColor(nextProps.color)};
+      this.iframeRef.contentWindow.postMessage(data,'*');
+      return;
+    })
+
   }
 
   shouldComponentUpdate(nextProps: Object, nextState: Object){
