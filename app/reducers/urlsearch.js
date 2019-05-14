@@ -9,7 +9,6 @@ export default function urlsearch(state=initialState, action) {
     switch(action.type){
 
       case 'URLUPDATE':
-        console.log("CHANGING URL TO: " + action.activeUrl);
         return Object.assign({},state, {
           activeUrl: action.activeUrl
        });

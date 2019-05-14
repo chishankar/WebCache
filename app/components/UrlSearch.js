@@ -3,7 +3,7 @@ import styles from './UrlSearch.css';
 import 'font-awesome/css/font-awesome.min.css';
 import getSite from '../utilities/webscraper';
 import * as urlsearchActions from '../actions/urlsearch';
-import * as notficationActions from '../actions/notification';
+import * as notificationActions from '../actions/notification';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fade from '@material-ui/core/Fade';
@@ -94,16 +94,31 @@ export default class UrlSearch extends Component<Props>{
     if (event.key === 'Enter' && this.state.showValidate){
       var save_location = remoteApp.getPath('userData') + '/' + this.state.validUrl.replace(/https:\/\//g,"") + '-' + Date.now();
       this.handleClickLoading();
-      getSite.getSite(this.state.validUrl, save_location, () => {
+      var req = new XMLHttpRequest();
+      req.open('HEAD', this.state.validUrl, false);
+      req.send(null);
+      var xframe = req.getResponseHeader("X-Frame-Options");
+      if (xframe && xframe.toLowerCase() == 'deny') {
+          this.store.dispatch(notificationActions.addNotification('Webpage could not be re-loaded. Please use the Save As feature on your browser.'));
+          this.handleClickLoading();
+          return;
+      }
+
+      getSite.getSite(this.state.validUrl, save_location, (success) => {
         //add the newly donwloaded files to the main index
+          if (!success) {
+            this.store.dispatch(notficationActions.addNotification('Webpage could not be re-loaded.'));
+            return;
+          }
           // console.log('SAVING NEW PAGE TO: ' + save_location);
+          // console.log('callback called with ' + success);
           fs.readdir(save_location, (err, files) => {
             if(err){
-              this.store.dispatch(notficationActions.addNotification('Not a valid url or URL cannot be loaded'));
-              // console.log('errors suck')
+              this.store.dispatch(notifcationActions.addNotification('Not a valid url or URL cannot be loaded'));
+              console.log(err);
               return;
             }else{
-              let update = files.filter(fn => {return !['img', 'js', 'css', 'fonts'].includes(fn)}).map((x) => {
+              let update = files.filter(fn => {return !['img', 'js', 'css', 'fonts', 'misc'].includes(fn)}).map((x) => {
                 // console.log("adding " + save_location + '/' + x + " to index");
                 return save_location + "/" + x
               });

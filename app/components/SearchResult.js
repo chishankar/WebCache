@@ -41,8 +41,6 @@ class SearchResult extends React.Component {
   handleClick = () => {
     let filePath;
 
-    console.log("SearchResult.js clicked filepath: " + this.props.filename);
-
     filePath = this.props.filename;
     if (this.props.filename.endsWith("json")) {
       var regexFile = this.props.filename.match(/annotations-(.*)\.json/)
@@ -50,12 +48,10 @@ class SearchResult extends React.Component {
       filePath = path.join(filePath, "../" + file + ".html");
     }
 
-    console.log("Search result file path: " + filePath);
     this.store.dispatch(urlsearchActions.changeActiveUrl('LOCAL' + filePath));
   };
 
   render() {
-    console.log("SearchResult.js filepath: " + this.props.filename);
     var regexWebsite = this.props.filename.match(/((\w+\.)?\w+\.\w+)/);
     var regexDate = this.props.filename.match(/\-(\d+)\//);
     var file;

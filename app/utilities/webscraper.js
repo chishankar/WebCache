@@ -10,16 +10,7 @@ exports.getSite = function (inputUrl, save_location, callback){
           // filename: inputUrl.match(/\//g).length > 2 ? inputUrl.slice(inputUrl.lastIndexOf('/')) : 'index.html'
           {url: inputUrl, filename: "index.html"}
         ],
-        urlFilter: function(url) {
-          var req = new XMLHttpRequest();
-          req.open('HEAD', url, false);
-          req.send(null);
-          var xframe = req.getResponseHeader("X-Frame-Options");
-          if (xframe.toLowerCase() == 'deny') {
-              return false;
-          }
-          return true
-        }, // Will be saved with default filename 'index.html',
+        // Will be saved with default filename 'index.html',
         directory: save_location,
         recursive: true,
         maxRecursiveDepth: 1,
@@ -69,7 +60,7 @@ exports.getSite = function (inputUrl, save_location, callback){
     return "passed"
 }).catch((err) => {
     // console.log(err);
-    console.log("THERE WAS AN ERROR")
+    // console.log("error in webscraper.js: " + err)
     callback(false);
     return "failed"
 });

@@ -114,12 +114,12 @@ export default class RenderText extends Component<Props> {
       }
 
       return (
-        <iframe className={ styles.setWidth }  className={ styles.setWidth } id="myIframe" ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml } ></iframe>
+        <iframe className={ styles.setWidth }  sandbox="allow-scripts" className={ styles.setWidth } id="myIframe" ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml } ></iframe>
       );
     } catch (exception){
-      return (
-        <div>NOOOOOOOOOOOOOOOOOOOOOOOOO</div>
-      )
+        return (
+          <div>You've deleted a file but it's still in the search result. Please click another link.</div>
+        );
     }
 
   }
@@ -209,7 +209,7 @@ export default class RenderText extends Component<Props> {
     // console.log("RenderText.js - annotationsFilePath = " + annotationsFilePath);
 
     // add the file to the index for sanity
-    searchAPI.addFilesToMainIndex([saveUrl]);
+    // searchAPI.addFilesToMainIndex([saveUrl]);
 
     //update the old index of the annotations json page
     try {

@@ -25,6 +25,7 @@ function mapDispatchToProps(dispatch){
 var path = require('path');
 const util = require('util');
 const fs = require('fs-extra');
+const searchAPI = require('../../webcache_testing/main5.js');
 
 // Convert fs.readFile into Promise version of same
 const readFile = util.promisify(fs.readFile);
@@ -67,9 +68,10 @@ class LegacyDataConverter extends Component<Props> {
         if (err) return this.props.addNotification(`${err}`)
         try{
           this.FindFile(destFolder);
-          this.props.addNotification('Scrapebook data imported')
+          this.props.addNotification('Scrapbook data imported')
         } catch(e){
-          this.props.addNotification(`${e}`)
+          console.log(e.stack);
+          console.log(e);
         }
         this.props.renderFileTree();
         console.log('success! moved files to data directory');
@@ -92,28 +94,28 @@ class LegacyDataConverter extends Component<Props> {
 
           if (stat.isDirectory()) {
             this.FindFile(htmlFilePath);
-          } else if (files[i].indexOf('index.html') == 0) {
+          } else if (files[i].indexOf('html') != -1) {
             var datFilePath = path.join(dirPath,'index.dat');
             var annotJsonPath = path.join(dirPath,'annotations-index.json');
             var snJsonPath = path.join(dirPath,'sticky.json');
             try{
               var fileArr = await ScrapbookToWebcacheFormat(htmlFilePath, datFilePath);
-              // console.log(filePath)
-              //console.log(fileArr[0]);
-              //console.log(fileArr[3]);
 
               // Write converted HTML to files
               this.WriteToFile(htmlFilePath, fileArr[0]);
+              searchAPI.addFilesToMainIndex([htmlFilePath]);
 
               // Write converted annotation to files
               this.WriteToFile(annotJsonPath, JSON.stringify(fileArr[1]));
+              searchAPI.addFilesToMainIndex([annotJsonPath]);
 
               // Write stkicy jason to files
               this.WriteToFile(snJsonPath, JSON.stringify(fileArr[2]));
 
             } catch(e) {
-              // this.props.addNotification(`${e}`)
-              console.log('error in LegacyDataConverter.js: ' + e);
+              // handle non-legacy imported files
+              searchAPI.addFilesToMainIndex([htmlFilePath]);
+              searchAPI.addFilesToMainIndex([annotJsonPath]);
             }
           }
         }

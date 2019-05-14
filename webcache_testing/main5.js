@@ -893,8 +893,8 @@ function addToMainAux(fileIndex) {
   */
 
 export function addFilesToMainIndex(fileNames) {
-  console.log("inside addFilesToMainIndex: WORD_INDS_LOCATION = " + WORD_INDS_LOCATION);
-  console.log("called with: " + JSON.stringify(fileNames));
+  // console.log("inside addFilesToMainIndex: WORD_INDS_LOCATION = " + WORD_INDS_LOCATION);
+  // console.log("called with: " + JSON.stringify(fileNames));
   if (!fs.existsSync(WORD_INDS_LOCATION)){
     fs.mkdirSync(WORD_INDS_LOCATION);
   }
@@ -936,7 +936,7 @@ export function addFilesToMainIndex(fileNames) {
         tempIndex = [];
       }
       saveIndexToFile("index_BSON", "lookup_BSON", "ranges_BSON");
-      console.log("Index saved to file.");
+      // console.log("Index saved to file.");
       resolveAll();
     });
   });
