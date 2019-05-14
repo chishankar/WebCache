@@ -74,15 +74,15 @@ export default class FileSearch extends Component<Props>{
 
         that.store.dispatch(notificationActions.addNotification('A fatal error has been caught. Your files are being re-indexed'));
         fs.removeSync(remoteApp.getPath('appData') + '/word_inds');
+        searchAPI.resetIndex();
         fs.mkdir(remoteApp.getPath('appData') + '/word_inds');
         // add all files in the folders
         var all_files = [];
         that.getAllFilesInUserData(remoteApp.getPath('userData'), all_files);
-        searchAPI.addFilesToMainIndex(all_files);
-        that.store.dispatch(notificationActions.addNotification('All files have been re-indexed.'));
+        searchAPI.addFilesToMainIndex(all_files).then(() => {
+          that.store.dispatch(notificationActions.addNotification('All files have been re-indexed.'));
+        });
       })
-      //searches for the specified word among all archived pages
-      //var searchResults = JSON.stringify({results : [{filename: "app/where/who/what/index.html", count: 5}, {filename: "Boring", count: 9}]});
     }
   }
 
