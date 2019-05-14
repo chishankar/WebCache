@@ -11,6 +11,8 @@ import * as notificationActions from '../actions/notification';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import app from 'electron';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Fade from '@material-ui/core/Fade';
 
 const remoteApp = app.remote.app;
 
@@ -52,6 +54,22 @@ class LegacyDataConverter extends Component<Props> {
 
   constructor(props) {
     super(props);
+    this.state = {
+      loading: false
+    }
+  }
+
+  turnOnLoading = () => {
+    this.setState({
+      loading: true
+    })
+  }
+
+
+  turnOffLoading = () => {
+    this.setState({
+      loading: false
+    })
   }
 
   /**
@@ -59,6 +77,7 @@ class LegacyDataConverter extends Component<Props> {
    * @param  {Event} e
    */
   onChange = (e: Event) => {
+    this.turnOnLoading()
     if (e.target.files[0] != null) {
       //this.setState({ path: e.target.files[0].path });
       // const destFolder = 'data/imported';
@@ -76,8 +95,8 @@ class LegacyDataConverter extends Component<Props> {
         this.props.renderFileTree();
         console.log('success! moved files to data directory');
       });
-
     }
+    this.turnOffLoading()
   };
 
   /**
@@ -147,6 +166,15 @@ class LegacyDataConverter extends Component<Props> {
             Import Data
           </Button>
         </label>
+        <Fade
+            in={this.state.loading}
+            style={{
+              transitionDelay: this.state.loading ? '800ms' : '0ms',
+            }}
+            unmountOnExit
+        >
+          <CircularProgress />
+        </Fade>
       </div>
     );
   }
