@@ -62,7 +62,7 @@ class LegacyDataConverter extends Component<Props> {
         if (err) return this.props.addNotification(`${err}`)
         try{
           this.FindFile(destFolder);
-          this.props.addNotification('Scrapebook data imported')
+          this.props.addNotification('Scrapbook data imported')
         } catch(e){
           this.props.addNotification(`${e}`)
         }
