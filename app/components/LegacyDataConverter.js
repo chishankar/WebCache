@@ -10,6 +10,8 @@ import ScrapbookToWebcacheFormat from './convert-html.js';
 import * as notificationActions from '../actions/notification';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Fade from '@material-ui/core/Fade';
 
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
@@ -50,13 +52,30 @@ class LegacyDataConverter extends Component<Props> {
    */
   constructor(props) {
     super(props);
+    this.state = {
+      loading: false,
+    }
   }
+
+  turnOnLoading = () => {
+    this.setState(state => ({
+      loading: true,
+    }));
+  };
+
+  turnOffLoading = () => {
+    this.setState(state => ({
+      loading: false,
+    }));
+  };
+
 
   /**
    * Handles path changes and updates state
    * @param  {Event} e
    */
   onChange = (e: Event) => {
+    this.turnOnLoading();
     if (e.target.files[0] != null) {
       //this.setState({ path: e.target.files[0].path });
       const destFolder = 'data/imported';
@@ -66,14 +85,14 @@ class LegacyDataConverter extends Component<Props> {
         try{
           this.FindFile(destFolder);
           this.props.addNotification('Scrapebook data imported')
+          this.turnOffLoading();
         } catch(e){
           this.props.addNotification(`${e}`)
         }
-
         console.log('success! moved files to data directory');
       });
-
     }
+    this.turnOffLoading();
   };
 
   /**
@@ -135,6 +154,15 @@ class LegacyDataConverter extends Component<Props> {
             Import Legacy Data
           </Button>
         </label>
+        <Fade
+            in={this.state.loading}
+            style={{
+              transitionDelay: this.state.loading ? '800ms' : '0ms',
+            }}
+            unmountOnExit
+        >
+          <CircularProgress />
+        </Fade>
       </div>
     );
   }
@@ -157,9 +185,6 @@ async function FindFile(dirPath) {
           var snJsonPath = path.join(dirPath,'sticky.json');
 
           var fileArr = await ScrapbookToWebcacheFormat(htmlFilePath, datFilePath);
-          // console.log(filePath)
-          //console.log(fileArr[0]);
-          //console.log(fileArr[3]);
 
           WriteToFile(htmlFilePath, fileArr[0]);
           WriteToFile(annotJsonPath, JSON.stringify(fileArr[1]));
