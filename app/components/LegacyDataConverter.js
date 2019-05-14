@@ -81,12 +81,12 @@ class LegacyDataConverter extends Component<Props> {
     if (e.target.files[0] != null) {
       //this.setState({ path: e.target.files[0].path });
       // const destFolder = 'data/imported';
-      const destFolder = remoteApp.getPath('userData') + '/imported';
+      const destFolder = remoteApp.getPath('userData');
       const sourceFolder = e.target.files[0].path;
       fs.copy(sourceFolder, destFolder, (err) => {
         if (err) return this.props.addNotification(`${err}`)
         try{
-          this.FindFile(destFolder);
+          this.FindFile(destFolder, this.turnOffLoading);
           this.props.addNotification('Scrapbook data imported')
         } catch(e){
           console.log(e.stack);
@@ -96,14 +96,13 @@ class LegacyDataConverter extends Component<Props> {
         console.log('success! moved files to data directory');
       });
     }
-    this.turnOffLoading()
   };
 
   /**
    * Finds File
    * @param  {String} dirPath
    */
-  async FindFile(dirPath: String) {
+  async FindFile(dirPath: String, callback: Function) {
     fs.readdir(dirPath, async (err, files) => {
       if (!err) {
         for (var i = 0; i < files.length; i++) {
@@ -112,7 +111,7 @@ class LegacyDataConverter extends Component<Props> {
           var stat = fs.lstatSync(htmlFilePath);
 
           if (stat.isDirectory()) {
-            this.FindFile(htmlFilePath);
+            this.FindFile(htmlFilePath, null);
           } else if (files[i].indexOf('html') != -1) {
             var datFilePath = path.join(dirPath,'index.dat');
             var annotJsonPath = path.join(dirPath,'annotations-index.json');
@@ -138,6 +137,9 @@ class LegacyDataConverter extends Component<Props> {
             }
           }
         }
+      }
+      if(callback) {
+        callback();
       }
     });
   }
