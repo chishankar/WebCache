@@ -1,0 +1,4721 @@
+[
+{
+  "commit": "042b57581499defea0a90afb1871330c56a4e83f",
+  "abbreviated_commit": "042b575",
+  "tree": "6ba3ed4c066a0e95583e8eee1a8d6c7cffe6449a",
+  "abbreviated_tree": "6ba3ed4",
+  "parent": "4c50ea480cdc252041013e17ff03fc0dcb2b4676",
+  "abbreviated_parent": "4c50ea4",
+  "refs": "HEAD -> develop, origin/develop, origin/HEAD",
+  "encoding": "%
+e",
+  "subject": "fixed bug with checking for x-frame-origin DENY errors",
+  "sanitized_subject_line": "fixed-bug-with-checking-for-x-frame-origin-DENY-errors",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 13 May 2019 17:49:40 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 13 May 2019 17:49:40 -0400"
+  }
+},
+{
+  "commit": "4c50ea480cdc252041013e17ff03fc0dcb2b4676",
+  "abbreviated_commit": "4c50ea4",
+  "tree": "46905f3a653f08f2fb9ee34f4c10654bd0d048d9",
+  "abbreviated_tree": "46905f3",
+  "parent": "2e77878a1a39b640468ba8bfedb2847142db1054 8704f0f7ff3ffdafbee5bc35b29eaa666689cbe8",
+  "abbreviated_parent": "2e77878 8704f0f",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'develop' of https://github.com/chishankar/WebCache into develop",
+  "sanitized_subject_line": "Merge-branch-develop-of-https-github.com-chishankar-WebCache-into-develop",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 13 May 2019 02:09:53 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 13 May 2019 02:09:53 -0400"
+  }
+},
+{
+  "commit": "2e77878a1a39b640468ba8bfedb2847142db1054",
+  "abbreviated_commit": "2e77878",
+  "tree": "7bcb8c0dbd482c02a0dfc5441393dd9e07c5d5c8",
+  "abbreviated_tree": "7bcb8c0",
+  "parent": "1de0646b0e4e25b2055b43cb637f1f6b99206d29",
+  "abbreviated_parent": "1de0646",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "fixed iFrame issue that would crash the application on certain websites",
+  "sanitized_subject_line": "fixed-iFrame-issue-that-would-crash-the-application-on-certain-websites",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 13 May 2019 02:09:48 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 13 May 2019 02:09:48 -0400"
+  }
+},
+{
+  "commit": "1de0646b0e4e25b2055b43cb637f1f6b99206d29",
+  "abbreviated_commit": "1de0646",
+  "tree": "460673e57a44dd1b9f0dc92b3895d1cc172b0842",
+  "abbreviated_tree": "460673e",
+  "parent": "971852f586465ba798c8a5d7e43e657d3ffa813c",
+  "abbreviated_parent": "971852f",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "fixed spam save bug. Added saving state to renderText component and then turn on and off when the component is in the process of saving",
+  "sanitized_subject_line": "fixed-spam-save-bug.-Added-saving-state-to-renderText-component-and-then-turn-on-and-off-when-the-component-is-in-the-process-of-saving",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 12 May 2019 21:32:15 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 12 May 2019 21:32:15 -0400"
+  }
+},
+{
+  "commit": "52cd84f4a6eefdd0a4e30eb36e41b0b514e39719",
+  "abbreviated_commit": "52cd84f",
+  "tree": "f56651c8e29b9db9b1dddc5857d7eda5b1cf5afa",
+  "abbreviated_tree": "f56651c",
+  "parent": "1b734519c90a87ef0fe609646a9cb3b11fb0e56e cdef0383d30c314a1ee5d7ba63969dfc67ada3c3",
+  "abbreviated_parent": "1b73451 cdef038",
+  "refs": "origin/master, master",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'develop'",
+  "sanitized_subject_line": "Merge-branch-develop",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 12 May 2019 16:38:18 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 12 May 2019 16:38:18 -0400"
+  }
+},
+{
+  "commit": "cdef0383d30c314a1ee5d7ba63969dfc67ada3c3",
+  "abbreviated_commit": "cdef038",
+  "tree": "2f89f70ef38d1b8675437b8f6d16e7d1b0606b0b",
+  "abbreviated_tree": "2f89f70",
+  "parent": "a4a3435d253b459cae63d1c7cfcb612b5cb31679",
+  "abbreviated_parent": "a4a3435",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "took out testing code for simple highlighting",
+  "sanitized_subject_line": "took-out-testing-code-for-simple-highlighting",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 12 May 2019 16:16:58 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 12 May 2019 16:16:58 -0400"
+  }
+},
+{
+  "commit": "a4a3435d253b459cae63d1c7cfcb612b5cb31679",
+  "abbreviated_commit": "a4a3435",
+  "tree": "e27670f5e59cb05e49fe9d8426b1f586498e4411",
+  "abbreviated_tree": "e27670f",
+  "parent": "455869144c4a28c6ea948ffdd2d017138a7b1749",
+  "abbreviated_parent": "4558691",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "** RenderText.js",
+  "sanitized_subject_line": "RenderText.js",
+  "body": " 1 - Replicate function for returning iframeRef for the default landing page iframe.
+
+ 2 -  Started wide spred migration to this.iframeRef.contentWindow.postMessage. Deployed in all 8 message passing scenarios.
+
+ 3 - Added return statement to getAnnotationsFn, it did not have one before and therefore passing undefined path.
+
+ 4 - I moved the check for this.props.activeUrl !== 'app/default_landing_page.html' to the handleSaveTask function so it doesn't do any more unnecessary work than it needs to and it doesn't send save message to iframe if it is default langing page.
+
+** GetColor.js
+
+ 5 - Added color 'default' to GetColor module that acts as color translator between application and iframe
+
+** Index.js (injection script)
+
+ 6 - Initialized color to 'default'
+
+ 7 - Added if statement so it doesn't do any highlight processing when color is equal to default
+
+** General
+
+Added console.logs
+",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 12 May 2019 15:37:13 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 12 May 2019 15:37:13 -0400"
+  }
+},
+{
+  "commit": "1f02c17c8b437512266e0bf609e1b245940d28dd",
+  "abbreviated_commit": "1f02c17",
+  "tree": "c9344b02c7099e6ecc16786654dfba82923272e4",
+  "abbreviated_tree": "c9344b0",
+  "parent": "3748f483e1fc3a8311e1e11a54b774fed483ea2c",
+  "abbreviated_parent": "3748f48",
+  "refs": "origin/search-error, search-error",
+  "encoding": "%
+e",
+  "subject": "Search error",
+  "sanitized_subject_line": "Search-error",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 8 May 2019 22:11:03 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 8 May 2019 22:11:03 -0400"
+  }
+},
+{
+  "commit": "3748f483e1fc3a8311e1e11a54b774fed483ea2c",
+  "abbreviated_commit": "3748f48",
+  "tree": "a3296204b262183e1cbcbf6ce0ca9f4920c1fbf7",
+  "abbreviated_tree": "a329620",
+  "parent": "07f68e6385fb69fa7953eca1ed341c93fa61a649",
+  "abbreviated_parent": "07f68e6",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "small ; fix",
+  "sanitized_subject_line": "small-fix",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 8 May 2019 20:20:41 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 8 May 2019 20:20:41 -0400"
+  }
+},
+{
+  "commit": "1b734519c90a87ef0fe609646a9cb3b11fb0e56e",
+  "abbreviated_commit": "1b73451",
+  "tree": "20978ba236810582405f277db30d59ea53ba2c18",
+  "abbreviated_tree": "20978ba",
+  "parent": "d5b0018ee24d163269c54b13dc96d9ff523a9d61",
+  "abbreviated_parent": "d5b0018",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "commit page",
+  "sanitized_subject_line": "commit-page",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 8 May 2019 15:25:16 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 8 May 2019 15:25:16 -0400"
+  }
+},
+{
+  "commit": "6b840b3e6e5f1b1e0aba8167ddbb6c8f055ed527",
+  "abbreviated_commit": "6b840b3",
+  "tree": "a2b87ea8cc3976a593c20b3e18401b4c2be2ac06",
+  "abbreviated_tree": "a2b87ea",
+  "parent": "cd9fe2befc4c4a2264ee1ef7d14547d2fdddcc5a",
+  "abbreviated_parent": "cd9fe2b",
+  "refs": "origin/new-filebrowser, new-filebrowser",
+  "encoding": "%
+e",
+  "subject": "trying to confine the file browser to /data",
+  "sanitized_subject_line": "trying-to-confine-the-file-browser-to-data",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 7 May 2019 19:07:33 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 7 May 2019 19:07:33 -0400"
+  }
+},
+{
+  "commit": "cd9fe2befc4c4a2264ee1ef7d14547d2fdddcc5a",
+  "abbreviated_commit": "cd9fe2b",
+  "tree": "5f82659222ae15802ba4bc2001c02d0d500fe3d1",
+  "abbreviated_tree": "5f82659",
+  "parent": "b1b236822ef68e1420a2a12634813ed70f964d40",
+  "abbreviated_parent": "b1b2368",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "trying to confine the file browser to /data",
+  "sanitized_subject_line": "trying-to-confine-the-file-browser-to-data",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 7 May 2019 19:07:13 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 7 May 2019 19:07:13 -0400"
+  }
+},
+{
+  "commit": "d5b0018ee24d163269c54b13dc96d9ff523a9d61",
+  "abbreviated_commit": "d5b0018",
+  "tree": "54f8908151fc00463ff01e3c6c4e801643981104",
+  "abbreviated_tree": "54f8908",
+  "parent": "9eab47e919a0b179f3fa85e8f3bb369b03074651",
+  "abbreviated_parent": "9eab47e",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "new stuff",
+  "sanitized_subject_line": "new-stuff",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 7 May 2019 15:24:26 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 7 May 2019 15:24:26 -0400"
+  }
+},
+{
+  "commit": "9eab47e919a0b179f3fa85e8f3bb369b03074651",
+  "abbreviated_commit": "9eab47e",
+  "tree": "45b267292fbb4c415c9b41c88f95a970ad1d2113",
+  "abbreviated_tree": "45b2672",
+  "parent": "fd6c2e83b40cb5391ac74d7de73bb63b7ca20820",
+  "abbreviated_parent": "fd6c2e8",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "fixed",
+  "sanitized_subject_line": "fixed",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 7 May 2019 14:06:00 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 7 May 2019 14:06:00 -0400"
+  }
+},
+{
+  "commit": "fd6c2e83b40cb5391ac74d7de73bb63b7ca20820",
+  "abbreviated_commit": "fd6c2e8",
+  "tree": "bbd0f7f9fc829848b3af11351e1a27d15eb16769",
+  "abbreviated_tree": "bbd0f7f",
+  "parent": "1a076651bfd620758a2174b66a40d74d3b0e1357 b1b236822ef68e1420a2a12634813ed70f964d40",
+  "abbreviated_parent": "1a07665 b1b2368",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "done",
+  "sanitized_subject_line": "done",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 7 May 2019 14:03:37 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 7 May 2019 14:03:37 -0400"
+  }
+},
+{
+  "commit": "e409d303bf5610409b5b2a9e102f30e7b52cb597",
+  "abbreviated_commit": "e409d30",
+  "tree": "957a1497fffb66fdd29d9431070cb926c5da6e66",
+  "abbreviated_tree": "957a149",
+  "parent": "4f4fba77415fc54e57f41ee5b39943d3de2f0b0b",
+  "abbreviated_parent": "4f4fba7",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "removed poop",
+  "sanitized_subject_line": "removed-poop",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 22:19:25 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 22:19:25 -0400"
+  }
+},
+{
+  "commit": "4f4fba77415fc54e57f41ee5b39943d3de2f0b0b",
+  "abbreviated_commit": "4f4fba7",
+  "tree": "e9934e5c08922e40e52dcbd5f2f9581280b0db52",
+  "abbreviated_tree": "e9934e5",
+  "parent": "17eab14dae58f30c43f77bcaf441d2e9226e8a66",
+  "abbreviated_parent": "17eab14",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "solves re-rendering of rendertext",
+  "sanitized_subject_line": "solves-re-rendering-of-rendertext",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 22:17:32 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 22:17:32 -0400"
+  }
+},
+{
+  "commit": "17eab14dae58f30c43f77bcaf441d2e9226e8a66",
+  "abbreviated_commit": "17eab14",
+  "tree": "346f72b041786fccc0c646422883d3afed8e42f5",
+  "abbreviated_tree": "346f72b",
+  "parent": "186738ca56867b5daaa7c6b8d5659160baa5bef7 4476d667f28dc76339b1c504ce419a4a4ae048b8",
+  "abbreviated_parent": "186738c 4476d66",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'develop' of https://github.com/chishankar/WebCache into develop",
+  "sanitized_subject_line": "Merge-branch-develop-of-https-github.com-chishankar-WebCache-into-develop",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 21:44:55 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 21:44:55 -0400"
+  }
+},
+{
+  "commit": "186738ca56867b5daaa7c6b8d5659160baa5bef7",
+  "abbreviated_commit": "186738c",
+  "tree": "d58ac295347166e49c4d2d082a5506d4d1496994",
+  "abbreviated_tree": "d58ac29",
+  "parent": "834e5343a72614f6a89bffbaff28131cae063601",
+  "abbreviated_parent": "834e534",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "removes highlights before it saves",
+  "sanitized_subject_line": "removes-highlights-before-it-saves",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 21:44:51 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 21:44:51 -0400"
+  }
+},
+{
+  "commit": "834e5343a72614f6a89bffbaff28131cae063601",
+  "abbreviated_commit": "834e534",
+  "tree": "1701f43edc4c8ba954c0fd2f9f5bf04bb1e70c64",
+  "abbreviated_tree": "1701f43",
+  "parent": "1052b8a624204269e6ee5318ac45c01a753e0de2",
+  "abbreviated_parent": "1052b8a",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "live searching of page",
+  "sanitized_subject_line": "live-searching-of-page",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 21:43:27 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 21:43:27 -0400"
+  }
+},
+{
+  "commit": "7db2ef4e090463c70e5f457b4400bceaa5fd1ae6",
+  "abbreviated_commit": "7db2ef4",
+  "tree": "f97c1e3f885fc2f1b3605bfb16683affc2b8a287",
+  "abbreviated_tree": "f97c1e3",
+  "parent": "1052b8a624204269e6ee5318ac45c01a753e0de2",
+  "abbreviated_parent": "1052b8a",
+  "refs": "origin/search-result-highlighting, search-result-highlighting",
+  "encoding": "%
+e",
+  "subject": "not working",
+  "sanitized_subject_line": "not-working",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 20:40:47 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 20:40:47 -0400"
+  }
+},
+{
+  "commit": "eb7ceb04c79d244597043f89634feac91c05c55b",
+  "abbreviated_commit": "eb7ceb0",
+  "tree": "ac144a9e07b7cf7a5c6b4d8b12e81e67248a2dd8",
+  "abbreviated_tree": "ac144a9",
+  "parent": "9d430192680547693b56e8e76d04dde3baf48945 0f35c29f90ca2a6e855182dfb4d6e894b6c0daa5",
+  "abbreviated_parent": "9d43019 0f35c29",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'develop' of https://github.com/chishankar/WebCache into develop",
+  "sanitized_subject_line": "Merge-branch-develop-of-https-github.com-chishankar-WebCache-into-develop",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 09:36:23 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 09:36:23 -0400"
+  }
+},
+{
+  "commit": "1a076651bfd620758a2174b66a40d74d3b0e1357",
+  "abbreviated_commit": "1a07665",
+  "tree": "f9ecd5468b9f74d6107033f9ad617d1891fcf227",
+  "abbreviated_tree": "f9ecd54",
+  "parent": "c336f55a8fc399b3e85f48358be3bc565a313ea4",
+  "abbreviated_parent": "c336f55",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "new documentation",
+  "sanitized_subject_line": "new-documentation",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 01:39:19 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 01:39:19 -0400"
+  }
+},
+{
+  "commit": "c336f55a8fc399b3e85f48358be3bc565a313ea4",
+  "abbreviated_commit": "c336f55",
+  "tree": "f10c961fedac5bff334c0e03481b99680232b5aa",
+  "abbreviated_tree": "f10c961",
+  "parent": "10d7ab50d2d6fc8d3579232f7411f81002868a6d",
+  "abbreviated_parent": "10d7ab5",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "new documentation",
+  "sanitized_subject_line": "new-documentation",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 01:00:13 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 01:00:13 -0400"
+  }
+},
+{
+  "commit": "10d7ab50d2d6fc8d3579232f7411f81002868a6d",
+  "abbreviated_commit": "10d7ab5",
+  "tree": "02995d48d822565451beb144cef29d56a7d2e890",
+  "abbreviated_tree": "02995d4",
+  "parent": "a0b98749e4b74cf49442b4d3874b515e418c2413",
+  "abbreviated_parent": "a0b9874",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "new things",
+  "sanitized_subject_line": "new-things",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 00:46:11 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 00:46:11 -0400"
+  }
+},
+{
+  "commit": "a0b98749e4b74cf49442b4d3874b515e418c2413",
+  "abbreviated_commit": "a0b9874",
+  "tree": "0793c56314a813c94e629c54dc3f1389f2c29050",
+  "abbreviated_tree": "0793c56",
+  "parent": "c5be304dc93115486723d85214dd4f867217ac31",
+  "abbreviated_parent": "c5be304",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "more documentation",
+  "sanitized_subject_line": "more-documentation",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 00:17:55 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 6 May 2019 00:17:55 -0400"
+  }
+},
+{
+  "commit": "c5be304dc93115486723d85214dd4f867217ac31",
+  "abbreviated_commit": "c5be304",
+  "tree": "a529201f7cc75031ebc455310cd7c92c85b71248",
+  "abbreviated_tree": "a529201",
+  "parent": "6bdcd173646f407e5bc898988014491185d92bf1",
+  "abbreviated_parent": "6bdcd17",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "updated documentation",
+  "sanitized_subject_line": "updated-documentation",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 23:59:01 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 23:59:01 -0400"
+  }
+},
+{
+  "commit": "6bdcd173646f407e5bc898988014491185d92bf1",
+  "abbreviated_commit": "6bdcd17",
+  "tree": "cbfacd7aaaaa9c2784f280f716dcfa95737bdda6",
+  "abbreviated_tree": "cbfacd7",
+  "parent": "54a72b64fc41d30f4995b318b77846417d5516b0",
+  "abbreviated_parent": "54a72b6",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "update to docs",
+  "sanitized_subject_line": "update-to-docs",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 22:09:45 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 22:09:45 -0400"
+  }
+},
+{
+  "commit": "54a72b64fc41d30f4995b318b77846417d5516b0",
+  "abbreviated_commit": "54a72b6",
+  "tree": "9ce4331e2e055b13ef075b0e055118fd11b3a7b6",
+  "abbreviated_tree": "9ce4331",
+  "parent": "715b5c5d6704efefd6c0f70071a1a9757afcac42",
+  "abbreviated_parent": "715b5c5",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "more documentation",
+  "sanitized_subject_line": "more-documentation",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 22:06:39 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 22:06:39 -0400"
+  }
+},
+{
+  "commit": "715b5c5d6704efefd6c0f70071a1a9757afcac42",
+  "abbreviated_commit": "715b5c5",
+  "tree": "6add7c8030094e1db04031717a322c69c96ac4cc",
+  "abbreviated_tree": "6add7c8",
+  "parent": "9d2f307173e2d2168a86fcc8d49654f33b6dab18 9d430192680547693b56e8e76d04dde3baf48945",
+  "abbreviated_parent": "9d2f307 9d43019",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'develop'",
+  "sanitized_subject_line": "Merge-branch-develop",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 22:06:05 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 22:06:05 -0400"
+  }
+},
+{
+  "commit": "9d430192680547693b56e8e76d04dde3baf48945",
+  "abbreviated_commit": "9d43019",
+  "tree": "5dddc72864616f732370e8d2bfa22b4d8354661f",
+  "abbreviated_tree": "5dddc72",
+  "parent": "345f3c0fc40266fd5377c95a13d2ba85a0f61e99",
+  "abbreviated_parent": "345f3c0",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "added more comments and documentation",
+  "sanitized_subject_line": "added-more-comments-and-documentation",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 22:05:57 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 22:05:57 -0400"
+  }
+},
+{
+  "commit": "345f3c0fc40266fd5377c95a13d2ba85a0f61e99",
+  "abbreviated_commit": "345f3c0",
+  "tree": "abf95789e6a54c303162cb0b0682d4fbc941d82d",
+  "abbreviated_tree": "abf9578",
+  "parent": "16ef25989ccb3d4e908b07e255c1d2f90a218937",
+  "abbreviated_parent": "16ef259",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "fixed delete issue",
+  "sanitized_subject_line": "fixed-delete-issue",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 21:34:39 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 21:34:39 -0400"
+  }
+},
+{
+  "commit": "16ef25989ccb3d4e908b07e255c1d2f90a218937",
+  "abbreviated_commit": "16ef259",
+  "tree": "67fbc71557978bb5aabad73d2e1ed02c124539c5",
+  "abbreviated_tree": "67fbc71",
+  "parent": "b6be740083158cc08b0c3078d071f354469595fe",
+  "abbreviated_parent": "b6be740",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "fixed highlighting problems",
+  "sanitized_subject_line": "fixed-highlighting-problems",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 20:45:49 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 20:45:49 -0400"
+  }
+},
+{
+  "commit": "b6be740083158cc08b0c3078d071f354469595fe",
+  "abbreviated_commit": "b6be740",
+  "tree": "d02c3bd293caaf24b2092d07384f80c4b9270d7a",
+  "abbreviated_tree": "d02c3bd",
+  "parent": "fd99c3762e6d4fe065d0573faeba35af190d5c43",
+  "abbreviated_parent": "fd99c37",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "idk",
+  "sanitized_subject_line": "idk",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 19:52:11 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 19:52:11 -0400"
+  }
+},
+{
+  "commit": "9d2f307173e2d2168a86fcc8d49654f33b6dab18",
+  "abbreviated_commit": "9d2f307",
+  "tree": "2ac861d2a07ffee4cf1a24897209b4de2d07b659",
+  "abbreviated_tree": "2ac861d",
+  "parent": "679017f8e2ad4eb368e5bfdb5f0c18de9ab931dc",
+  "abbreviated_parent": "679017f",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "new docs update",
+  "sanitized_subject_line": "new-docs-update",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 13:37:26 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 13:37:26 -0400"
+  }
+},
+{
+  "commit": "679017f8e2ad4eb368e5bfdb5f0c18de9ab931dc",
+  "abbreviated_commit": "679017f",
+  "tree": "7a872da76956981f1126facae8f78a0b649fd22f",
+  "abbreviated_tree": "7a872da",
+  "parent": "276bc4ae3a05fc5a20e602c5055ded25292cb118 fd99c3762e6d4fe065d0573faeba35af190d5c43",
+  "abbreviated_parent": "276bc4a fd99c37",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'develop'",
+  "sanitized_subject_line": "Merge-branch-develop",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 13:34:13 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 13:34:13 -0400"
+  }
+},
+{
+  "commit": "fd99c3762e6d4fe065d0573faeba35af190d5c43",
+  "abbreviated_commit": "fd99c37",
+  "tree": "5e99584f5052f7cb2eb61598aecadc4bf26ffec1",
+  "abbreviated_tree": "5e99584",
+  "parent": "a5d124df7b59fb39f745286eadda6039e8808605",
+  "abbreviated_parent": "a5d124d",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "add types to functions",
+  "sanitized_subject_line": "add-types-to-functions",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 13:33:54 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 13:33:54 -0400"
+  }
+},
+{
+  "commit": "a5d124df7b59fb39f745286eadda6039e8808605",
+  "abbreviated_commit": "a5d124d",
+  "tree": "46c4ab481eb4068045aa680d766def6ce8592d40",
+  "abbreviated_tree": "46c4ab4",
+  "parent": "07414be02efc3022372b0f3ed5d0fdca1bdd32ea c407d9544e85218bd0b40a235e16676673eba367",
+  "abbreviated_parent": "07414be c407d95",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge remote-tracking branch 'origin/legacyDataUpdated' into develop",
+  "sanitized_subject_line": "Merge-remote-tracking-branch-origin-legacyDataUpdated-into-develop",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 13:23:31 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 13:23:31 -0400"
+  }
+},
+{
+  "commit": "276bc4ae3a05fc5a20e602c5055ded25292cb118",
+  "abbreviated_commit": "276bc4a",
+  "tree": "eb59e7e44aba3bd8403cb89e03fdee269929c818",
+  "abbreviated_tree": "eb59e7e",
+  "parent": "cc9f1dbbeaacc58b5f339e47136ea2735224440a 07414be02efc3022372b0f3ed5d0fdca1bdd32ea",
+  "abbreviated_parent": "cc9f1db 07414be",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'develop'",
+  "sanitized_subject_line": "Merge-branch-develop",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 13:04:06 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 13:04:06 -0400"
+  }
+},
+{
+  "commit": "07414be02efc3022372b0f3ed5d0fdca1bdd32ea",
+  "abbreviated_commit": "07414be",
+  "tree": "995723644820b5b025417cf737c6f7cdc266158c",
+  "abbreviated_tree": "9957236",
+  "parent": "11763cccfa37d42ca8d4b23a9f45dd5c513bc143",
+  "abbreviated_parent": "11763cc",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "updated docs",
+  "sanitized_subject_line": "updated-docs",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 12:59:44 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 5 May 2019 12:59:44 -0400"
+  }
+},
+{
+  "commit": "cc9f1dbbeaacc58b5f339e47136ea2735224440a",
+  "abbreviated_commit": "cc9f1db",
+  "tree": "4dab38ace828e501976e8746417b74fddd4fbf12",
+  "abbreviated_tree": "4dab38a",
+  "parent": "94572c1bf87efaf81a0eb831cefdf6dc542da44a 5f58a659bd02c5c96dac846b42d54e0dd579b1cc",
+  "abbreviated_parent": "94572c1 5f58a65",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'master' of https://github.com/chishankar/WebCache",
+  "sanitized_subject_line": "Merge-branch-master-of-https-github.com-chishankar-WebCache",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:52:54 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:52:54 -0400"
+  }
+},
+{
+  "commit": "94572c1bf87efaf81a0eb831cefdf6dc542da44a",
+  "abbreviated_commit": "94572c1",
+  "tree": "b37ba2937184b52a438ef1552e0426e02089612c",
+  "abbreviated_tree": "b37ba29",
+  "parent": "1576127987b26e3001bea5becedc2ad3beffa61f",
+  "abbreviated_parent": "1576127",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "rebased from develop",
+  "sanitized_subject_line": "rebased-from-develop",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:52:49 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:52:49 -0400"
+  }
+},
+{
+  "commit": "1576127987b26e3001bea5becedc2ad3beffa61f",
+  "abbreviated_commit": "1576127",
+  "tree": "4e9499082d89e9605e11b833131e2b19f5f6c1e4",
+  "abbreviated_tree": "4e94990",
+  "parent": "cdb43adbbd40d69ed6080127a0d731b8dbd3cd18",
+  "abbreviated_parent": "cdb43ad",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "took some stuff out",
+  "sanitized_subject_line": "took-some-stuff-out",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:46:46 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:51:35 -0400"
+  }
+},
+{
+  "commit": "cdb43adbbd40d69ed6080127a0d731b8dbd3cd18",
+  "abbreviated_commit": "cdb43ad",
+  "tree": "d582a417e5c57d710e89fdbc8f8d12544ec568cb",
+  "abbreviated_tree": "d582a41",
+  "parent": "c789148a084eb3f64e0faec1889cef6a879af0c3",
+  "abbreviated_parent": "c789148",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Set theme jekyll-theme-cayman",
+  "sanitized_subject_line": "Set-theme-jekyll-theme-cayman",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:29:45 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:51:35 -0400"
+  }
+},
+{
+  "commit": "c789148a084eb3f64e0faec1889cef6a879af0c3",
+  "abbreviated_commit": "c789148",
+  "tree": "f8d29673fa30656bdfe238ebd861036641531679",
+  "abbreviated_tree": "f8d2967",
+  "parent": "11763cccfa37d42ca8d4b23a9f45dd5c513bc143",
+  "abbreviated_parent": "11763cc",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "stuff",
+  "sanitized_subject_line": "stuff",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:31:45 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:51:35 -0400"
+  }
+},
+{
+  "commit": "11763cccfa37d42ca8d4b23a9f45dd5c513bc143",
+  "abbreviated_commit": "11763cc",
+  "tree": "b2aa027eb2f9044953d94cebc6684c71e4a41aa2",
+  "abbreviated_tree": "b2aa027",
+  "parent": "72bb40a91262b297aefe9f5ef89f4ab419ce4dfa",
+  "abbreviated_parent": "72bb40a",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "syntax",
+  "sanitized_subject_line": "syntax",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:51:18 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:51:18 -0400"
+  }
+},
+{
+  "commit": "72bb40a91262b297aefe9f5ef89f4ab419ce4dfa",
+  "abbreviated_commit": "72bb40a",
+  "tree": "aff8b9eb2ac5b44601e285e1dd73ec8e766681b2",
+  "abbreviated_tree": "aff8b9e",
+  "parent": "804024990007929ca638f3561d8d1b72c291f043",
+  "abbreviated_parent": "8040249",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "stuff",
+  "sanitized_subject_line": "stuff",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:49:40 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:49:40 -0400"
+  }
+},
+{
+  "commit": "5f58a659bd02c5c96dac846b42d54e0dd579b1cc",
+  "abbreviated_commit": "5f58a65",
+  "tree": "7b0b9cc5912bd23c0a22b62cc6a7dec4a46807a0",
+  "abbreviated_tree": "7b0b9cc",
+  "parent": "00e14028a368de639bf87356661321532d5ce2f7",
+  "abbreviated_parent": "00e1402",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "took some stuff out",
+  "sanitized_subject_line": "took-some-stuff-out",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:46:46 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:46:46 -0400"
+  }
+},
+{
+  "commit": "00e14028a368de639bf87356661321532d5ce2f7",
+  "abbreviated_commit": "00e1402",
+  "tree": "553363ed6a722df55b809e875d93edb23867fd0b",
+  "abbreviated_tree": "553363e",
+  "parent": "dd6d3dfd8b9e62171bd9a10ee7207d62be98035b e8cd385b08112bcf014c84f43f09209d5f28ceaf",
+  "abbreviated_parent": "dd6d3df e8cd385",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'master' of https://github.com/chishankar/WebCache",
+  "sanitized_subject_line": "Merge-branch-master-of-https-github.com-chishankar-WebCache",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:31:53 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:31:53 -0400"
+  }
+},
+{
+  "commit": "dd6d3dfd8b9e62171bd9a10ee7207d62be98035b",
+  "abbreviated_commit": "dd6d3df",
+  "tree": "e2f850521ef65c85a6653a6d91e720f9f1f20311",
+  "abbreviated_tree": "e2f8505",
+  "parent": "804024990007929ca638f3561d8d1b72c291f043",
+  "abbreviated_parent": "8040249",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "stuff",
+  "sanitized_subject_line": "stuff",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:31:45 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:31:45 -0400"
+  }
+},
+{
+  "commit": "e8cd385b08112bcf014c84f43f09209d5f28ceaf",
+  "abbreviated_commit": "e8cd385",
+  "tree": "fd286db72bb21a2261e70eaa56175da98b4231d6",
+  "abbreviated_tree": "fd286db",
+  "parent": "804024990007929ca638f3561d8d1b72c291f043",
+  "abbreviated_parent": "8040249",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Set theme jekyll-theme-cayman",
+  "sanitized_subject_line": "Set-theme-jekyll-theme-cayman",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:29:45 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:29:45 -0400"
+  }
+},
+{
+  "commit": "804024990007929ca638f3561d8d1b72c291f043",
+  "abbreviated_commit": "8040249",
+  "tree": "86fe18dc50ef5250708957bd669fe3f03fbf77de",
+  "abbreviated_tree": "86fe18d",
+  "parent": "cb4de12c6e2513db12858db7742ba75eb4972169",
+  "abbreviated_parent": "cb4de12",
+  "refs": "origin/gh-pages",
+  "encoding": "%
+e",
+  "subject": "documenation",
+  "sanitized_subject_line": "documenation",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:25:14 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:25:14 -0400"
+  }
+},
+{
+  "commit": "cb4de12c6e2513db12858db7742ba75eb4972169",
+  "abbreviated_commit": "cb4de12",
+  "tree": "53c32790b04b861bde38ffbd69213ad7fd53107f",
+  "abbreviated_tree": "53c3279",
+  "parent": "6fe0a718fb37b3a4639e504092289f745edf1269",
+  "abbreviated_parent": "6fe0a71",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "documentation",
+  "sanitized_subject_line": "documentation",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:21:02 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 4 May 2019 19:21:02 -0400"
+  }
+},
+{
+  "commit": "f837a1e927cb08cc1ab105775435e2fe945d8aa6",
+  "abbreviated_commit": "f837a1e",
+  "tree": "9b0e632e61a032774a4f2a07a35a1acc32de6b02",
+  "abbreviated_tree": "9b0e632",
+  "parent": "be225729509bd1755ed348e083ded6df819aa763",
+  "abbreviated_parent": "be22572",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "fix for invalid URL's",
+  "sanitized_subject_line": "fix-for-invalid-URL-s",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 22:06:09 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 22:06:09 -0400"
+  }
+},
+{
+  "commit": "be225729509bd1755ed348e083ded6df819aa763",
+  "abbreviated_commit": "be22572",
+  "tree": "c57abad0473e72937eb82b665c43a131bcc31c00",
+  "abbreviated_tree": "c57abad",
+  "parent": "e01c5e1aab4ac4800321c40583332dd94a684961",
+  "abbreviated_parent": "e01c5e1",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "commented out console.logs",
+  "sanitized_subject_line": "commented-out-console.logs",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 18:50:16 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 18:50:16 -0400"
+  }
+},
+{
+  "commit": "e01c5e1aab4ac4800321c40583332dd94a684961",
+  "abbreviated_commit": "e01c5e1",
+  "tree": "8cfea50f740c5700e170e6b59d7361f4ac11da7d",
+  "abbreviated_tree": "8cfea50",
+  "parent": "a14d4ad4b0da7e120a9e6e198d5bcc2e75089bb3",
+  "abbreviated_parent": "a14d4ad",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "new notifications and error handeling",
+  "sanitized_subject_line": "new-notifications-and-error-handeling",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 18:24:48 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 18:24:48 -0400"
+  }
+},
+{
+  "commit": "189072eda17275027ce6ae03823e0a5bde717a5d",
+  "abbreviated_commit": "189072e",
+  "tree": "834a3055dde8a951f2b823b3fd9a36906a7f294b",
+  "abbreviated_tree": "834a305",
+  "parent": "7a1ffd467b34ebd4ca9b36921e8d7b66c86bca59",
+  "abbreviated_parent": "7a1ffd4",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "automatically hide notficiation",
+  "sanitized_subject_line": "automatically-hide-notficiation",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 17:43:42 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 17:43:42 -0400"
+  }
+},
+{
+  "commit": "a14d4ad4b0da7e120a9e6e198d5bcc2e75089bb3",
+  "abbreviated_commit": "a14d4ad",
+  "tree": "6eaa4576af356b2c09a5e8bdf712b62e0ba582b6",
+  "abbreviated_tree": "6eaa457",
+  "parent": "7a1ffd467b34ebd4ca9b36921e8d7b66c86bca59",
+  "abbreviated_parent": "7a1ffd4",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "new strip stuff",
+  "sanitized_subject_line": "new-strip-stuff",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 16:17:37 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 16:17:37 -0400"
+  }
+},
+{
+  "commit": "7a1ffd467b34ebd4ca9b36921e8d7b66c86bca59",
+  "abbreviated_commit": "7a1ffd4",
+  "tree": "68b582b93dd54ad4d957a90f815af87d9ba9ef6f",
+  "abbreviated_tree": "68b582b",
+  "parent": "22d385b5f90e1c09fbea7519f696add8494580d6",
+  "abbreviated_parent": "22d385b",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "new fixes ----",
+  "sanitized_subject_line": "new-fixes",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 15:27:58 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 15:27:58 -0400"
+  }
+},
+{
+  "commit": "433889c5ea974401cdec2feccd6b7edd584a1188",
+  "abbreviated_commit": "433889c",
+  "tree": "14b9e6093e8979695f5dfdd5a061d04412ef86b7",
+  "abbreviated_tree": "14b9e60",
+  "parent": "5eacf24f64d5943ab52d48e382c30602d1816e86",
+  "abbreviated_parent": "5eacf24",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "minor changes",
+  "sanitized_subject_line": "minor-changes",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 01:31:50 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 01:31:50 -0400"
+  }
+},
+{
+  "commit": "56c7998e4617f86984abcf796e6f51353770e7d0",
+  "abbreviated_commit": "56c7998",
+  "tree": "78a0df837cf4a787921ec40e54e65529f2572e0b",
+  "abbreviated_tree": "78a0df8",
+  "parent": "8f05e3e40ea56c74bc8c06e5a0ce37025a62b7fd e90d193301a74361baf17eb342407f6ad009cc56",
+  "abbreviated_parent": "8f05e3e e90d193",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "stuff",
+  "sanitized_subject_line": "stuff",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 00:50:30 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 00:50:30 -0400"
+  }
+},
+{
+  "commit": "8f05e3e40ea56c74bc8c06e5a0ce37025a62b7fd",
+  "abbreviated_commit": "8f05e3e",
+  "tree": "9dd219bd1000ca8b903623ff28da3a5014e2452b",
+  "abbreviated_tree": "9dd219b",
+  "parent": "3214280214fe7c9e3486482114f002aa953ac5eb c76ae504fef7886a2cf03a70d528660d0c94e8e3",
+  "abbreviated_parent": "3214280 c76ae50",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "search integrated",
+  "sanitized_subject_line": "search-integrated",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 00:41:37 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 00:41:37 -0400"
+  }
+},
+{
+  "commit": "c76ae504fef7886a2cf03a70d528660d0c94e8e3",
+  "abbreviated_commit": "c76ae50",
+  "tree": "15c6b6350fea04bcf9a9ca52e35b6bbcee242343",
+  "abbreviated_tree": "15c6b63",
+  "parent": "0cb244bde426643a1938685513890be471f4ea4d d9c99c78bf8d4c2c6c3f94fcfa60ef8cc54c0044",
+  "abbreviated_parent": "0cb244b d9c99c7",
+  "refs": "origin/akbar-search, akbar-search",
+  "encoding": "%
+e",
+  "subject": "fixed merge",
+  "sanitized_subject_line": "fixed-merge",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 00:13:57 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 00:13:57 -0400"
+  }
+},
+{
+  "commit": "0cb244bde426643a1938685513890be471f4ea4d",
+  "abbreviated_commit": "0cb244b",
+  "tree": "9682d02e37867d9f06d5a7d4c70ab325ebc67962",
+  "abbreviated_tree": "9682d02",
+  "parent": "6c09bccaed49a491d00a78294007647fe93ba0a9",
+  "abbreviated_parent": "6c09bcc",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "cleaned up the search side bar ui",
+  "sanitized_subject_line": "cleaned-up-the-search-side-bar-ui",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 00:12:47 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 00:12:47 -0400"
+  }
+},
+{
+  "commit": "6c09bccaed49a491d00a78294007647fe93ba0a9",
+  "abbreviated_commit": "6c09bcc",
+  "tree": "53bf886266964869d54afbbf55c70922495cd0e3",
+  "abbreviated_tree": "53bf886",
+  "parent": "b2547ac3bd38e88634d0adb8f5b35d840a1b29bd",
+  "abbreviated_parent": "b2547ac",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "new search UI",
+  "sanitized_subject_line": "new-search-UI",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 00:01:03 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 3 May 2019 00:01:03 -0400"
+  }
+},
+{
+  "commit": "6093b05eadc444768dc19ebc71f7c0e1ef7aa15b",
+  "abbreviated_commit": "6093b05",
+  "tree": "88bcf804035b350df406079f524771861fd65d7e",
+  "abbreviated_tree": "88bcf80",
+  "parent": "d113f1b7255ebf4fb5fc59f26222972768848b75 7da09af764f42453be6d110b1839f9416ab7e33b",
+  "abbreviated_parent": "d113f1b 7da09af",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'akbar-search' of https://github.com/chishankar/WebCache into akbar-search",
+  "sanitized_subject_line": "Merge-branch-akbar-search-of-https-github.com-chishankar-WebCache-into-akbar-search",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 2 May 2019 22:56:04 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 2 May 2019 22:56:04 -0400"
+  }
+},
+{
+  "commit": "d113f1b7255ebf4fb5fc59f26222972768848b75",
+  "abbreviated_commit": "d113f1b",
+  "tree": "750ea4b926386907f530003e0105b4e1e139ecd1",
+  "abbreviated_tree": "750ea4b",
+  "parent": "223069bc724bdbe385586d32dbc8d353da6d762c",
+  "abbreviated_parent": "223069b",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "fixed UI for side search results",
+  "sanitized_subject_line": "fixed-UI-for-side-search-results",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 2 May 2019 22:55:56 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 2 May 2019 22:55:56 -0400"
+  }
+},
+{
+  "commit": "223069bc724bdbe385586d32dbc8d353da6d762c",
+  "abbreviated_commit": "223069b",
+  "tree": "9a6978e0abfeb0313dfff635abb344a35224db60",
+  "abbreviated_tree": "9a6978e",
+  "parent": "1536cf47f780201137c5aff669a9c1767d1c88be fc821168f969bc79ea08a150cfe9761edb8f36c5",
+  "abbreviated_parent": "1536cf4 fc82116",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "merged",
+  "sanitized_subject_line": "merged",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 2 May 2019 20:48:49 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 2 May 2019 20:48:49 -0400"
+  }
+},
+{
+  "commit": "3214280214fe7c9e3486482114f002aa953ac5eb",
+  "abbreviated_commit": "3214280",
+  "tree": "59eefedcd87e428214ad12a7a9d908f21db149de",
+  "abbreviated_tree": "59eefed",
+  "parent": "f16582e8dd9321e2c4d894b21db9d4e3ba113f37",
+  "abbreviated_parent": "f16582e",
+  "refs": "origin/scroll-feature, scroll-feature",
+  "encoding": "%
+e",
+  "subject": "working on some stuff",
+  "sanitized_subject_line": "working-on-some-stuff",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 2 May 2019 16:06:29 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 2 May 2019 16:06:29 -0400"
+  }
+},
+{
+  "commit": "f16582e8dd9321e2c4d894b21db9d4e3ba113f37",
+  "abbreviated_commit": "f16582e",
+  "tree": "8c247ab524c2c7ae98ed0059b3cbfd329f042d4e",
+  "abbreviated_tree": "8c247ab",
+  "parent": "fc821168f969bc79ea08a150cfe9761edb8f36c5",
+  "abbreviated_parent": "fc82116",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "current implementation",
+  "sanitized_subject_line": "current-implementation",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 1 May 2019 20:12:22 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 1 May 2019 20:12:22 -0400"
+  }
+},
+{
+  "commit": "fc821168f969bc79ea08a150cfe9761edb8f36c5",
+  "abbreviated_commit": "fc82116",
+  "tree": "0b6d0c173a7f3e7a490f811adaf332226774a8a3",
+  "abbreviated_tree": "0b6d0c1",
+  "parent": "a83b81c312d5699f6a4744b55489dec6dfbb153d",
+  "abbreviated_parent": "a83b81c",
+  "refs": "old-develop, new-develop",
+  "encoding": "%
+e",
+  "subject": "changed notification location",
+  "sanitized_subject_line": "changed-notification-location",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 1 May 2019 16:54:40 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 1 May 2019 16:54:40 -0400"
+  }
+},
+{
+  "commit": "a83b81c312d5699f6a4744b55489dec6dfbb153d",
+  "abbreviated_commit": "a83b81c",
+  "tree": "bf24c934fa04ed8dee5b3a85c27ca4a83bedf8e5",
+  "abbreviated_tree": "bf24c93",
+  "parent": "614929f09687f7f77ae22c98d31df821a9c047e8",
+  "abbreviated_parent": "614929f",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "more stuff including notification cards",
+  "sanitized_subject_line": "more-stuff-including-notification-cards",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 1 May 2019 15:59:06 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 1 May 2019 15:59:06 -0400"
+  }
+},
+{
+  "commit": "614929f09687f7f77ae22c98d31df821a9c047e8",
+  "abbreviated_commit": "614929f",
+  "tree": "ea9cef9f17820a4b58b8c18ea7bc940f20d25de0",
+  "abbreviated_tree": "ea9cef9",
+  "parent": "c802e89b1c92226570197261fa689063fab082f4",
+  "abbreviated_parent": "c802e89",
+  "refs": "new-features",
+  "encoding": "%
+e",
+  "subject": "Display last update date and took out unneeded stuff from Toolbar",
+  "sanitized_subject_line": "Display-last-update-date-and-took-out-unneeded-stuff-from-Toolbar",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 1 May 2019 14:15:54 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 1 May 2019 14:15:54 -0400"
+  }
+},
+{
+  "commit": "c802e89b1c92226570197261fa689063fab082f4",
+  "abbreviated_commit": "c802e89",
+  "tree": "ed607f85d02cbfefd9fd23d017f57f9b86dfa0bd",
+  "abbreviated_tree": "ed607f8",
+  "parent": "621b79eedb553d3dafdb8cc065cc040df18ebcc4",
+  "abbreviated_parent": "621b79e",
+  "refs": "origin/new-features",
+  "encoding": "%
+e",
+  "subject": "save button + recently updated",
+  "sanitized_subject_line": "save-button-recently-updated",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 1 May 2019 13:35:17 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 1 May 2019 13:35:17 -0400"
+  }
+},
+{
+  "commit": "621b79eedb553d3dafdb8cc065cc040df18ebcc4",
+  "abbreviated_commit": "621b79e",
+  "tree": "fdb2a44eb0063ecdae4224f5386fb0ec593e017f",
+  "abbreviated_tree": "fdb2a44",
+  "parent": "fd9f449b320de6f2b7f6c311c61024990aae94c4",
+  "abbreviated_parent": "fd9f449",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "small ui fix",
+  "sanitized_subject_line": "small-ui-fix",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 1 May 2019 10:55:08 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 1 May 2019 10:55:08 -0400"
+  }
+},
+{
+  "commit": "f5422473516c98c901509fb51b5fb46cfbefb67a",
+  "abbreviated_commit": "f542247",
+  "tree": "aa7664470b36827182a9d01d710a6ef6167e533a",
+  "abbreviated_tree": "aa76644",
+  "parent": "ea8e15560dada78dda4b44caac5e01c5e100a6d3",
+  "abbreviated_parent": "ea8e155",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "worked out sidebar show",
+  "sanitized_subject_line": "worked-out-sidebar-show",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 26 Apr 2019 14:10:12 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 26 Apr 2019 14:10:12 -0400"
+  }
+},
+{
+  "commit": "ea8e15560dada78dda4b44caac5e01c5e100a6d3",
+  "abbreviated_commit": "ea8e155",
+  "tree": "9f2d85076945a93782860c10cc854d9801f8ab84",
+  "abbreviated_tree": "9f2d850",
+  "parent": "4be1dc8420609d1a0ac1de6fc128c5d2dd889afd",
+  "abbreviated_parent": "4be1dc8",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "worked out sidebar show",
+  "sanitized_subject_line": "worked-out-sidebar-show",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 26 Apr 2019 14:09:48 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 26 Apr 2019 14:09:48 -0400"
+  }
+},
+{
+  "commit": "bab0ee9ce483318ec02997e6bfe2b39dd4a4b19c",
+  "abbreviated_commit": "bab0ee9",
+  "tree": "de7f18273177cd53288461399b71f7f18a6810d8",
+  "abbreviated_tree": "de7f182",
+  "parent": "b020310f12d5148eecf01f2548b18e686ebc85f9",
+  "abbreviated_parent": "b020310",
+  "refs": "chirag",
+  "encoding": "%
+e",
+  "subject": "check",
+  "sanitized_subject_line": "check",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 20:11:12 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 20:11:12 -0400"
+  }
+},
+{
+  "commit": "dca03d756540e890c370804592e521e65f28a806",
+  "abbreviated_commit": "dca03d7",
+  "tree": "19745623d47e1e71003425c1fcd541b7b19f5377",
+  "abbreviated_tree": "1974562",
+  "parent": "b3cdcf1530b96dccdb942c4504df78fee2674064",
+  "abbreviated_parent": "b3cdcf1",
+  "refs": "origin/remove-highlight, remove-highlight, path-correction",
+  "encoding": "%
+e",
+  "subject": "removed unecessary files",
+  "sanitized_subject_line": "removed-unecessary-files",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 18:49:58 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 18:49:58 -0400"
+  }
+},
+{
+  "commit": "b3cdcf1530b96dccdb942c4504df78fee2674064",
+  "abbreviated_commit": "b3cdcf1",
+  "tree": "14d64877ceed489b55af47c21e997097f117b391",
+  "abbreviated_tree": "14d6487",
+  "parent": "96d82721f4c6c256b810a6e74ca9c2ad612e51b9",
+  "abbreviated_parent": "96d8272",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "added comments and small props error",
+  "sanitized_subject_line": "added-comments-and-small-props-error",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 18:43:03 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 18:43:03 -0400"
+  }
+},
+{
+  "commit": "96d82721f4c6c256b810a6e74ca9c2ad612e51b9",
+  "abbreviated_commit": "96d8272",
+  "tree": "554daf5900d3d07ad9cd8a19025e6b49dd49adc8",
+  "abbreviated_tree": "554daf5",
+  "parent": "9b50cc1d6ccc857465352b24bf313c7b777b519b",
+  "abbreviated_parent": "9b50cc1",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "tried to make selections dark blue",
+  "sanitized_subject_line": "tried-to-make-selections-dark-blue",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 18:06:31 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 18:06:31 -0400"
+  }
+},
+{
+  "commit": "9b50cc1d6ccc857465352b24bf313c7b777b519b",
+  "abbreviated_commit": "9b50cc1",
+  "tree": "22aacaffd7b48fbd3c96c28dbbac1695efae9180",
+  "abbreviated_tree": "22aacaf",
+  "parent": "96e83536b9fe61b0d5affe58eeb4bba629ac66d7",
+  "abbreviated_parent": "96e8353",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "UI changes",
+  "sanitized_subject_line": "UI-changes",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 14:52:49 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 14:52:49 -0400"
+  }
+},
+{
+  "commit": "96e83536b9fe61b0d5affe58eeb4bba629ac66d7",
+  "abbreviated_commit": "96e8353",
+  "tree": "9ac5adae00688f389bf82617a933aa3d40ea725c",
+  "abbreviated_tree": "9ac5ada",
+  "parent": "85ddfda6aae6f72e112e506207983e609491fae5",
+  "abbreviated_parent": "85ddfda",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "made fileTreeStyle light themed",
+  "sanitized_subject_line": "made-fileTreeStyle-light-themed",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 13:01:36 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 13:01:36 -0400"
+  }
+},
+{
+  "commit": "dd0f8a9789fe121778a9f28a54ee2d2fedeb0260",
+  "abbreviated_commit": "dd0f8a9",
+  "tree": "2d896ebf6998783809e0809588ad1c480cbaf555",
+  "abbreviated_tree": "2d896eb",
+  "parent": "eb53abe4102d0b3fcf8fa03c80f12990278a4297",
+  "abbreviated_parent": "eb53abe",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "formatting",
+  "sanitized_subject_line": "formatting",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 12:16:53 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 12:16:53 -0400"
+  }
+},
+{
+  "commit": "eb53abe4102d0b3fcf8fa03c80f12990278a4297",
+  "abbreviated_commit": "eb53abe",
+  "tree": "47c67873649de357a063228dc7d79db039b16936",
+  "abbreviated_tree": "47c6787",
+  "parent": "aad0eff3a8c4e42d4713d23b4501c53aac866203",
+  "abbreviated_parent": "aad0eff",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "got hiding and other highlighting functions working",
+  "sanitized_subject_line": "got-hiding-and-other-highlighting-functions-working",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 12:15:20 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 12:15:20 -0400"
+  }
+},
+{
+  "commit": "aad0eff3a8c4e42d4713d23b4501c53aac866203",
+  "abbreviated_commit": "aad0eff",
+  "tree": "1fd08eba5e10538db99c16efac313a10593d0873",
+  "abbreviated_tree": "1fd08eb",
+  "parent": "a25b3452f9a8080140201daa4793f898077a8594 06d866a9889d1192f004d64334c6e5203de41cc3",
+  "abbreviated_parent": "a25b345 06d866a",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "merged conflicts and got loading and deleting working",
+  "sanitized_subject_line": "merged-conflicts-and-got-loading-and-deleting-working",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 11:36:14 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 11:36:14 -0400"
+  }
+},
+{
+  "commit": "a25b3452f9a8080140201daa4793f898077a8594",
+  "abbreviated_commit": "a25b345",
+  "tree": "008b85ed26c513d3c9618c849a99734ea0a9402b",
+  "abbreviated_tree": "008b85e",
+  "parent": "dd741784299d2e2b1a2821b89dfaf8b8b0be9f8b",
+  "abbreviated_parent": "dd74178",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "working on hiding all highlights",
+  "sanitized_subject_line": "working-on-hiding-all-highlights",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 11:34:05 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 11:34:05 -0400"
+  }
+},
+{
+  "commit": "dd741784299d2e2b1a2821b89dfaf8b8b0be9f8b",
+  "abbreviated_commit": "dd74178",
+  "tree": "47339e9836ab732ca80a5d123826e1ec54438000",
+  "abbreviated_tree": "47339e9",
+  "parent": "43f93e2c2c8be93e0fd9a8e0286c628f7e5773d3",
+  "abbreviated_parent": "43f93e2",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "working on hide component",
+  "sanitized_subject_line": "working-on-hide-component",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 00:23:04 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 24 Apr 2019 00:23:04 -0400"
+  }
+},
+{
+  "commit": "43f93e2c2c8be93e0fd9a8e0286c628f7e5773d3",
+  "abbreviated_commit": "43f93e2",
+  "tree": "5035bf3c36e9cb9b0e942eaff388a59f2139de1b",
+  "abbreviated_tree": "5035bf3",
+  "parent": "d7f349a5b4f3ae91efb80d20fe98fbf37149e415",
+  "abbreviated_parent": "d7f349a",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "remove highlights works! peter and chirag",
+  "sanitized_subject_line": "remove-highlights-works-peter-and-chirag",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 23:29:26 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 23:29:26 -0400"
+  }
+},
+{
+  "commit": "d7f349a5b4f3ae91efb80d20fe98fbf37149e415",
+  "abbreviated_commit": "d7f349a",
+  "tree": "be51ab2ef55f09d0dc38f33c965913d296e27ad3",
+  "abbreviated_tree": "be51ab2",
+  "parent": "682486751e5b0e7d6d617c704db4436bbf728da7",
+  "abbreviated_parent": "6824867",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "search sidebar and searchresult components have been made",
+  "sanitized_subject_line": "search-sidebar-and-searchresult-components-have-been-made",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 22:38:18 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 22:38:18 -0400"
+  }
+},
+{
+  "commit": "682486751e5b0e7d6d617c704db4436bbf728da7",
+  "abbreviated_commit": "6824867",
+  "tree": "57ac6905a7abacc6c65c14650c388abcb1f18f97",
+  "abbreviated_tree": "57ac690",
+  "parent": "ed379598271f08963fa456e32c953fdaa545ebb8 75401860b7517f3e2a48629ed6a0a9d3475a04bb",
+  "abbreviated_parent": "ed37959 7540186",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "new stuff + merge",
+  "sanitized_subject_line": "new-stuff-merge",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 21:32:54 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 21:32:54 -0400"
+  }
+},
+{
+  "commit": "ed379598271f08963fa456e32c953fdaa545ebb8",
+  "abbreviated_commit": "ed37959",
+  "tree": "bbb6db227d563d31e28426977dcffe5e7691f5d4",
+  "abbreviated_tree": "bbb6db2",
+  "parent": "8fa876bead17e7ca5932cb9756ff2bf47dbcea55",
+  "abbreviated_parent": "8fa876b",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "new stuff",
+  "sanitized_subject_line": "new-stuff",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 21:32:04 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 21:32:04 -0400"
+  }
+},
+{
+  "commit": "8fa876bead17e7ca5932cb9756ff2bf47dbcea55",
+  "abbreviated_commit": "8fa876b",
+  "tree": "dd4d9a8f37c6e1a16120d3fd8d5a644f86b151cc",
+  "abbreviated_tree": "dd4d9a8",
+  "parent": "11dc19bddf618803246c58ca6ae8ea804381ebcf e0097446b46c1f141efbc2f99d763239fa2c80db",
+  "abbreviated_parent": "11dc19b e009744",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'comment-component' into develop",
+  "sanitized_subject_line": "Merge-branch-comment-component-into-develop",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 16:52:35 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 16:52:35 -0400"
+  }
+},
+{
+  "commit": "e0097446b46c1f141efbc2f99d763239fa2c80db",
+  "abbreviated_commit": "e009744",
+  "tree": "1790fb7c5412aaba162f03b66d38e8260c694894",
+  "abbreviated_tree": "1790fb7",
+  "parent": "b4652671ba422e7775504639f9366fec362d5581",
+  "abbreviated_parent": "b465267",
+  "refs": "origin/comment-component, comment-component",
+  "encoding": "%
+e",
+  "subject": "footer stuff",
+  "sanitized_subject_line": "footer-stuff",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 16:52:13 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 16:52:13 -0400"
+  }
+},
+{
+  "commit": "b4652671ba422e7775504639f9366fec362d5581",
+  "abbreviated_commit": "b465267",
+  "tree": "4efca9da263d16903a522092f8c925ec2640bf8f",
+  "abbreviated_tree": "4efca9d",
+  "parent": "386bb1591854984c3b37f5e431d637e87efe2801",
+  "abbreviated_parent": "386bb15",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "added loading spinner and context menu",
+  "sanitized_subject_line": "added-loading-spinner-and-context-menu",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 13:19:55 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 13:19:55 -0400"
+  }
+},
+{
+  "commit": "386bb1591854984c3b37f5e431d637e87efe2801",
+  "abbreviated_commit": "386bb15",
+  "tree": "b64360859cef7dc6a91f894491a0052a8eedc203",
+  "abbreviated_tree": "b643608",
+  "parent": "ec1e5f93b5058cc98e329b0230d09d1351bd4b3e",
+  "abbreviated_parent": "ec1e5f9",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "working on menu",
+  "sanitized_subject_line": "working-on-menu",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 12:34:09 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 12:49:41 -0400"
+  }
+},
+{
+  "commit": "ec1e5f93b5058cc98e329b0230d09d1351bd4b3e",
+  "abbreviated_commit": "ec1e5f9",
+  "tree": "76136a741cc95ce8e08822b3447f4e1f8144f937",
+  "abbreviated_tree": "76136a7",
+  "parent": "a524b1fe4a5412c6ac12599f400db97280f532ce d6fcf96c6d4615f661bc657529ef4b3fcaf6dd19",
+  "abbreviated_parent": "a524b1f d6fcf96",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'robust-caching' into develop",
+  "sanitized_subject_line": "Merge-branch-robust-caching-into-develop",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 12:35:31 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 23 Apr 2019 12:35:31 -0400"
+  }
+},
+{
+  "commit": "a524b1fe4a5412c6ac12599f400db97280f532ce",
+  "abbreviated_commit": "a524b1f",
+  "tree": "a0f36059d6f75e13f7107dcefcadf99cf0945a2c",
+  "abbreviated_tree": "a0f3605",
+  "parent": "5db89628e1fb1c8d05bf53a7d708e91ac50ba8a2",
+  "abbreviated_parent": "5db8962",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "got rid of unnecessary files",
+  "sanitized_subject_line": "got-rid-of-unnecessary-files",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 22 Apr 2019 00:52:45 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 22 Apr 2019 00:52:45 -0400"
+  }
+},
+{
+  "commit": "5db89628e1fb1c8d05bf53a7d708e91ac50ba8a2",
+  "abbreviated_commit": "5db8962",
+  "tree": "770da2d99605795d96ff8fb3dafe1ca6adc98533",
+  "abbreviated_tree": "770da2d",
+  "parent": "b847dba676e752f7b44daf3da6d79d24d3342836",
+  "abbreviated_parent": "b847dba",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "fixed spacing",
+  "sanitized_subject_line": "fixed-spacing",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 22 Apr 2019 00:49:07 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 22 Apr 2019 00:49:07 -0400"
+  }
+},
+{
+  "commit": "b847dba676e752f7b44daf3da6d79d24d3342836",
+  "abbreviated_commit": "b847dba",
+  "tree": "64fb95e0b670ff0872a7eda88d39b8f242f8f0cd",
+  "abbreviated_tree": "64fb95e",
+  "parent": "9ad9a4a0dea4ac75943d7789d8e3fe439fa96a3f",
+  "abbreviated_parent": "9ad9a4a",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "more fixes",
+  "sanitized_subject_line": "more-fixes",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 22 Apr 2019 00:48:09 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 22 Apr 2019 00:48:09 -0400"
+  }
+},
+{
+  "commit": "9ad9a4a0dea4ac75943d7789d8e3fe439fa96a3f",
+  "abbreviated_commit": "9ad9a4a",
+  "tree": "38aedc020418a51068b4acd1dec5403d5b9fd0d7",
+  "abbreviated_tree": "38aedc0",
+  "parent": "4f4a9917cea1f000f19ad552b5becf1860aab071",
+  "abbreviated_parent": "4f4a991",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "small changes",
+  "sanitized_subject_line": "small-changes",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 22:47:44 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 22:47:44 -0400"
+  }
+},
+{
+  "commit": "4f4a9917cea1f000f19ad552b5becf1860aab071",
+  "abbreviated_commit": "4f4a991",
+  "tree": "ecae17503cbac9bd2637eda9f168b7ddab9ed230",
+  "abbreviated_tree": "ecae175",
+  "parent": "673ad0316c58272d0f1a1c088b1a8156aebb9000",
+  "abbreviated_parent": "673ad03",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "fixed comment store propagation",
+  "sanitized_subject_line": "fixed-comment-store-propagation",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 22:42:27 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 22:42:27 -0400"
+  }
+},
+{
+  "commit": "673ad0316c58272d0f1a1c088b1a8156aebb9000",
+  "abbreviated_commit": "673ad03",
+  "tree": "c22879bb43ac183f6744d9398d1c00d48b2849c2",
+  "abbreviated_tree": "c22879b",
+  "parent": "90931b4edeb7a31578e29f4b0f44b32830b4b230",
+  "abbreviated_parent": "90931b4",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "propagating comments and range objects up to store",
+  "sanitized_subject_line": "propagating-comments-and-range-objects-up-to-store",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 22:25:09 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 22:25:09 -0400"
+  }
+},
+{
+  "commit": "90931b4edeb7a31578e29f4b0f44b32830b4b230",
+  "abbreviated_commit": "90931b4",
+  "tree": "0ad0d67583bf870eb941431ff786a96ed4bfa1db",
+  "abbreviated_tree": "0ad0d67",
+  "parent": "2409dcc1e5eefd543bc3a2bf2e2ce78364b9f368",
+  "abbreviated_parent": "2409dcc",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "added persistent highlighting",
+  "sanitized_subject_line": "added-persistent-highlighting",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 21:16:15 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 21:16:15 -0400"
+  }
+},
+{
+  "commit": "2409dcc1e5eefd543bc3a2bf2e2ce78364b9f368",
+  "abbreviated_commit": "2409dcc",
+  "tree": "83b4b8fd57175a7b1ef26c785f2db69b5d190dcf",
+  "abbreviated_tree": "83b4b8f",
+  "parent": "12a4ab189cdfc79f44f0a5b0a70c2d8fd243bcdd",
+  "abbreviated_parent": "12a4ab1",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "made url search button",
+  "sanitized_subject_line": "made-url-search-button",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 20:35:08 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 20:35:08 -0400"
+  }
+},
+{
+  "commit": "9b819c3abfa4ebb7553ad7dcc7dbef314cf7e1dc",
+  "abbreviated_commit": "9b819c3",
+  "tree": "b77d9b15233d6be6f57012dec4bf4f5680547001",
+  "abbreviated_tree": "b77d9b1",
+  "parent": "a35784f873f47f56a3a1f508cfe7920358ff0d33",
+  "abbreviated_parent": "a35784f",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "MERGE",
+  "sanitized_subject_line": "MERGE",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 18:58:16 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 18:58:16 -0400"
+  }
+},
+{
+  "commit": "a35784f873f47f56a3a1f508cfe7920358ff0d33",
+  "abbreviated_commit": "a35784f",
+  "tree": "f416ea92b6c957f7321a7f2b4021476618e1006c",
+  "abbreviated_tree": "f416ea9",
+  "parent": "f4fb25230605afcc53ec47fe8eb21e5fdd159b2f",
+  "abbreviated_parent": "f4fb252",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "new stuff",
+  "sanitized_subject_line": "new-stuff",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 18:42:16 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 18:42:16 -0400"
+  }
+},
+{
+  "commit": "f4fb25230605afcc53ec47fe8eb21e5fdd159b2f",
+  "abbreviated_commit": "f4fb252",
+  "tree": "66c96ebcfd0a90902c305c2df6634e5ca64e1acb",
+  "abbreviated_tree": "66c96eb",
+  "parent": "b875b7b0c4ccea3d2f497ea5017550c0904e7d72",
+  "abbreviated_parent": "b875b7b",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "changed UI and then propogated states back up to store to feed into sidebar component",
+  "sanitized_subject_line": "changed-UI-and-then-propogated-states-back-up-to-store-to-feed-into-sidebar-component",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 15:32:01 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 21 Apr 2019 15:32:01 -0400"
+  }
+},
+{
+  "commit": "b875b7b0c4ccea3d2f497ea5017550c0904e7d72",
+  "abbreviated_commit": "b875b7b",
+  "tree": "75043c784ca03f9f437b554fa18b6b279c079859",
+  "abbreviated_tree": "75043c7",
+  "parent": "af97bed30f337fce161f8f823f1c6088ebc8cef0",
+  "abbreviated_parent": "af97bed",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Got store and data flow working",
+  "sanitized_subject_line": "Got-store-and-data-flow-working",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 19:20:24 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 19:20:24 -0400"
+  }
+},
+{
+  "commit": "af97bed30f337fce161f8f823f1c6088ebc8cef0",
+  "abbreviated_commit": "af97bed",
+  "tree": "29e496d399c07371cdf7e2c4ad3c86c77f5ef4a9",
+  "abbreviated_tree": "29e496d",
+  "parent": "9fecabde0bcf74738386428e4db877868bac4da7",
+  "abbreviated_parent": "9fecabd",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "passed in store",
+  "sanitized_subject_line": "passed-in-store",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 19:10:06 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 19:10:06 -0400"
+  }
+},
+{
+  "commit": "9fecabde0bcf74738386428e4db877868bac4da7",
+  "abbreviated_commit": "9fecabd",
+  "tree": "7218901c3458e3e5f97f16f98c5ed2dc3df5b75a",
+  "abbreviated_tree": "7218901",
+  "parent": "e21e94ff5f4529fa7297e0b7b1fa5d9075ffd896",
+  "abbreviated_parent": "e21e94f",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "set up redux for sidebar",
+  "sanitized_subject_line": "set-up-redux-for-sidebar",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 19:08:07 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 19:08:07 -0400"
+  }
+},
+{
+  "commit": "b020310f12d5148eecf01f2548b18e686ebc85f9",
+  "abbreviated_commit": "b020310",
+  "tree": "084455f13aca3ae5a3c8dcba0868b388fb981ba0",
+  "abbreviated_tree": "084455f",
+  "parent": "37caae41bd9810adfbee43fd50b87cc4ec1ff6d1 8343bd5c8ee4e8f84fad8216796913e70e67a00b",
+  "abbreviated_parent": "37caae4 8343bd5",
+  "refs": "origin/chirag",
+  "encoding": "%
+e",
+  "subject": "Merge remote-tracking branch 'origin/chirag' into chirag",
+  "sanitized_subject_line": "Merge-remote-tracking-branch-origin-chirag-into-chirag",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 14:37:46 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 14:37:46 -0400"
+  }
+},
+{
+  "commit": "e21e94ff5f4529fa7297e0b7b1fa5d9075ffd896",
+  "abbreviated_commit": "e21e94f",
+  "tree": "8f95929648b3b34ead86a724f48b7c62cdd63a89",
+  "abbreviated_tree": "8f95929",
+  "parent": "6492bd28039a96ae93f688d0bfdc14831e655237",
+  "abbreviated_parent": "6492bd2",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "small change",
+  "sanitized_subject_line": "small-change",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 14:20:49 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 14:20:49 -0400"
+  }
+},
+{
+  "commit": "6492bd28039a96ae93f688d0bfdc14831e655237",
+  "abbreviated_commit": "6492bd2",
+  "tree": "fb25b8bb5c810dba6361234403a97d9481bdc97e",
+  "abbreviated_tree": "fb25b8b",
+  "parent": "60aed52d85b893c2956e71f0630c46132aad93ab 14d0c55cc228eebefeb2451b552b0696576d8a8e",
+  "abbreviated_parent": "60aed52 14d0c55",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'file-explorer' into develop",
+  "sanitized_subject_line": "Merge-branch-file-explorer-into-develop",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 14:06:58 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 14:06:58 -0400"
+  }
+},
+{
+  "commit": "14d0c55cc228eebefeb2451b552b0696576d8a8e",
+  "abbreviated_commit": "14d0c55",
+  "tree": "f99e824f6ebb5572c3566289e275257d03675e41",
+  "abbreviated_tree": "f99e824",
+  "parent": "102623ffa592a542320c7d858dbd99ddaa4d0829",
+  "abbreviated_parent": "102623f",
+  "refs": "origin/file-explorer, file-explorer",
+  "encoding": "%
+e",
+  "subject": "binding fixed",
+  "sanitized_subject_line": "binding-fixed",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 14:06:40 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 14:06:40 -0400"
+  }
+},
+{
+  "commit": "60aed52d85b893c2956e71f0630c46132aad93ab",
+  "abbreviated_commit": "60aed52",
+  "tree": "db8a718bd30a5357ca7453a4f62bdd9b274d8255",
+  "abbreviated_tree": "db8a718",
+  "parent": "ac4a89865e8e2c4b440b94f1e5202e0aa1e43654 b18f19e3afb1a365f611580c42d9a63aca2b3f17",
+  "abbreviated_parent": "ac4a898 b18f19e",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'develop' of https://github.com/chishankar/WebCache into develop",
+  "sanitized_subject_line": "Merge-branch-develop-of-https-github.com-chishankar-WebCache-into-develop",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 14:00:13 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 14:00:13 -0400"
+  }
+},
+{
+  "commit": "ac4a89865e8e2c4b440b94f1e5202e0aa1e43654",
+  "abbreviated_commit": "ac4a898",
+  "tree": "a3637012c2447d2e0828f41fc00a457cdaade145",
+  "abbreviated_tree": "a363701",
+  "parent": "1f81d56a0f36ea763b638ce3dbce2769af531267 37caae41bd9810adfbee43fd50b87cc4ec1ff6d1",
+  "abbreviated_parent": "1f81d56 37caae4",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'chirag' into develop",
+  "sanitized_subject_line": "Merge-branch-chirag-into-develop",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 13:56:49 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 13:56:49 -0400"
+  }
+},
+{
+  "commit": "37caae41bd9810adfbee43fd50b87cc4ec1ff6d1",
+  "abbreviated_commit": "37caae4",
+  "tree": "c081c382d3e731362ea846334f78b817fe405a50",
+  "abbreviated_tree": "c081c38",
+  "parent": "3ac8c8159bde9310925c8687e2da9413739e79a6",
+  "abbreviated_parent": "3ac8c81",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "hello",
+  "sanitized_subject_line": "hello",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 13:54:55 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 13:54:55 -0400"
+  }
+},
+{
+  "commit": "3ac8c8159bde9310925c8687e2da9413739e79a6",
+  "abbreviated_commit": "3ac8c81",
+  "tree": "da1eacfa43f9c7de35c377fbebf56ff8f6de1aa2",
+  "abbreviated_tree": "da1eacf",
+  "parent": "a3998139598b9659f0a5c615e05c15bf50a50473 acfbd367911429b9ba9a0140fd75c828c5769c80",
+  "abbreviated_parent": "a399813 acfbd36",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge branch 'chirag' of https://github.com/chishankar/WebCache into chirag",
+  "sanitized_subject_line": "Merge-branch-chirag-of-https-github.com-chishankar-WebCache-into-chirag",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 13:45:51 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 13:45:51 -0400"
+  }
+},
+{
+  "commit": "a3998139598b9659f0a5c615e05c15bf50a50473",
+  "abbreviated_commit": "a399813",
+  "tree": "4296f19e2c75331ef0a9cafdf0d80220746156dc",
+  "abbreviated_tree": "4296f19",
+  "parent": "28653486555e1491d04442338469b243ed9a90b8",
+  "abbreviated_parent": "2865348",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "sending highlighted data to",
+  "sanitized_subject_line": "sending-highlighted-data-to",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 13:45:42 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 13:45:42 -0400"
+  }
+},
+{
+  "commit": "28653486555e1491d04442338469b243ed9a90b8",
+  "abbreviated_commit": "2865348",
+  "tree": "72bc03ba258c5b9273d4429e90af472221101fe6",
+  "abbreviated_tree": "72bc03b",
+  "parent": "09e3c38ad91c7c731ebf4e8517b40bc2abd84ce1",
+  "abbreviated_parent": "09e3c38",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Made resource object for calibrating full paths. Cleaned up and tried to solve iframe sources issue",
+  "sanitized_subject_line": "Made-resource-object-for-calibrating-full-paths.-Cleaned-up-and-tried-to-solve-iframe-sources-issue",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 01:40:28 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 19 Apr 2019 01:40:28 -0400"
+  }
+},
+{
+  "commit": "09e3c38ad91c7c731ebf4e8517b40bc2abd84ce1",
+  "abbreviated_commit": "09e3c38",
+  "tree": "f7b842bc6677906510b722acd7d463aebb00e688",
+  "abbreviated_tree": "f7b842b",
+  "parent": "48e4acd9932f7b035337d9d9859f143a5f1d25e0",
+  "abbreviated_parent": "48e4acd",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "hard shit",
+  "sanitized_subject_line": "hard-shit",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 18 Apr 2019 22:31:23 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 18 Apr 2019 22:31:23 -0400"
+  }
+},
+{
+  "commit": "48e4acd9932f7b035337d9d9859f143a5f1d25e0",
+  "abbreviated_commit": "48e4acd",
+  "tree": "6ca4e027b945eb1dad355423d5d8136adf24ebbe",
+  "abbreviated_tree": "6ca4e02",
+  "parent": "d6ab62cbd98e4a1f70718e56588c19f2798cbcda",
+  "abbreviated_parent": "d6ab62c",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "we fuck shit up chirag & akbar",
+  "sanitized_subject_line": "we-fuck-shit-up-chirag-akbar",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 18 Apr 2019 22:00:56 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 18 Apr 2019 22:00:56 -0400"
+  }
+},
+{
+  "commit": "1f81d56a0f36ea763b638ce3dbce2769af531267",
+  "abbreviated_commit": "1f81d56",
+  "tree": "0a33ec17d8a6784ea565486d7cb7cf18137487f6",
+  "abbreviated_tree": "0a33ec1",
+  "parent": "1acec3326d67f91dea8fdfb2f6bd3daaaa4e4015",
+  "abbreviated_parent": "1acec33",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "updated",
+  "sanitized_subject_line": "updated",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 16 Apr 2019 13:02:10 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 16 Apr 2019 13:02:10 -0400"
+  }
+},
+{
+  "commit": "1acec3326d67f91dea8fdfb2f6bd3daaaa4e4015",
+  "abbreviated_commit": "1acec33",
+  "tree": "86952c773d759f4c42ec1adb4cdcb45673fff10a",
+  "abbreviated_tree": "86952c7",
+  "parent": "ed817d2c38ede781c53406e8fa3b2b89723383a9",
+  "abbreviated_parent": "ed817d2",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "updated readMe",
+  "sanitized_subject_line": "updated-readMe",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 16 Apr 2019 12:48:53 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 16 Apr 2019 12:48:53 -0400"
+  }
+},
+{
+  "commit": "d6ab62cbd98e4a1f70718e56588c19f2798cbcda",
+  "abbreviated_commit": "d6ab62c",
+  "tree": "20f82e253c14a4816a6428a0b27aba09191f9088",
+  "abbreviated_tree": "20f82e2",
+  "parent": "506039b1dce4792bbdb4f1029f498a41ae19b522",
+  "abbreviated_parent": "506039b",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "working on some shit",
+  "sanitized_subject_line": "working-on-some-shit",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 16 Apr 2019 12:26:45 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 16 Apr 2019 12:26:45 -0400"
+  }
+},
+{
+  "commit": "506039b1dce4792bbdb4f1029f498a41ae19b522",
+  "abbreviated_commit": "506039b",
+  "tree": "69632fdbfe2974d51de2473f34e9c1fd07d36c29",
+  "abbreviated_tree": "69632fd",
+  "parent": "bf435be71c11bf0aeabe9973140ff9bcd5bc223c",
+  "abbreviated_parent": "bf435be",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "HIGHLIGHTING WORKING IN IFRAME WITH CHANGING COLOR",
+  "sanitized_subject_line": "HIGHLIGHTING-WORKING-IN-IFRAME-WITH-CHANGING-COLOR",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 10 Apr 2019 23:20:56 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Wed, 10 Apr 2019 23:20:56 -0400"
+  }
+},
+{
+  "commit": "806ea852ed2abbd375ae0d7a174b74856350bb85",
+  "abbreviated_commit": "806ea85",
+  "tree": "752951bb6235bac14a7781a3c7c4c4ec827f3e05",
+  "abbreviated_tree": "752951b",
+  "parent": "b48cf47d0ac99cbaf247c4870063b37ec27bbb44",
+  "abbreviated_parent": "b48cf47",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "trying out IPC stuff",
+  "sanitized_subject_line": "trying-out-IPC-stuff",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 9 Apr 2019 21:58:23 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 9 Apr 2019 21:58:23 -0400"
+  }
+},
+{
+  "commit": "b48cf47d0ac99cbaf247c4870063b37ec27bbb44",
+  "abbreviated_commit": "b48cf47",
+  "tree": "61312b3982d803c9f9cc4a4e77ec441f64b13649",
+  "abbreviated_tree": "61312b3",
+  "parent": "7a69d73ced5b90914485805002f15d4fc54870ef",
+  "abbreviated_parent": "7a69d73",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "something is not right, fuckkkk",
+  "sanitized_subject_line": "something-is-not-right-fuckkkk",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 8 Apr 2019 21:54:16 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 8 Apr 2019 21:54:16 -0400"
+  }
+},
+{
+  "commit": "bf435be71c11bf0aeabe9973140ff9bcd5bc223c",
+  "abbreviated_commit": "bf435be",
+  "tree": "50e6de063667cf816eaadf12ec3114153bea9cc5",
+  "abbreviated_tree": "50e6de0",
+  "parent": "7a69d73ced5b90914485805002f15d4fc54870ef d9316bc4d479e036867adb100d3eca954ad71a05",
+  "abbreviated_parent": "7a69d73 d9316bc",
+  "refs": "origin/iframe-communication",
+  "encoding": "%
+e",
+  "subject": "Merge pull request #5 from chishankar/search-index-testing",
+  "sanitized_subject_line": "Merge-pull-request-5-from-chishankar-search-index-testing",
+  "body": "Search index testing",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 8 Apr 2019 16:44:55 -0400"
+  },
+  "commiter": 
+{
+    "name": "GitHub",
+    "email": "noreply@github.com",
+    "date": "Mon, 8 Apr 2019 16:44:55 -0400"
+  }
+},
+{
+  "commit": "7a69d73ced5b90914485805002f15d4fc54870ef",
+  "abbreviated_commit": "7a69d73",
+  "tree": "4e5f5c4d772a887aea499b1faa3d642d4c8cd6cd",
+  "abbreviated_tree": "4e5f5c4",
+  "parent": "3a55216ef77ce1135983a287e314fa6bb4a695a4",
+  "abbreviated_parent": "3a55216",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "a few css modifications",
+  "sanitized_subject_line": "a-few-css-modifications",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 8 Apr 2019 16:41:32 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 8 Apr 2019 16:41:32 -0400"
+  }
+},
+{
+  "commit": "3a55216ef77ce1135983a287e314fa6bb4a695a4",
+  "abbreviated_commit": "3a55216",
+  "tree": "bc1ca5284d74afaa94b115f86a0bedfc832e9587",
+  "abbreviated_tree": "bc1ca52",
+  "parent": "b6d357b4c313c218ea3a5bf70ecbb475b32bd62e e426e038f3673f61f8c97de5e6577c8bdcff5ed5",
+  "abbreviated_parent": "b6d357b e426e03",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge pull request #4 from chishankar/default-landing-page",
+  "sanitized_subject_line": "Merge-pull-request-4-from-chishankar-default-landing-page",
+  "body": "New footer and cache naming",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 8 Apr 2019 14:30:37 -0400"
+  },
+  "commiter": 
+{
+    "name": "GitHub",
+    "email": "noreply@github.com",
+    "date": "Mon, 8 Apr 2019 14:30:37 -0400"
+  }
+},
+{
+  "commit": "e426e038f3673f61f8c97de5e6577c8bdcff5ed5",
+  "abbreviated_commit": "e426e03",
+  "tree": "bc1ca5284d74afaa94b115f86a0bedfc832e9587",
+  "abbreviated_tree": "bc1ca52",
+  "parent": "b2115c408def15de407b094ed19c065e01028030",
+  "abbreviated_parent": "b2115c4",
+  "refs": "origin/default-landing-page, default-landing-page",
+  "encoding": "%
+e",
+  "subject": "New footer and cache naming",
+  "sanitized_subject_line": "New-footer-and-cache-naming",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 8 Apr 2019 14:30:00 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 8 Apr 2019 14:30:00 -0400"
+  }
+},
+{
+  "commit": "b6d357b4c313c218ea3a5bf70ecbb475b32bd62e",
+  "abbreviated_commit": "b6d357b",
+  "tree": "a32615ccf457e545ce86370af69bfed438472ca6",
+  "abbreviated_tree": "a32615c",
+  "parent": "70c23fccce79fb2c08653e08056a8d238a494727 b2115c408def15de407b094ed19c065e01028030",
+  "abbreviated_parent": "70c23fc b2115c4",
+  "refs": "origin/search-integration",
+  "encoding": "%
+e",
+  "subject": "Merge pull request #3 from chishankar/default-landing-page",
+  "sanitized_subject_line": "Merge-pull-request-3-from-chishankar-default-landing-page",
+  "body": "default landing page created",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 8 Apr 2019 10:42:07 -0400"
+  },
+  "commiter": 
+{
+    "name": "GitHub",
+    "email": "noreply@github.com",
+    "date": "Mon, 8 Apr 2019 10:42:07 -0400"
+  }
+},
+{
+  "commit": "b2115c408def15de407b094ed19c065e01028030",
+  "abbreviated_commit": "b2115c4",
+  "tree": "a32615ccf457e545ce86370af69bfed438472ca6",
+  "abbreviated_tree": "a32615c",
+  "parent": "8778efbeccc10c9e81cbd989f5df18a476c4ccbe",
+  "abbreviated_parent": "8778efb",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "set default page in store",
+  "sanitized_subject_line": "set-default-page-in-store",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 8 Apr 2019 10:41:36 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Mon, 8 Apr 2019 10:41:36 -0400"
+  }
+},
+{
+  "commit": "d9cdc6fe80de480bf009335af0e5be6c6f951cf4",
+  "abbreviated_commit": "d9cdc6f",
+  "tree": "bfd33c017da7c9d334a427e6ea4d4a8072a11183",
+  "abbreviated_tree": "bfd33c0",
+  "parent": "6baf453c0837c52034498a61961da130162363c9 3671a08563fd0594b6c41646adf5fb4befa11357",
+  "abbreviated_parent": "6baf453 3671a08",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "merged",
+  "sanitized_subject_line": "merged",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 7 Apr 2019 20:45:20 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 7 Apr 2019 20:45:20 -0400"
+  }
+},
+{
+  "commit": "6baf453c0837c52034498a61961da130162363c9",
+  "abbreviated_commit": "6baf453",
+  "tree": "bf81aa8d9b2b2ddcead36416330aa766eec4cb1c",
+  "abbreviated_tree": "bf81aa8",
+  "parent": "d9f95f53736af95649a18d0bdf1175029a667e5c",
+  "abbreviated_parent": "d9f95f5",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "redux fix for active url",
+  "sanitized_subject_line": "redux-fix-for-active-url",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 7 Apr 2019 20:44:35 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 7 Apr 2019 20:44:35 -0400"
+  }
+},
+{
+  "commit": "d9f95f53736af95649a18d0bdf1175029a667e5c",
+  "abbreviated_commit": "d9f95f5",
+  "tree": "9c948f4374b0117c13897ea3c63eebecc6225ed9",
+  "abbreviated_tree": "9c948f4",
+  "parent": "5316a6de39b5cce634ea90f58d8b3c1ae5e99b6a",
+  "abbreviated_parent": "5316a6d",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Able to trender local downloads in render window",
+  "sanitized_subject_line": "Able-to-trender-local-downloads-in-render-window",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 7 Apr 2019 19:52:46 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 7 Apr 2019 19:52:46 -0400"
+  }
+},
+{
+  "commit": "2a378a0b0063cc6fe4878e0c4d0be932ba2ab3e7",
+  "abbreviated_commit": "2a378a0",
+  "tree": "1c4ce599379636879fde154f5dd4cdd2c4616015",
+  "abbreviated_tree": "1c4ce59",
+  "parent": "2ccce95d000b4b4f216c5211a75a79d74fa22ffa",
+  "abbreviated_parent": "2ccce95",
+  "refs": "origin/new-ui, new-ui",
+  "encoding": "%
+e",
+  "subject": "Syntax stuff",
+  "sanitized_subject_line": "Syntax-stuff",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 7 Apr 2019 13:13:12 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sun, 7 Apr 2019 13:13:12 -0400"
+  }
+},
+{
+  "commit": "c451d7e524c92f12cec490def2d238cb67897614",
+  "abbreviated_commit": "c451d7e",
+  "tree": "95c0b8ddd9d062f760a080934b4143368ec408dc",
+  "abbreviated_tree": "95c0b8d",
+  "parent": "f34558bee65ec77be1d66e1c56616b2d0ed37ded 2ccce95d000b4b4f216c5211a75a79d74fa22ffa",
+  "abbreviated_parent": "f34558b 2ccce95",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge pull request #2 from chishankar/new-ui",
+  "sanitized_subject_line": "Merge-pull-request-2-from-chishankar-new-ui",
+  "body": "New ui!!",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 5 Apr 2019 14:53:51 -0400"
+  },
+  "commiter": 
+{
+    "name": "GitHub",
+    "email": "noreply@github.com",
+    "date": "Fri, 5 Apr 2019 14:53:51 -0400"
+  }
+},
+{
+  "commit": "2ccce95d000b4b4f216c5211a75a79d74fa22ffa",
+  "abbreviated_commit": "2ccce95",
+  "tree": "95c0b8ddd9d062f760a080934b4143368ec408dc",
+  "abbreviated_tree": "95c0b8d",
+  "parent": "4832d9c74cac8ada0f1f5b686f80ea86ed1d256f",
+  "abbreviated_parent": "4832d9c",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "updated UI",
+  "sanitized_subject_line": "updated-UI",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 5 Apr 2019 14:52:41 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 5 Apr 2019 14:52:41 -0400"
+  }
+},
+{
+  "commit": "4832d9c74cac8ada0f1f5b686f80ea86ed1d256f",
+  "abbreviated_commit": "4832d9c",
+  "tree": "dae1dbd1551295d9d5cf928641334268cbdb78df",
+  "abbreviated_tree": "dae1dbd",
+  "parent": "211b4e5dce914c223bab91dfe86d72a0c1a414eb",
+  "abbreviated_parent": "211b4e5",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "new ui css styling",
+  "sanitized_subject_line": "new-ui-css-styling",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 5 Apr 2019 10:28:53 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 5 Apr 2019 10:28:53 -0400"
+  }
+},
+{
+  "commit": "f34558bee65ec77be1d66e1c56616b2d0ed37ded",
+  "abbreviated_commit": "f34558b",
+  "tree": "fa12ee45863288d5c5328d0c26c4eb64d7a80fa0",
+  "abbreviated_tree": "fa12ee4",
+  "parent": "1f4b07379cd17d8377eee0663353901660c19bbb 211b4e5dce914c223bab91dfe86d72a0c1a414eb",
+  "abbreviated_parent": "1f4b073 211b4e5",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Merge pull request #1 from chishankar/new-ui",
+  "sanitized_subject_line": "Merge-pull-request-1-from-chishankar-new-ui",
+  "body": "New ui and temp fix of develop",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 5 Apr 2019 09:36:07 -0400"
+  },
+  "commiter": 
+{
+    "name": "GitHub",
+    "email": "noreply@github.com",
+    "date": "Fri, 5 Apr 2019 09:36:07 -0400"
+  }
+},
+{
+  "commit": "211b4e5dce914c223bab91dfe86d72a0c1a414eb",
+  "abbreviated_commit": "211b4e5",
+  "tree": "fa12ee45863288d5c5328d0c26c4eb64d7a80fa0",
+  "abbreviated_tree": "fa12ee4",
+  "parent": "2b1a17835033b689aa942ef22e9738dc9c8b5ff1",
+  "abbreviated_parent": "2b1a178",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Just testing",
+  "sanitized_subject_line": "Just-testing",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 5 Apr 2019 09:35:06 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 5 Apr 2019 09:35:06 -0400"
+  }
+},
+{
+  "commit": "2b1a17835033b689aa942ef22e9738dc9c8b5ff1",
+  "abbreviated_commit": "2b1a178",
+  "tree": "5116d945548bcdec7a408b20cc872b6ef5f3b0cc",
+  "abbreviated_tree": "5116d94",
+  "parent": "1f4b07379cd17d8377eee0663353901660c19bbb",
+  "abbreviated_parent": "1f4b073",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Commented out broken code",
+  "sanitized_subject_line": "Commented-out-broken-code",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 5 Apr 2019 09:33:58 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 5 Apr 2019 09:33:58 -0400"
+  }
+},
+{
+  "commit": "1f4b07379cd17d8377eee0663353901660c19bbb",
+  "abbreviated_commit": "1f4b073",
+  "tree": "855655ecbe81237438e9a8879e92008d55f734bf",
+  "abbreviated_tree": "855655e",
+  "parent": "acb7751eda68bb205767d8229e62b5d5d80c9f65 854ae1fd2feb91d20eec09f91a3f087b2a8a6b9c",
+  "abbreviated_parent": "acb7751 854ae1f",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "working on UI upgrades",
+  "sanitized_subject_line": "working-on-UI-upgrades",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 5 Apr 2019 09:21:09 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 5 Apr 2019 09:21:09 -0400"
+  }
+},
+{
+  "commit": "acb7751eda68bb205767d8229e62b5d5d80c9f65",
+  "abbreviated_commit": "acb7751",
+  "tree": "93560715e7b26fe53d3ddd5c4bd36533d11d0c1f",
+  "abbreviated_tree": "9356071",
+  "parent": "7340a22b60bdf2d2a03f01e96295d28fe275dcbd",
+  "abbreviated_parent": "7340a22",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "ui changes",
+  "sanitized_subject_line": "ui-changes",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 5 Apr 2019 09:16:08 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Fri, 5 Apr 2019 09:16:08 -0400"
+  }
+},
+{
+  "commit": "7340a22b60bdf2d2a03f01e96295d28fe275dcbd",
+  "abbreviated_commit": "7340a22",
+  "tree": "b025c5d58aceeb7c72393b0bfde54dd898832dfb",
+  "abbreviated_tree": "b025c5d",
+  "parent": "c24f03267ae36a521c3a9ce552ce6b7bc964bc04",
+  "abbreviated_parent": "c24f032",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "NEW UI GUYS :)",
+  "sanitized_subject_line": "NEW-UI-GUYS",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 4 Apr 2019 19:41:05 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 4 Apr 2019 19:41:05 -0400"
+  }
+},
+{
+  "commit": "aa92ba0d5a1a83c7d5d7fe50ae2af389e3488c4c",
+  "abbreviated_commit": "aa92ba0",
+  "tree": "7269400b1ff9c108778d3ee956cf5323c6ec69d4",
+  "abbreviated_tree": "7269400",
+  "parent": "ff5ad449ef67b327d1d78eb466c6a5cbd85cbaae 55d60328d07add362d54dca8fc781bb7a12afcac",
+  "abbreviated_parent": "ff5ad44 55d6032",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "testing",
+  "sanitized_subject_line": "testing",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 4 Apr 2019 16:38:03 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 4 Apr 2019 16:38:03 -0400"
+  }
+},
+{
+  "commit": "ff5ad449ef67b327d1d78eb466c6a5cbd85cbaae",
+  "abbreviated_commit": "ff5ad44",
+  "tree": "4cb512f7e0148fd516d686503e36405e03300123",
+  "abbreviated_tree": "4cb512f",
+  "parent": "3c14b399f899a7e998494e3b0eef52dcd0b9ef50",
+  "abbreviated_parent": "3c14b39",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "testing",
+  "sanitized_subject_line": "testing",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 4 Apr 2019 16:36:45 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 4 Apr 2019 16:36:45 -0400"
+  }
+},
+{
+  "commit": "3c14b399f899a7e998494e3b0eef52dcd0b9ef50",
+  "abbreviated_commit": "3c14b39",
+  "tree": "380dbd294820c64356ace9ce1fb17f016e2dee9a",
+  "abbreviated_tree": "380dbd2",
+  "parent": "b8937923c7037cd8a2b1838ac0fcbfcbbb072de5",
+  "abbreviated_parent": "b893792",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Updated a few things",
+  "sanitized_subject_line": "Updated-a-few-things",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 4 Apr 2019 16:27:03 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 4 Apr 2019 16:27:03 -0400"
+  }
+},
+{
+  "commit": "dc307976264ccb15a8cf2d0f2bfec725f0dab8d5",
+  "abbreviated_commit": "dc30797",
+  "tree": "a34c97f1115d95c964ecc5baebc08de7ecda8b73",
+  "abbreviated_tree": "a34c97f",
+  "parent": "4d71fab61a003ca61a35f4b51cb0caa7d3771ab5",
+  "abbreviated_parent": "4d71fab",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "added module for website scraping",
+  "sanitized_subject_line": "added-module-for-website-scraping",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 4 Apr 2019 13:28:28 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 4 Apr 2019 13:28:28 -0400"
+  }
+},
+{
+  "commit": "4d71fab61a003ca61a35f4b51cb0caa7d3771ab5",
+  "abbreviated_commit": "4d71fab",
+  "tree": "546b50bb3e914185952b15e32a8b2c63c0d01b54",
+  "abbreviated_tree": "546b50b",
+  "parent": "06c59bc6ffc55f6b44b3db900b35c9e19cf79c50",
+  "abbreviated_parent": "06c59bc",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "added website scraper utilities",
+  "sanitized_subject_line": "added-website-scraper-utilities",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 4 Apr 2019 12:49:28 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 4 Apr 2019 12:49:28 -0400"
+  }
+},
+{
+  "commit": "06c59bc6ffc55f6b44b3db900b35c9e19cf79c50",
+  "abbreviated_commit": "06c59bc",
+  "tree": "bf523a9119c591149c0ba5328efbccb1dcc63d0e",
+  "abbreviated_tree": "bf523a9",
+  "parent": "116986d7f4b3824cce930b20b27747d133d248e0",
+  "abbreviated_parent": "116986d",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "modified front-end to show highlighting color",
+  "sanitized_subject_line": "modified-front-end-to-show-highlighting-color",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 2 Apr 2019 16:09:56 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 2 Apr 2019 16:09:56 -0400"
+  }
+},
+{
+  "commit": "116986d7f4b3824cce930b20b27747d133d248e0",
+  "abbreviated_commit": "116986d",
+  "tree": "49a90b13057ff5c66cdb2a67a3c472300ea12752",
+  "abbreviated_tree": "49a90b1",
+  "parent": "04e4d2199175e61b8fdb91f2ec4a1f4d8cf78606",
+  "abbreviated_parent": "04e4d21",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "added a remove highlight feature",
+  "sanitized_subject_line": "added-a-remove-highlight-feature",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 2 Apr 2019 15:40:11 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 2 Apr 2019 15:40:11 -0400"
+  }
+},
+{
+  "commit": "04e4d2199175e61b8fdb91f2ec4a1f4d8cf78606",
+  "abbreviated_commit": "04e4d21",
+  "tree": "247eb411d82c8b0780b12ce435a3a4bd8caa7b94",
+  "abbreviated_tree": "247eb41",
+  "parent": "ba00798a3c7829ed07eee42f8d7f6c8e5c085f05",
+  "abbreviated_parent": "ba00798",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "added urlsearch component and added more functionarlity to rendering html",
+  "sanitized_subject_line": "added-urlsearch-component-and-added-more-functionarlity-to-rendering-html",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 2 Apr 2019 14:19:46 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 2 Apr 2019 14:19:46 -0400"
+  }
+},
+{
+  "commit": "ba00798a3c7829ed07eee42f8d7f6c8e5c085f05",
+  "abbreviated_commit": "ba00798",
+  "tree": "2bb198bbd91768e9cb23815cc8899089fbfdbb10",
+  "abbreviated_tree": "2bb198b",
+  "parent": "0023a32f7724f679128fc1a90e3dbc60cf9eb7f8",
+  "abbreviated_parent": "0023a32",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "got a prototype of highliting component working",
+  "sanitized_subject_line": "got-a-prototype-of-highliting-component-working",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 30 Mar 2019 15:40:36 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Sat, 30 Mar 2019 15:40:36 -0400"
+  }
+},
+{
+  "commit": "0023a32f7724f679128fc1a90e3dbc60cf9eb7f8",
+  "abbreviated_commit": "0023a32",
+  "tree": "b5d20d701c8ebf71a1e4c7debb0cabafddf341be",
+  "abbreviated_tree": "b5d20d7",
+  "parent": "bb41a6b3c5492ea68cf6300c0768cbe7f78036bf",
+  "abbreviated_parent": "bb41a6b",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "Propagated states between highlighter and navbar and am able to globally chnage highlighter color state",
+  "sanitized_subject_line": "Propagated-states-between-highlighter-and-navbar-and-am-able-to-globally-chnage-highlighter-color-state",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 28 Mar 2019 13:31:11 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Thu, 28 Mar 2019 13:31:11 -0400"
+  }
+},
+{
+  "commit": "bb41a6b3c5492ea68cf6300c0768cbe7f78036bf",
+  "abbreviated_commit": "bb41a6b",
+  "tree": "8748cd91fc4cd5b20a2b7e3725b12f83037815a8",
+  "abbreviated_tree": "8748cd9",
+  "parent": "28da23ea0a3a4cd53a6eb4a49b596b1435033650",
+  "abbreviated_parent": "28da23e",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "finished a few other components",
+  "sanitized_subject_line": "finished-a-few-other-components",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 26 Mar 2019 21:48:33 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 26 Mar 2019 21:48:33 -0400"
+  }
+},
+{
+  "commit": "28da23ea0a3a4cd53a6eb4a49b596b1435033650",
+  "abbreviated_commit": "28da23e",
+  "tree": "edecc8969fa90590ab0339056e4b6970041ce215",
+  "abbreviated_tree": "edecc89",
+  "parent": "b3fb506b4cbe79d6da96d9b674c38ca8cbae0176",
+  "abbreviated_parent": "b3fb506",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "took out unused dependencies",
+  "sanitized_subject_line": "took-out-unused-dependencies",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 26 Mar 2019 14:58:45 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 26 Mar 2019 14:58:45 -0400"
+  }
+},
+{
+  "commit": "b3fb506b4cbe79d6da96d9b674c38ca8cbae0176",
+  "abbreviated_commit": "b3fb506",
+  "tree": "8269259263aea4521d069235650e178d8cc1b95d",
+  "abbreviated_tree": "8269259",
+  "parent": "1e40dd409f4cc7d5ca057be84132dcb701407d18",
+  "abbreviated_parent": "1e40dd4",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "added new things",
+  "sanitized_subject_line": "added-new-things",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 26 Mar 2019 13:16:14 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 26 Mar 2019 13:16:14 -0400"
+  }
+},
+{
+  "commit": "1e40dd409f4cc7d5ca057be84132dcb701407d18",
+  "abbreviated_commit": "1e40dd4",
+  "tree": "010bb012a8b2a985f17ca2da3804b722dbd62432",
+  "abbreviated_tree": "010bb01",
+  "parent": "11a7241a849b6d58c4ff3210febcf9dde9fe02c6",
+  "abbreviated_parent": "11a7241",
+  "refs": "",
+  "encoding": "%
+e",
+  "subject": "added debug configurations for VS code",
+  "sanitized_subject_line": "added-debug-configurations-for-VS-code",
+  "body": "",
+  "commit_notes": "",
+  "verification_flag": "N",
+  "signer": "",
+  "signer_key": "",
+  "author": {
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 26 Mar 2019 12:52:04 -0400"
+  },
+  "commiter": 
+{
+    "name": "Chirag Shankar",
+    "email": "chishankar@gmail.com",
+    "date": "Tue, 26 Mar 2019 12:52:04 -0400"
+  }
+}
+]

@@ -1,20 +1,20 @@
 {
   "app": {
-    "css": "assets/app-551e2c876c84ebe7bf1b.css",
-    "js": "assets/app-551e2c876c84ebe7bf1b.js"
+    "css": "assets/app-1d7ba351d79b888a4e62.css",
+    "js": "assets/app-1d7ba351d79b888a4e62.js"
   },
   "vendors~app": {
-    "js": "assets/1.551e2c876c84ebe7bf1b.js"
+    "js": "assets/1.1d7ba351d79b888a4e62.js"
   },
   "": {
     "js": [
-      "assets/2.551e2c876c84ebe7bf1b.js",
-      "assets/3.551e2c876c84ebe7bf1b.js",
-      "assets/4.551e2c876c84ebe7bf1b.js"
+      "assets/2.1d7ba351d79b888a4e62.js",
+      "assets/3.1d7ba351d79b888a4e62.js",
+      "assets/4.1d7ba351d79b888a4e62.js"
     ],
     "css": [
-      "assets/3-551e2c876c84ebe7bf1b.css",
-      "assets/4-551e2c876c84ebe7bf1b.css"
+      "assets/3-1d7ba351d79b888a4e62.css",
+      "assets/4-1d7ba351d79b888a4e62.css"
     ],
     "eot": "assets/YourFavoriteFont.eot",
     "otf": "assets/YourFavoriteFont.otf",
