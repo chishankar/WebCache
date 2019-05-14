@@ -71,7 +71,7 @@ export default class RenderText extends Component<Props> {
         var injectScript = fs.readFileSync(jsResource).toString();
         resourceHtml += "<script id=\"webcache-script\">" + injectScript + "<\/script>";
         return (
-          <iframe name="iframe" className={ styles.setWidth }  ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml }></iframe>
+          <iframe name="iframe" className={ styles.setWidth } id="myIframe" ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml }></iframe>
         );
     }
     let resource = getResourceBuilder(filePath);
@@ -115,7 +115,7 @@ export default class RenderText extends Component<Props> {
       }
 
       return (
-        <iframe className={ styles.setWidth }  ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml } ></iframe>
+        <iframe className={ styles.setWidth }  className={ styles.setWidth } id="myIframe" ref={(f) => this.iframeRef = f } srcDoc={ resourceHtml } ></iframe>
       );
     } catch (exception){
       //this.props.addNotification("Url does not exist!")

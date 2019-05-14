@@ -3,7 +3,7 @@ var urlUtil = require('url');
 var _ = require('lodash');
 const searchAPI = require('../../webcache_testing/main5.js');
 const path = require('path');
-
+const iframeRegex = /x-frame-options:\s+(\w*)/
 
 
 class MyPlugin {
@@ -30,7 +30,23 @@ exports.getSite = function (inputUrl, save_location, callback){
           {url: inputUrl, filename: "index.html"}
         ],
         urlFilter: function(url) {
-          return (url.indexOf('github.com') === -1 || url.indexof('stackoverflow.com') === -1);
+          var req = new XMLHttpRequest();
+          req.open('HEAD', url, false);
+          req.send(null);
+          let header = req.getAllResponseHeaders();
+
+          let matches = header.match(iframeRegex);
+
+          console.log(matches)
+          //  || matches[1].toLowerCase() === 'sameorigin')
+          if (matches && matches[1].toLowerCase() === 'deny'){
+            console.log(matches[1].toLowerCase())
+            return false
+          }
+
+          return true;
+
+          // return (url.indexOf('github.com') === -1 || url.indexof('stackoverflow.com') === -1);
         }, // Will be saved with default filename 'index.html',
         directory: save_location,
         recursive: true,
