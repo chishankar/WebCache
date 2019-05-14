@@ -105,7 +105,6 @@ export default class RenderText extends Component<Props> {
           if (!this.props.annotations.some(element => {
             return element.id == highlight.id;
           })) {
-            // console.log("i want to add highlight: " + JSON.stringify(highlight));
             this.props.addHighlight(highlight);
           }
         })
@@ -215,13 +214,6 @@ export default class RenderText extends Component<Props> {
       {"lastUpdated":this.props.save}
     )
 
-    // console.log("RenderText.js - saveUrl = " + saveUrl);
-    // console.log("RenderText.js - fileName = " + fileName);
-    // console.log("RenderText.js - annotationsFilePath = " + annotationsFilePath);
-
-    // add the file to the index for sanity
-    // searchAPI.addFilesToMainIndex([saveUrl]);
-
     //update the old index of the annotations json page
     try {
       fs.readFile(annotationsFilePath, (err, buf) => {
@@ -229,8 +221,6 @@ export default class RenderText extends Component<Props> {
           fs.writeFile(annotationsFilePath, JSON.stringify(annotationJSON), (err) => {
             if (!err) {
               searchAPI.addFilesToMainIndex([annotationsFn]);
-            } else {
-              console.log("error writing new annotations file");
             }
           });
         }
@@ -239,21 +229,17 @@ export default class RenderText extends Component<Props> {
           fs.writeFile(annotationsFilePath, JSON.stringify(annotationJSON), (err) => {
             if (!err) {
               searchAPI.update(annotationsFn, buf.toString());
-            } else {
-              console.log("error writing updated annotations file");
             }
           });
         }
       });
     } catch(err) {
-      console.log(err);
     }
 
     var end = htmlData.indexOf("<script id=\"webcache-script\">");
     let updatedHtml = htmlData.substring(0, end); //remove our injected script tag from the document
 
     fs.writeFileSync(saveUrl, updatedHtml);
-    // console.log(this.props);
     this.props.addNotification(`File saved! ${this.props.save}`)
     callback();
   }
