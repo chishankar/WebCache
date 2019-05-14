@@ -43,6 +43,7 @@ type Props = {
   clearHighlights: Function,
   addNotification: Function,
   updateLastUpdate: Function,
+  showId: Function,
   annotations: Object,
   hideHighlights: Boolean
 }
@@ -161,6 +162,7 @@ export default class RenderText extends Component<Props> {
     if (this.props.viewId !== nextProps.viewId){
       data = {showHighlight: nextProps.viewId};
       this.iframeRef.contentWindow.postMessage(data, '*');
+      this.props.showId('');
     }
 
     // This sends a message to the iFrame upon save request

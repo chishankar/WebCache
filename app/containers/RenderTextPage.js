@@ -24,7 +24,8 @@ function mapDispatchToProps(dispatch){
     addHighlight: sideBarActions.addHighlight,
     clearHighlights: sideBarActions.clearHighlights,
     addNotification: notificationActions.addNotification,
-    updateLastUpdate: saveActions.ChangeSave
+    updateLastUpdate: saveActions.ChangeSave,
+    showId: sideBarActions.viewHighlight
   },dispatch);
 }
 
